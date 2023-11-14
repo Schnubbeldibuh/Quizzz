@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class Menu {
-    private Scanner sc = new Scanner(System.in);
+    private final Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
         Menu menu = new Menu();
         menu.showSelection();
@@ -23,7 +23,7 @@ public class Menu {
         System.out.println("3 - Statistiken");
         System.out.println("4 - Exit");
 
-        Optional<Submenu> selection; ;
+        Optional<Submenu> selection;
 
         do {
             selection = scanSelection();
