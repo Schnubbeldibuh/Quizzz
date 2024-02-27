@@ -12,12 +12,11 @@ public class Menu {
     public static void main(String[] args) {
         Menu menu = new Menu();
         menu.showSelection();
-
     }
 
     public void showSelection (){
         System.out.println("Herzlichen Willkommen bei Quizzz!");
-        System.out.println("Wählen Sie: ");
+        System.out.println("Wähle: ");
         System.out.println("1 - Spielen");
         System.out.println("2 - Fragenverwaltung");
         System.out.println("3 - Statistiken");
