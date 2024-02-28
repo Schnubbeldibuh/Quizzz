@@ -4,13 +4,9 @@ import menu.play.PlayMenu;
 import menu.questionmanagement.QuestionMenu;
 import menu.stats.StatsMenu;
 
-import java.util.Optional;
 import java.util.Scanner;
 
 public class Menu {
-    public record selectedMenu () {
-
-    }
     private final Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
         Menu menu = new Menu();
