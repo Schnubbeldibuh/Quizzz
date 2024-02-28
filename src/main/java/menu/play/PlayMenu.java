@@ -1,21 +1,17 @@
 package menu.play;
+
 import menu.SelectedMenu;
 import menu.Submenu;
 import menu.play.games.FindQuestions;
 import menu.play.games.Multiplayer;
 import menu.play.games.MultiplayerQuick;
-import menu.play.games.WerWirdMillionär;
+import menu.play.games.WerWirdMillionaer;
 
-import java.util.Scanner;
+public class PlayMenu extends Submenu {
 
-public class PlayMenu implements Submenu {
-    private final Scanner sc = new Scanner(System.in);
-    public SelectedMenu.MenuSelection start() {
+    @Override
+    protected void showOptions() {
         System.out.println("Spielen");
-        return showGameModeSelection();
-    }
-
-    private SelectedMenu.MenuSelection showGameModeSelection() {
         System.out.println("Welchen Spielmodus möchtest du spielen?");
         System.out.println("1 - Wer wird Millionär?");
         System.out.println("2 - Multiplayer");
@@ -23,25 +19,13 @@ public class PlayMenu implements Submenu {
         System.out.println("4 - Fragenfinder");
         System.out.println("5 - Zurück");
         System.out.println("6 - Exit");
-
-        SelectedMenu gameSelection;
-
-        do {
-            gameSelection = scanSelection();
-        } while (gameSelection.menuSelection() == SelectedMenu.MenuSelection.INVALID);
-
-        if (gameSelection.menuSelection() == SelectedMenu.MenuSelection.SUBMENU) {
-            gameSelection.submenu().start();
-        }
-        return gameSelection.menuSelection();
     }
 
-    private SelectedMenu scanSelection() {
-        String playMenuSelection = sc.next();
-
-        switch (playMenuSelection.charAt(0)){
+    @Override
+    protected SelectedMenu scanSelection(String input) {
+        switch (input.charAt(0)){
             case '1':
-                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new WerWirdMillionär());
+                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new WerWirdMillionaer());
             case '2':
                 return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new Multiplayer());
             case '3':

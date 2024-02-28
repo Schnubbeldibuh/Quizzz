@@ -4,43 +4,30 @@ import menu.play.PlayMenu;
 import menu.questionmanagement.QuestionMenu;
 import menu.stats.StatsMenu;
 
-import java.util.Scanner;
-
-public class Menu {
-    private final Scanner sc = new Scanner(System.in);
+public class Menu extends Submenu {
     public static void main(String[] args) {
         Menu menu = new Menu();
-        menu.showSelection();
+        menu.startGame();
     }
 
-    public void showSelection (){
-        SelectedMenu.MenuSelection menuSelection;
-        do {
-            System.out.println("Herzlichen Willkommen bei Quizzz!");
-            System.out.println("Wähle: ");
-            System.out.println("1 - Spielen");
-            System.out.println("2 - Fragenverwaltung");
-            System.out.println("3 - Statistiken");
-            System.out.println("4 - Exit");
-
-            SelectedMenu selection;
-
-            do {
-                selection = scanSelection();
-            } while (selection.menuSelection() == SelectedMenu.MenuSelection.INVALID);
-
-            if (selection.menuSelection() == SelectedMenu.MenuSelection.SUBMENU) {
-                menuSelection = selection.submenu().start();
-            } else {
-                menuSelection = SelectedMenu.MenuSelection.EXIT;
-            }
-        } while (menuSelection != SelectedMenu.MenuSelection.EXIT);
+    public void startGame() {
+        System.out.println("Herzlichen Willkommen bei Quizzz!");
+        start();
     }
 
-    private SelectedMenu scanSelection() {
-        String menuSelection = sc.next();
+    @Override
+    protected void showOptions() {
+        System.out.println("Hauptmenü");
+        System.out.println("Wähle: ");
+        System.out.println("1 - Spielen");
+        System.out.println("2 - Fragenverwaltung");
+        System.out.println("3 - Statistiken");
+        System.out.println("4 - Exit");
+    }
 
-        switch (menuSelection.charAt(0)){
+    @Override
+    protected SelectedMenu scanSelection(String input) {
+        switch (input.charAt(0)){
             case '1':
                 return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new PlayMenu());
             case '2':
