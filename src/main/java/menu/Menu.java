@@ -4,10 +4,16 @@ import menu.play.PlayMenu;
 import menu.questionmanagement.QuestionMenu;
 import menu.stats.StatsMenu;
 
+import java.util.Scanner;
+
 public class Menu extends Submenu {
     public static void main(String[] args) {
-        Menu menu = new Menu();
+        Menu menu = new Menu(new Scanner(System.in));
         menu.startGame();
+    }
+
+    public Menu(Scanner sc) {
+        super(sc);
     }
 
     public void startGame() {
@@ -29,11 +35,11 @@ public class Menu extends Submenu {
     protected SelectedMenu scanSelection(String input) {
         switch (input.charAt(0)){
             case '1':
-                return new SelectedMenu(new PlayMenu());
+                return new SelectedMenu(new PlayMenu(getSc()));
             case '2':
-                return new SelectedMenu(new QuestionMenu());
+                return new SelectedMenu(new QuestionMenu(getSc()));
             case '3':
-                return new SelectedMenu(new StatsMenu());
+                return new SelectedMenu(new StatsMenu(getSc()));
             case '4':
                 return new SelectedMenu(SelectedMenu.MenuSelection.EXIT);
             default:

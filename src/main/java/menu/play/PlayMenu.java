@@ -7,7 +7,13 @@ import menu.play.games.Multiplayer;
 import menu.play.games.MultiplayerQuick;
 import menu.play.games.WerWirdMillionaer;
 
+import java.util.Scanner;
+
 public class PlayMenu extends Submenu {
+
+    public PlayMenu(Scanner sc) {
+        super(sc);
+    }
 
     @Override
     protected void showOptions() {

@@ -3,7 +3,13 @@ package menu.questionmanagement;
 import menu.SelectedMenu;
 import menu.Submenu;
 
+import java.util.Scanner;
+
 public class QuestionMenu extends Submenu {
+
+    public QuestionMenu(Scanner sc) {
+        super(sc);
+    }
 
     @Override
     protected void showOptions() {

@@ -4,7 +4,11 @@ import java.util.Scanner;
 
 public abstract class Submenu implements Startable {
 
-    private final Scanner sc = new Scanner(System.in);
+    private final Scanner sc;
+
+    public Submenu(Scanner sc) {
+        this.sc = sc;
+    }
 
     protected abstract void showOptions();
 
@@ -41,6 +45,9 @@ public abstract class Submenu implements Startable {
             }
             System.out.println("Invalide Eingabe. Bitte erneut wählen.");
         } while (true);
+    }
 
+    protected Scanner getSc() {
+        return sc;
     }
 }
