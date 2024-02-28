@@ -4,6 +4,8 @@ import menu.play.PlayMenu;
 import menu.questionmanagement.QuestionMenu;
 import menu.stats.StatsMenu;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Menu extends Submenu {
@@ -22,6 +24,17 @@ public class Menu extends Submenu {
     }
 
     @Override
+    protected Map<Character, SelectedMenu> createSelectionMap() {
+        Map<Character, SelectedMenu> map = new HashMap<>();
+        map.put('1', new SelectedMenu(new PlayMenu(getSc())));
+        map.put('2', new SelectedMenu(new QuestionMenu(getSc())));
+        map.put('3', new SelectedMenu(new StatsMenu(getSc())));
+        map.put('4', new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
+
+        return map;
+    }
+
+    @Override
     protected void showOptions() {
         System.out.println("Hauptmenü");
         System.out.println("Wähle: ");
@@ -29,21 +42,5 @@ public class Menu extends Submenu {
         System.out.println("2 - Fragenverwaltung");
         System.out.println("3 - Statistiken");
         System.out.println("4 - Exit");
-    }
-
-    @Override
-    protected SelectedMenu scanSelection(String input) {
-        switch (input.charAt(0)){
-            case '1':
-                return new SelectedMenu(new PlayMenu(getSc()));
-            case '2':
-                return new SelectedMenu(new QuestionMenu(getSc()));
-            case '3':
-                return new SelectedMenu(new StatsMenu(getSc()));
-            case '4':
-                return new SelectedMenu(SelectedMenu.MenuSelection.EXIT);
-            default:
-                return new SelectedMenu(SelectedMenu.MenuSelection.INVALID);
-        }
     }
 }
