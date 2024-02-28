@@ -1,11 +1,12 @@
 package menu.play.games;
+import menu.SelectedMenu;
 import menu.Submenu;
 import menu.play.PlayMenu;
 
 public class MultiplayerQuick implements Submenu {
 
-    public void start() {
+    public SelectedMenu.MenuSelection start() {
         System.out.println("Multiplayer - Schnellmodus");
-        //Todo
+        return SelectedMenu.MenuSelection.EXIT;
     }
 }

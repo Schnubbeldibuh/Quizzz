@@ -1,10 +1,11 @@
 package menu.stats;
 
+import menu.SelectedMenu;
 import menu.Submenu;
 
 public class StatsMenu implements Submenu {
-    public void start() {
+    public SelectedMenu.MenuSelection start() {
         System.out.println("Statistiken");
-        //Todo
+        return SelectedMenu.MenuSelection.EXIT;
     }
 }

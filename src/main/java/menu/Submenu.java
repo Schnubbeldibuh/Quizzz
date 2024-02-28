@@ -1,5 +1,5 @@
 package menu;
 
 public interface Submenu {
-    void start();
+    SelectedMenu.MenuSelection start();
 }

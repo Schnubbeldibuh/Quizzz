@@ -1,11 +1,12 @@
 package menu.play.games;
 
+import menu.SelectedMenu;
 import menu.Submenu;
 
 public class FindQuestions implements Submenu {
 
-    public void start() {
+    public SelectedMenu.MenuSelection start() {
         System.out.println("Finde die passende Frage");
-        //Todo
+        return SelectedMenu.MenuSelection.EXIT;
     }
 }
