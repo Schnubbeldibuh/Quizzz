@@ -25,20 +25,20 @@ public class PlayMenu extends Submenu {
     protected SelectedMenu scanSelection(String input) {
         switch (input.charAt(0)){
             case '1':
-                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new WerWirdMillionaer());
+                return new SelectedMenu(new WerWirdMillionaer());
             case '2':
-                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new Multiplayer());
+                return new SelectedMenu(new Multiplayer());
             case '3':
-                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new MultiplayerQuick());
+                return new SelectedMenu(new MultiplayerQuick());
             case '4':
-                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new FindQuestions());
+                return new SelectedMenu(new FindQuestions());
             case '5':
-                return new SelectedMenu(SelectedMenu.MenuSelection.BACK, null);
+                return new SelectedMenu(SelectedMenu.MenuSelection.BACK);
             case '6':
-                return new SelectedMenu(SelectedMenu.MenuSelection.EXIT, null);
+                return new SelectedMenu(SelectedMenu.MenuSelection.EXIT);
             default:
                 System.out.println("Invalide Eingabe. Bitte erneut wählen.");
-                return new SelectedMenu(SelectedMenu.MenuSelection.INVALID, null);
+                return new SelectedMenu(SelectedMenu.MenuSelection.INVALID);
         }
     }
 }

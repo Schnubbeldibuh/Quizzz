@@ -29,16 +29,16 @@ public class Menu extends Submenu {
     protected SelectedMenu scanSelection(String input) {
         switch (input.charAt(0)){
             case '1':
-                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new PlayMenu());
+                return new SelectedMenu(new PlayMenu());
             case '2':
-                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new QuestionMenu());
+                return new SelectedMenu(new QuestionMenu());
             case '3':
-                return new SelectedMenu(SelectedMenu.MenuSelection.SUBMENU, new StatsMenu());
+                return new SelectedMenu(new StatsMenu());
             case '4':
-                return new SelectedMenu(SelectedMenu.MenuSelection.EXIT, null);
+                return new SelectedMenu(SelectedMenu.MenuSelection.EXIT);
             default:
                 System.out.println("Invalide Eingabe. Bitte erneut wählen.");
-                return new SelectedMenu(SelectedMenu.MenuSelection.INVALID, null);
+                return new SelectedMenu(SelectedMenu.MenuSelection.INVALID);
         }
     }
 }
