@@ -37,7 +37,6 @@ public class PlayMenu extends Submenu {
             case '6':
                 return new SelectedMenu(SelectedMenu.MenuSelection.EXIT);
             default:
-                System.out.println("Invalide Eingabe. Bitte erneut wählen.");
                 return new SelectedMenu(SelectedMenu.MenuSelection.INVALID);
         }
     }

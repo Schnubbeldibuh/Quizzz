@@ -17,9 +17,7 @@ public abstract class Submenu implements Startable {
             showOptions();
 
             SelectedMenu selection;
-            do {
-                selection = scanSelection(sc.next());
-            } while (selection.menuSelection() == SelectedMenu.MenuSelection.INVALID);
+            selection = scanUntilValidInput();
 
             if (selection.menuSelection() == SelectedMenu.MenuSelection.SUBMENU)
                 // executing Submenu
@@ -30,5 +28,19 @@ public abstract class Submenu implements Startable {
 
         } while (submenuSelection != SelectedMenu.MenuSelection.EXIT);
         return submenuSelection;
+    }
+
+    private SelectedMenu scanUntilValidInput() {
+        SelectedMenu selection;
+        do {
+            String input = sc.next();
+            if (input.length() == 1) {
+                selection = scanSelection(input);
+                if (selection.menuSelection() != SelectedMenu.MenuSelection.INVALID)
+                    return selection;
+            }
+            System.out.println("Invalide Eingabe. Bitte erneut wählen.");
+        } while (true);
+
     }
 }
