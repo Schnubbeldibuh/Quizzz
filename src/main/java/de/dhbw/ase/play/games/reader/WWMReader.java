@@ -2,16 +2,23 @@ package de.dhbw.ase.play.games.reader;
 
 import de.dhbw.ase.Quizzz;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 public class WWMReader {
 
+    private final Random random;
+
+    public WWMReader() {
+        random = new Random();
+    }
+
     public List<WWMQuestion> getQuestionList() {
-        List<WWMQuestion> questionsForOneRound = readFile(new File(Quizzz.FILE_WWM_EASY), 5);
+        List<WWMQuestion> questionsForOneRound = new ArrayList<>();
+        questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_WWM_EASY), 5));
         questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_WWM_MEDIUM), 4));
         questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_WWM_HARD), 3));
         questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_WWM_VERY_HARD), 2));
@@ -20,28 +27,38 @@ public class WWMReader {
     }
 
     private List<WWMQuestion> readFile(File file, int amount) {
-        List<WWMQuestion> questionList = new ArrayList<>();
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-             LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(file))){
-            lineNumberReader.skip(Long.MAX_VALUE);
-            int numberOfLines = lineNumberReader.getLineNumber();
-            ArrayList<Integer> randomNumberList = new ArrayList<>();
-            Random random = new Random();
-            while (randomNumberList.size() < amount) {
-                int randomNumber = random.nextInt(numberOfLines);
-                if (!randomNumberList.contains(randomNumber)) {
-                    randomNumberList.add(randomNumber);
-                }
-            }
-            Collections.sort(randomNumberList);
-            for (int l: randomNumberList) {
-                bufferedReader.skip(l-1);
-                questionList.add(mapLineToWWMQuestion(bufferedReader.readLine()));
-            }
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
+            bufferedReader.mark(1000);
+            String l1 = bufferedReader.readLine();
+            int lines = Integer.parseInt(l1.substring(0, l1.indexOf(';')));
+            bufferedReader.reset();
+
+            Set<Integer> linenumbers = getRandomLinenumbers(amount, lines);
+            return bufferedReader.lines()
+                    .filter(l -> checkLinePrefix(linenumbers, l))
+                    .map(this::mapLineToWWMQuestion)
+                    .toList();
         } catch (IOException e) {
-            e.printStackTrace();
+            // TODO
+            throw new RuntimeException();
         }
-        return questionList;
+    }
+
+    private boolean checkLinePrefix(Set<Integer> searchedNumbers, String line) {
+        for (Integer n : searchedNumbers)
+            if (line.startsWith(n.toString())) {
+                searchedNumbers.remove(n);
+                return true;
+            }
+        return false;
+    }
+
+    private Set<Integer> getRandomLinenumbers(int amount, int lines) {
+        Set<Integer> randomNumberList = new HashSet<>();
+        while (randomNumberList.size() < amount) {
+            randomNumberList.add(random.nextInt(lines+1));
+        }
+        return randomNumberList;
     }
 
     private WWMQuestion mapLineToWWMQuestion(String line) {
