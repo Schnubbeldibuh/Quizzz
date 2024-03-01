@@ -1,15 +1,15 @@
-package menu.questionmanagement;
+package de.dhbw.ase.stats;
 
-import menu.SelectedMenu;
-import menu.Submenu;
+import de.dhbw.ase.SelectedMenu;
+import de.dhbw.ase.Submenu;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class QuestionMenu extends Submenu {
+public class StatsMenu extends Submenu {
 
-    public QuestionMenu(Scanner sc) {
+    public StatsMenu(Scanner sc) {
         super(sc);
     }
 
@@ -21,7 +21,7 @@ public class QuestionMenu extends Submenu {
 
     @Override
     protected void showOptions() {
-        System.out.println("Fragen");
+        System.out.println("Statistiken");
         //TODO
     }
 }

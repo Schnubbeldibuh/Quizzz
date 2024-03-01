@@ -1,4 +1,4 @@
-package menu;
+package de.dhbw.ase;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -24,8 +24,7 @@ public abstract class Submenu implements Startable {
         do {
             showOptions();
 
-            SelectedMenu selection;
-            selection = scanUntilValidInput();
+            SelectedMenu selection = scanUntilValidInput();
 
             if (selection.menuSelection() == SelectedMenu.MenuSelection.SUBMENU)
                 // executing Submenu

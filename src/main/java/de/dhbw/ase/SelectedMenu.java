@@ -1,4 +1,4 @@
-package menu;
+package de.dhbw.ase;
 
 public record SelectedMenu(MenuSelection menuSelection, Startable startable) {
 

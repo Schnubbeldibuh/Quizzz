@@ -1,14 +1,15 @@
-package menu;
+package de.dhbw.ase;
 
-import menu.play.PlayMenu;
-import menu.questionmanagement.QuestionMenu;
-import menu.stats.StatsMenu;
+import de.dhbw.ase.play.PlayMenu;
+import de.dhbw.ase.questionmanagement.QuestionMenu;
+import de.dhbw.ase.stats.StatsMenu;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Menu extends Submenu {
+
     public static void main(String[] args) {
         Menu menu = new Menu(new Scanner(System.in));
         menu.startGame();
