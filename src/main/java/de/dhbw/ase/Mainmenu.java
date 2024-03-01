@@ -8,14 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Menu extends Submenu {
+public class Mainmenu extends Submenu {
 
-    public static void main(String[] args) {
-        Menu menu = new Menu(new Scanner(System.in));
-        menu.startGame();
-    }
 
-    public Menu(Scanner sc) {
+    public Mainmenu(Scanner sc) {
         super(sc);
     }
 
