@@ -1,5 +1,7 @@
 package de.dhbw.ase.play.games.reader;
 
+import de.dhbw.ase.Quizzz;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,11 +11,11 @@ import java.util.Random;
 public class WWMReader {
 
     public List<WWMQuestion> getQuestionList() {
-        List<WWMQuestion> questionsForOneRound = readFile(new File("src/main/resources/WWMleicht.csv"), 5);
-        questionsForOneRound.addAll(readFile(new File("src/main/resources/WWMmittle.csv"), 4));
-        questionsForOneRound.addAll(readFile(new File("src/main/resources/WWMschwer.csv"), 3));
-        questionsForOneRound.addAll(readFile(new File("src/main/resources/WWMSehrSchwer.csv"), 2));
-        questionsForOneRound.addAll(readFile(new File("src/main/resources/WWMexperte.csv"), 1));
+        List<WWMQuestion> questionsForOneRound = readFile(new File(Quizzz.FILE_WWM_EASY), 5);
+        questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_WWM_MEDIUM), 4));
+        questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_WWM_HARD), 3));
+        questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_WWM_VERY_HARD), 2));
+        questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_WWM_EXPERT), 1));
         return questionsForOneRound;
     }
 
