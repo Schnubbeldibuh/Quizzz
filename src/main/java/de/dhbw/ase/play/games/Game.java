@@ -26,6 +26,7 @@ public abstract class Game implements Startable {
     }
 
     private void indicateUser () {
+        System.out.println();
         System.out.println("Bitte gebe deinen Usernamen ein:");
         username = sc.next();
     }

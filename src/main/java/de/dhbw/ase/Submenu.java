@@ -22,6 +22,7 @@ public abstract class Submenu implements Startable {
     public SelectedMenu.MenuSelection start() {
         SelectedMenu.MenuSelection submenuSelection;
         do {
+            System.out.println();
             showOptions();
 
             SelectedMenu selection = scanUntilValidInput();

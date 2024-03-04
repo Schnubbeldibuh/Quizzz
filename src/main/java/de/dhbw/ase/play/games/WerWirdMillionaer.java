@@ -17,8 +17,14 @@ public class WerWirdMillionaer extends Game {
 
     @Override
     protected void startGame() {
+        /* Man könnte auch noch eine Version machen bei der die Antworten nicht mit A, B, C, D angegebenen werden
+           sondern mit W, A, S, D. Für einfacherer Bedienbarkeit */
         WWMReader wwmReader = new WWMReader();
         List<WWMQuestion> questionList = wwmReader.getQuestionList();
+
+        System.out.println();
+        System.out.println("------------- Neue Runde WWM -------------");
+
         for (int i = 0; i < questionList.size(); i++) {
             showQuestionLevel(i);
             boolean answerEvaluation = playQuestion(questionList.get(i));
@@ -36,6 +42,7 @@ public class WerWirdMillionaer extends Game {
     }
 
     private void showQuestionLevel(int level) {
+        System.out.println();
         System.out.println("Level: " + level + ", Gewinnstufe: " + WWMLevels.values()[level].getLevel());
     }
 
