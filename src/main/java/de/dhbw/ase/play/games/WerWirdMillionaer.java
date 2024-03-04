@@ -20,9 +20,23 @@ public class WerWirdMillionaer extends Game {
         WWMReader wwmReader = new WWMReader();
         List<WWMQuestion> questionList = wwmReader.getQuestionList();
         for (int i = 0; i < questionList.size(); i++) {
-            playQuestion(questionList.get(i));
-        //TODO
+            showQuestionLevel(i);
+            boolean answerEvaluation = playQuestion(questionList.get(i));
+            if (answerEvaluation) {
+                System.out.println("Richtige Antwort!");
+                continue;
+            }
+            System.out.println("Diese Antwort war leider Falsch.");
+            if (i >= 5) {
+                System.out.println("Herzlichen Glückwunsch zu 500€!");
+            }
+            // Sicherheitsstufe bei 16.000 € noch möglich
+            return;
         }
+    }
+
+    private void showQuestionLevel(int level) {
+        System.out.println("Level: " + level + ", Gewinnstufe: " + WWMLevels.values()[level].getLevel());
     }
 
     private boolean playQuestion(WWMQuestion question) {
@@ -54,5 +68,33 @@ public class WerWirdMillionaer extends Game {
             }
             System.out.println("Invalide Eingabe. Bitte erneut antworten.");
         } while (true);
+    }
+
+    private enum WWMLevels {
+        ONE ("50€"),
+        TWO ("100€"),
+        THREE ("200€"),
+        FOUR ("300€"),
+        FIVE ("500€"),
+        SIX ("1.000€"),
+        SEVEN ("2.000€"),
+        EIGHT ("4.000€"),
+        NINE ("8.000€"),
+        TEN ("16.000€"),
+        ELEVEN ("32.000€"),
+        TWELVE ("64.000€"),
+        THIRTEEN ("125.000€"),
+        FOURTEEN ("500.000€"),
+        FIFTEEN ("1.000.000€");
+
+        private final String level;
+
+        WWMLevels(String level) {
+            this.level = level;
+        }
+
+        public String getLevel() {
+            return level;
+        }
     }
 }
