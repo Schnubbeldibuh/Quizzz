@@ -2,12 +2,13 @@ package de.dhbw.ase.play.games;
 
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.WWMReader;
+import de.dhbw.ase.play.games.singelplayer.SingeplayerGame;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class WerWirdMillionaer extends Game {
+public class WerWirdMillionaer extends SingeplayerGame {
 
     private final Scanner sc;
     public WerWirdMillionaer(Scanner sc) {

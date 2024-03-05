@@ -1,8 +1,10 @@
 package de.dhbw.ase.play.games;
 
+import de.dhbw.ase.play.games.singelplayer.SingeplayerGame;
+
 import java.util.Scanner;
 
-public class FindQuestions extends Game {
+public class FindQuestions extends SingeplayerGame {
 
     public FindQuestions(Scanner sc) {
         super(sc);

@@ -11,6 +11,8 @@ public class Quizzz {
     public static String FILE_WWM_VERY_HARD = "src/main/resources/WWMVeryHard.csv";
     public static String FILE_FQ = "src/main/resources/FQ.csv";
 
+    public static int SERVER_PORT = 2400;
+
     public static void main(String[] args) {
         Mainmenu menu = new Mainmenu(new Scanner(System.in));
         menu.startGame();
