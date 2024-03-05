@@ -1,6 +1,6 @@
 package de.dhbw.ase.play.games;
 
-import de.dhbw.ase.play.games.reader.WWMQuestion;
+import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.WWMReader;
 
 import java.util.Collections;
@@ -20,7 +20,7 @@ public class WerWirdMillionaer extends Game {
         /* Man könnte auch noch eine Version machen bei der die Antworten nicht mit A, B, C, D angegebenen werden
            sondern mit W, A, S, D. Für einfacherer Bedienbarkeit */
         WWMReader wwmReader = new WWMReader();
-        List<WWMQuestion> questionList = wwmReader.getQuestionList();
+        List<Question> questionList = wwmReader.getQuestionList();
 
         System.out.println();
         System.out.println("------------- Neue Runde WWM -------------");
@@ -37,6 +37,7 @@ public class WerWirdMillionaer extends Game {
                 System.out.println("Herzlichen Glückwunsch zu 500€!");
             }
             // Sicherheitsstufe bei 16.000 € noch möglich
+            // bei falscher Antwort noch die Richtige anzeigen
             return;
         }
     }
@@ -46,8 +47,8 @@ public class WerWirdMillionaer extends Game {
         System.out.println("Level: " + level + ", Gewinnstufe: " + WWMLevels.values()[level].getLevel());
     }
 
-    private boolean playQuestion(WWMQuestion question) {
-        List<WWMQuestion.Answer> answerList = question.getAnswerList();
+    private boolean playQuestion(Question question) {
+        List<Question.Answer> answerList = question.getAnswerList();
         Collections.shuffle(answerList);
         System.out.println(question.getQuestion());
         System.out.println("A: " + answerList.get(0).answer());

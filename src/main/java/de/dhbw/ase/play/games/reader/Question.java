@@ -2,12 +2,12 @@ package de.dhbw.ase.play.games.reader;
 
 import java.util.List;
 
-public class WWMQuestion {
+public class Question {
 
     public record Answer(String answer, boolean isRight) {}
     private final List<Answer> answerList;
     private final String question;
-    public WWMQuestion(List<Answer> answerList, String question) {
+    public Question(List<Answer> answerList, String question) {
         this.answerList = answerList;
         this.question = question;
     }
