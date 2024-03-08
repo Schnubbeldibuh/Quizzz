@@ -23,12 +23,4 @@ public abstract class SingeplayerGame extends Game {
         } while (askUserForRetry());
         return SelectedMenu.MenuSelection.BACK;
     }
-
-    private boolean askUserForRetry() {
-        System.out.println("1 - Erneut spielen");
-        System.out.println("2 - Zurück zum Menü");
-
-        // Es ist gewollt das alles außer 1 als zurück zum Menü interpretiert wird
-        return sc.next().equals("1");
-    }
 }
