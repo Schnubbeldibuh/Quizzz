@@ -10,8 +10,6 @@ public class FQReader extends Reader{
 
     @Override
     public List<Question> getQuestionList() {
-        List<Question> questionsForOneRound = new ArrayList<>();
-        questionsForOneRound.addAll(readFile(new File(Quizzz.FILE_FQ), 15));
-        return questionsForOneRound;
+        return new ArrayList<>(readFile(new File(Quizzz.FILE_FQ2), 15));
     }
 }
