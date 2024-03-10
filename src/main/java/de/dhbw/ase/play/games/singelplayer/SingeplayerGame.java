@@ -20,7 +20,8 @@ public abstract class SingeplayerGame extends Game {
     protected abstract void startGame();
 
     @Override
-    protected SelectedMenu.MenuSelection startGameMenu() {
+    public SelectedMenu.MenuSelection start() {
+        indicateUser();
         do {
             startGame();
         } while (askUserForRetry());
