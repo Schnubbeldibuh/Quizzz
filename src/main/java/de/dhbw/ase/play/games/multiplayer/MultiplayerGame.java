@@ -1,38 +1,129 @@
 package de.dhbw.ase.play.games.multiplayer;
 
+import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
+import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.Game;
 
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public abstract class MultiplayerGame extends Game {
 
     private final Scanner sc;
-    private final MultiplayerClient client;
-    private final MultiplayerServer server;
 
-    public MultiplayerGame(Scanner sc, MultiplayerClient client, MultiplayerServer server) {
+    private record ServerInfos(String host, int port) {}
+
+    public MultiplayerGame(Scanner sc) {
         super(sc);
         this.sc = sc;
-        this.client = client;
-        this.server = server;
     }
 
-    @Override
-    protected SelectedMenu.MenuSelection startGameMenu() {
-        boolean host = askForHost();
+    protected abstract MultiplayerServer createServer();
+    protected abstract MultiplayerClient createClient(String Username, MultiplayerServer server);
 
-        if (host) {
-            Thread serverThread = new Thread(server);
-            serverThread.start();
+    @Override
+    public SelectedMenu.MenuSelection start() {
+        indicateUser();
+
+        boolean host;
+        try {
+            host = askForHost();
+        } catch (ExitException e) {
+            return SelectedMenu.MenuSelection.BACK;
         }
-        client.start();
-        // TODO
-        // kennen müssen sich client und server nicht. Das wird über die verbindung gemacht
+        MultiplayerServer server = null;
+        MultiplayerClient client = null;
+        do {
+            if (host) {
+                // TODO eigenen IP anzeigen
+                // TODO User fragen wann starten
+                System.out.println("Folgende Spieler sind bereits beigetreten:"); // TODO @Gloria Formulierung überarbeiten
+                if (server == null) {
+                    // no previous game was played -> new server has to be started
+                    server = createServer();
+                    server.startJoiningPhase();
+                    client = createClient(getUsername(), server);
+                    try {
+                        client.registerClient("localhost", Quizzz.SERVER_PORT);
+                    } catch (UsernameAlreadyExistsException | UnknownHostException e) {
+                        /* TODO was tun wenn hier die Registrierung nicht klappt?
+                        *   muss ein technischer Fehler sein*/
+                    }
+                } else {
+                    server.advanceGamestate();
+                    server.getUsernames().forEach(System.out::println);
+                }
+                String s = sc.nextLine();
+                // TODO chekc for exit
+                server.advanceGamestate();
+            } else {
+                ServerInfos serverInfos;
+                do {
+                    try {
+                        serverInfos = askForServerInfos();
+                    } catch (ExitException e) {
+                        return SelectedMenu.MenuSelection.BACK;
+                    }
+                    do {
+                        client = createClient(getUsername(), null);
+                        try {
+                            client.registerClient(serverInfos.host(), serverInfos.port());
+                        } catch (UnknownHostException e) {
+                            System.out.println("Der Host existiert nicht. Bitte erneut versuchen"); // TODO Formulierung prüfen
+                            serverInfos = null;
+                        } catch (UsernameAlreadyExistsException e) {
+                            System.out.println("Username ist bereits vergeben. Bitte einen anderen wählen"); // TODO Formulierung prüfen
+                            client = null;
+                        }
+
+                    } while (client == null);
+                } while (serverInfos == null);
+                // TODO was tun wenn hier die Registrierung nicht klappt?
+            }
+            try {
+                client.start();
+            } catch (ExitException e) {
+                return SelectedMenu.MenuSelection.BACK;
+            }
+            if (host)
+                server.advanceGamestate();
+
+        } while (askUserForRetry());
+
+        if (host)
+            server.shutdown();
         return SelectedMenu.MenuSelection.BACK;
     }
 
-    private boolean askForHost() {
+    private ServerInfos askForServerInfos() throws ExitException {
+        ServerInfos serverInfos;
+        do {
+            String input = sc.nextLine();
+            if (input.equals("exit"))
+                throw new ExitException();
+            serverInfos = parseServerInfos(input);
+            if (serverInfos != null)
+                return serverInfos;
+
+            System.out.println("Fehlerhafte Eingabe"); // TODO Formulierung prüfen
+        } while (true);
+    }
+
+    private ServerInfos parseServerInfos(String input) {
+        String[] split = input.split(":");
+        if (split.length != 2)
+            return null;
+        int port;
+        try {
+            port = Integer.parseInt(split[1]);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        return new ServerInfos(split[0], port);
+    }
+
+    private boolean askForHost() throws ExitException {
         System.out.println();
         System.out.println("1 - Hosten");
         System.out.println("2 - Beitreten");
@@ -43,6 +134,7 @@ public abstract class MultiplayerGame extends Game {
             p = switch(input) {
                 case "1" -> true;
                 case "2" -> false;
+                case "exit" -> throw new ExitException();
                 default -> null;
             };
         } while (p == null);
