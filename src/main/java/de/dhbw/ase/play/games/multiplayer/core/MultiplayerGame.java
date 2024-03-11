@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.multiplayer;
+package de.dhbw.ase.play.games.multiplayer.core;
 
 import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;

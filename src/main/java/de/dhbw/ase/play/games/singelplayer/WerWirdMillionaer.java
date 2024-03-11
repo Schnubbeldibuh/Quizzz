@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games;
+package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.WWMReader;

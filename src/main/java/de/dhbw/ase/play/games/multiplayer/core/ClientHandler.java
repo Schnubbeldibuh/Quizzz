@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.multiplayer;
+package de.dhbw.ase.play.games.multiplayer.core;
 
 import java.io.BufferedReader;
 import java.io.IOException;

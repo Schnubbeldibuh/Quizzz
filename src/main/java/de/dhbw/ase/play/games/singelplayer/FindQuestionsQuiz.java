@@ -1,15 +1,14 @@
-package de.dhbw.ase.play.games;
+package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.play.games.reader.FQReader;
 import de.dhbw.ase.play.games.reader.Question;
-import de.dhbw.ase.play.games.singelplayer.SingeplayerGame;
 
 import java.util.List;
 import java.util.Scanner;
 
-public class FindQuestions extends SingeplayerGame {
+public class FindQuestionsQuiz extends SingeplayerGame {
 
-    public FindQuestions(Scanner sc) {
+    public FindQuestionsQuiz(Scanner sc) {
         super(sc);
     }
 

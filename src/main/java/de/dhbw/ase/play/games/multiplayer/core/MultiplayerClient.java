@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.multiplayer;
+package de.dhbw.ase.play.games.multiplayer.core;
 
 import de.dhbw.ase.play.games.ExitException;
 
@@ -136,7 +136,7 @@ public abstract class MultiplayerClient {
         out.println(msg);
     }
 
-    private enum Source {
+    protected enum Source {
         SERVER, USER
     }
 }
