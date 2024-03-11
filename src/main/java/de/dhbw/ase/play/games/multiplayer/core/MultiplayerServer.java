@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.multiplayer;
+package de.dhbw.ase.play.games.multiplayer.core;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -31,6 +31,10 @@ public abstract class MultiplayerServer {
     protected void sendMessageToAllClients(String msg) {
         clients.values()
                 .forEach(c -> c.sendMessage(msg));
+    }
+
+    protected void sendMessageToClient(String msg, String username) {
+        clients.get(username).sendMessage(msg);
     }
 
     void startJoiningPhase() {
