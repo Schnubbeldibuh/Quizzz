@@ -45,7 +45,7 @@ public abstract class MultiplayerGame extends Game {
                     server.startJoiningPhase();
                     client = createClient(getUsername(), server);
                     try {
-                        client.registerClient("localhost", Quizzz.SERVER_PORT);
+                        client.registerClient("localhost", Quizzz.SERVER_PORT); // TODO rückgabewert verarbeiten
                     } catch (UsernameAlreadyExistsException | UnknownHostException e) {
                         /* TODO was tun wenn hier die Registrierung nicht klappt?
                         *   muss ein technischer Fehler sein*/
@@ -68,7 +68,7 @@ public abstract class MultiplayerGame extends Game {
                     do {
                         client = createClient(getUsername(), null);
                         try {
-                            client.registerClient(serverInfos.host(), serverInfos.port());
+                            client.registerClient(serverInfos.host(), serverInfos.port()); // TODO Rückgabewert verarbeiten
                         } catch (UnknownHostException e) {
                             System.out.println("Der Host existiert nicht. Bitte erneut versuchen"); // TODO Formulierung prüfen
                             serverInfos = null;

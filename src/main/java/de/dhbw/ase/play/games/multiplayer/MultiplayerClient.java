@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.*;
 
@@ -21,31 +23,45 @@ public abstract class MultiplayerClient {
     private PrintWriter out;
     private Socket socket;
 
-    private record ListeningResult(String input, InputSource source) {}
+    private record ListeningResult(String input, Source source) {}
 
     public MultiplayerClient(Scanner sc, String username) {
         this.sc = sc;
         this.username = username;
     }
 
-    protected abstract String checkAndFormatUserInput(String input);
-    protected abstract String processServerInput(String input);
+    protected abstract boolean checkUserInput(String input);
+    protected abstract boolean checkServerInput(String input);
+    protected abstract List<Source> processServerInput(String input);
+    protected abstract List<Source> processUserInput(String input);
 
     protected void start() throws ExitException {
+        List<Source> listeningTo = new ArrayList<>();
+        listeningTo.add(Source.USER);
+        listeningTo.add(Source.SERVER);
+
         do {
-            Future<ListeningResult> clientThread = threadPool.submit(() -> {
-                String input;
-                do {
-                    input = checkAndFormatUserInput(sc.next());
-                } while (input == null);
-                return new ListeningResult(input, InputSource.USER);
-            });
-            Future<ListeningResult> serverThread = threadPool.submit(() -> {
-                String s = in.readLine();
-                if (s == null)
-                    throw new ServerClosedConnectionException();
-                return new ListeningResult(s, InputSource.SERVER);
-            });
+            Future<ListeningResult> clientThread = null, serverThread = null;
+            if (listeningTo.contains(Source.USER)) {
+                clientThread = threadPool.submit(() -> {
+                    String input;
+                    do {
+                        input = sc.next();
+                        if (input.equals("exit"))
+                            throw new ExitException();
+                    } while (!checkUserInput(input));
+                    return new ListeningResult(input, Source.USER);
+                });
+            }
+            if (listeningTo.contains(Source.SERVER)) {
+                serverThread = threadPool.submit(() -> {
+                    String input;
+                    do {
+                        input = in.readLine();
+                    } while (!checkServerInput(input));
+                    return new ListeningResult(input, Source.SERVER);
+                });
+            }
 
             ListeningResult res;
             try {
@@ -57,24 +73,29 @@ public abstract class MultiplayerClient {
                 return;
             } catch (ExecutionException e) {
                 if (e.getCause().getClass() == ExitException.class) {
+                    // TODO falls Host: Server herunterfahren?
                     executor.shutdownNow();
                     throw new ExitException();
                 }
                 if (e.getCause().getClass() == ServerClosedConnectionException.class) {
                     executor.shutdownNow();
-                    //TODO
+                    // TODO was tun wenn das hier der Host ist?
+                    // TODO was tun wenn nicht Host?
                 }
                 // TODO
                 return;
             }
 
-            if (res.source() == InputSource.USER) {
-                serverThread.cancel(true);
-                out.println(res.input());
+            if (res.source() == Source.USER) {
+                if (serverThread != null)
+                    serverThread.cancel(true);
+                listeningTo = processUserInput(res.input());
             } else {
-                clientThread.cancel(true);
-                processServerInput(res.input()); // TODO der Methode ein rückgabewert geben um festzustellen ob auf den server oder auf den user oder beide gewartet werden soll
+                if (clientThread != null)
+                    clientThread.cancel(true);
+                listeningTo = processServerInput(res.input());
             }
+            // TODO was tun wenn listeningTo leer ist?
 
         } while (true);
     }
@@ -85,7 +106,7 @@ public abstract class MultiplayerClient {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            out.println("Username: " + username); // TODO String rausziehen
+            sendMessage("Username: " + username); // TODO String rausziehen
 
             String line;
             do {
@@ -111,7 +132,11 @@ public abstract class MultiplayerClient {
         }
     }
 
-    private enum InputSource {
+    protected void sendMessage(String msg) {
+        out.println(msg);
+    }
+
+    private enum Source {
         SERVER, USER
     }
 }
