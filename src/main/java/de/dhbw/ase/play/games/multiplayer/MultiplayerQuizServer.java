@@ -7,13 +7,14 @@ import de.dhbw.ase.play.games.reader.Reader;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class MultiplayerQuizServer extends MultiplayerServer {
 
     private List<Question> questionList;
     private int questionIndex = 0;
     private List<Question.Answer> currentAnswerList;
-
+    private Set<String > userList;
     protected MultiplayerQuizServer(int port) {
         super(port);
     }
@@ -25,7 +26,10 @@ public class MultiplayerQuizServer extends MultiplayerServer {
             boolean outcome = currentAnswerList.get(answerIndex).isRight();
             String outgoingMsg = "Answer evaluation:" + outcome;
             sendMessageToClient(outgoingMsg, username);
-            //TODO
+            synchronized(userList) {
+                userList.remove(username);
+                checkIfRoundClosed();
+            }
         }
     }
 
@@ -38,7 +42,18 @@ public class MultiplayerQuizServer extends MultiplayerServer {
         playQuestion();
     }
 
+    private void checkIfRoundClosed() {
+        if (userList.isEmpty()) {
+            playQuestion();
+        }
+    }
+
     private void playQuestion() {
+        if(questionList.size() == questionIndex) {
+            sendMessageToAllClients("Round is finished!");
+            //TODO Punktestand an alle Clients schicken
+            return;
+        }
         Question question = questionList.get(questionIndex++);
         currentAnswerList = question.getAnswerList();
         Collections.shuffle(currentAnswerList);
@@ -46,9 +61,10 @@ public class MultiplayerQuizServer extends MultiplayerServer {
         stringBuilder.append("Next question:");
         stringBuilder.append(question.getQuestion());
         currentAnswerList.forEach(a -> {
-            stringBuilder.append(";");
-            stringBuilder.append(a);
+                    stringBuilder.append(";");
+                    stringBuilder.append(a);
         });
         sendMessageToAllClients(stringBuilder.toString());
+        userList = getUsernames();
     }
 }

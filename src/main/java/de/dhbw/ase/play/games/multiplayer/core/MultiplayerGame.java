@@ -36,8 +36,8 @@ public abstract class MultiplayerGame extends Game {
         MultiplayerClient client = null;
         do {
             if (host) {
-                // TODO eigenen IP anzeigen
-                // TODO User fragen wann starten
+                //TODO eigenen IP anzeigen
+                //TODO User fragen wann starten
                 System.out.println("Folgende Spieler sind bereits beigetreten:"); // TODO @Gloria Formulierung überarbeiten
                 if (server == null) {
                     // no previous game was played -> new server has to be started
@@ -55,7 +55,7 @@ public abstract class MultiplayerGame extends Game {
                     server.getUsernames().forEach(System.out::println);
                 }
                 String s = sc.nextLine();
-                // TODO chekc for exit
+                //TODO chekc for exit
                 server.advanceGamestate();
             } else {
                 ServerInfos serverInfos;

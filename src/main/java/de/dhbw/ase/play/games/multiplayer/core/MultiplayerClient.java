@@ -30,14 +30,13 @@ public abstract class MultiplayerClient {
         this.username = username;
     }
 
-    protected abstract boolean checkUserInput(String input);
-    protected abstract boolean checkServerInput(String input);
+    protected abstract boolean checkUserInput(String input) throws ExitException;
+    protected abstract boolean checkServerInput(String input) throws ExitException;
     protected abstract List<Source> processServerInput(String input);
     protected abstract List<Source> processUserInput(String input);
 
     protected void start() throws ExitException {
         List<Source> listeningTo = new ArrayList<>();
-        listeningTo.add(Source.USER);
         listeningTo.add(Source.SERVER);
 
         do {
@@ -106,7 +105,7 @@ public abstract class MultiplayerClient {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            sendMessage("Username: " + username); // TODO String rausziehen
+            sendMessageToServer("Username: " + username); // TODO String rausziehen
 
             String line;
             do {
@@ -132,7 +131,7 @@ public abstract class MultiplayerClient {
         }
     }
 
-    protected void sendMessage(String msg) {
+    protected void sendMessageToServer(String msg) {
         out.println(msg);
     }
 

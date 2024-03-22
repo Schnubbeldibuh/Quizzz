@@ -45,7 +45,7 @@ public abstract class MultiplayerServer {
     void advanceGamestate() {
         checkIfShutDown();
         switch (gameState) {
-            case CREATED -> {
+            case CREATED, FINISHED -> {
                 gameState = GameState.JOIN;
                 joiningPhase();
             }
@@ -57,10 +57,6 @@ public abstract class MultiplayerServer {
             case PLAY ->
                 // TODO save statistics
                     gameState = GameState.FINISHED;
-            case FINISHED -> {
-                gameState = GameState.PLAY;
-                joiningPhase();
-            }
         }
     }
 
@@ -96,7 +92,7 @@ public abstract class MultiplayerServer {
                 .forEach(ClientHandler::closeConnection);
     }
 
-    Set<String> getUsernames() {
+    protected Set<String> getUsernames() {
         return clients.keySet();
     }
 
