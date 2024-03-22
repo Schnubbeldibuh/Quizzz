@@ -62,7 +62,7 @@ public class MultiplayerQuizServer extends MultiplayerServer {
         stringBuilder.append(question.getQuestion());
         currentAnswerList.forEach(a -> {
                     stringBuilder.append(";");
-                    stringBuilder.append(a);
+                    stringBuilder.append(a.answer());
         });
         sendMessageToAllClients(stringBuilder.toString());
         userList = getUsernames();

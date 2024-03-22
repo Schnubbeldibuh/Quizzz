@@ -96,7 +96,7 @@ public abstract class MultiplayerClient {
             }
             // TODO was tun wenn listeningTo leer ist?
 
-        } while (true);
+        } while (!listeningTo.isEmpty());
     }
 
     boolean registerClient(String host, int port) throws UsernameAlreadyExistsException, UnknownHostException {

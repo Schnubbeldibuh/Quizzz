@@ -1,10 +1,12 @@
 package de.dhbw.ase.play.games.multiplayer.core;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -47,7 +49,7 @@ public abstract class MultiplayerServer {
         switch (gameState) {
             case CREATED, FINISHED -> {
                 gameState = GameState.JOIN;
-                joiningPhase();
+                startJoiningPhase();
             }
             case JOIN -> {
                 gameState = GameState.PLAY;
@@ -93,13 +95,15 @@ public abstract class MultiplayerServer {
     }
 
     protected Set<String> getUsernames() {
-        return clients.keySet();
+        return new HashSet<>(clients.keySet());
     }
 
     private Void joiningPhase() {
         ServerSocket serverSocket = null;
-        try (ServerSocket ss = new ServerSocket(port)) {
+        try (ServerSocket ss = new ServerSocket()) {
             serverSocket = ss;
+            ss.setReuseAddress(true);
+            ss.bind(new InetSocketAddress(port));
             while (gameState == GameState.JOIN) {
                 Socket socket = serverSocket.accept();
                 threadPool.submit(new ClientHandler(socket, this));
@@ -107,7 +111,7 @@ public abstract class MultiplayerServer {
         } catch (SocketException e) {
             if (serverSocket != null && serverSocket.isClosed())
                 return null;
-
+            e.printStackTrace();
             System.out.println("Der Server ist abgestürzt :(");
             System.out.println("Bitte erneut versuchen.");
             return null;

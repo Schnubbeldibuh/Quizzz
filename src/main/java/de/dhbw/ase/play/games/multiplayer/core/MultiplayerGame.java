@@ -42,7 +42,7 @@ public abstract class MultiplayerGame extends Game {
                 if (server == null) {
                     // no previous game was played -> new server has to be started
                     server = createServer();
-                    server.startJoiningPhase();
+                    server.advanceGamestate();
                     client = createClient(getUsername(), server);
                     try {
                         client.registerClient("localhost", Quizzz.SERVER_PORT); // TODO rückgabewert verarbeiten
@@ -54,7 +54,10 @@ public abstract class MultiplayerGame extends Game {
                     server.advanceGamestate();
                     server.getUsernames().forEach(System.out::println);
                 }
-                String s = sc.nextLine();
+                String s;
+                do {
+                    s = sc.nextLine();
+                } while (!s.equals("start"));
                 //TODO chekc for exit
                 server.advanceGamestate();
             } else {
