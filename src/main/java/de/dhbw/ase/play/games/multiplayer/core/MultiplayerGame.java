@@ -36,8 +36,7 @@ public abstract class MultiplayerGame extends Game {
         MultiplayerClient client = null;
         do {
             if (host) {
-                //TODO eigenen IP anzeigen
-                //TODO User fragen wann starten
+                System.out.println("Zum Starten bitte <start> eingeben.");
                 System.out.println("Folgende Spieler sind bereits beigetreten:"); // TODO @Gloria Formulierung überarbeiten
                 if (server == null) {
                     // no previous game was played -> new server has to be started
@@ -102,6 +101,7 @@ public abstract class MultiplayerGame extends Game {
     private ServerInfos askForServerInfos() throws ExitException {
         ServerInfos serverInfos;
         do {
+            System.out.println("Bitte gebe den Hostnamen und Port an in der Form <hostname:port>.");
             String input = sc.nextLine();
             if (input.equals("exit"))
                 throw new ExitException();
@@ -109,7 +109,7 @@ public abstract class MultiplayerGame extends Game {
             if (serverInfos != null)
                 return serverInfos;
 
-            System.out.println("Fehlerhafte Eingabe"); // TODO Formulierung prüfen
+            System.out.println("Fehlerhafte Eingabe, bitte erneut eingeben.");
         } while (true);
     }
 

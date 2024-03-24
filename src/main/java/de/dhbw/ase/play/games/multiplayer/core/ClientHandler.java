@@ -42,7 +42,7 @@ class ClientHandler implements Runnable {
                 return;
             }
             out.println("successful joined"); // TODO String rausziehen
-            // TODO Host benachrichtigen, dass ein Client erfolgreich connected hat
+            System.out.println(username);
 
             do {
                 line = in.readLine();
@@ -52,7 +52,7 @@ class ClientHandler implements Runnable {
             server.removeClient(username);
         } catch (IOException e) {
             server.removeClient(username);
-            // TODO Host benachrichtigen das der Client removed wurde
+            System.out.println(username + " wurde entfernt.");
         }
     }
 
