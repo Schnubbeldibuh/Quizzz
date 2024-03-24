@@ -12,7 +12,7 @@ import java.util.Set;
 public class MultiplayerQuizServer extends MultiplayerServer {
 
     private List<Question> questionList;
-    private int questionIndex = 0;
+    private int questionIndex;
     private List<Question.Answer> currentAnswerList;
     private Set<String > userList;
     protected MultiplayerQuizServer(int port) {
@@ -34,6 +34,7 @@ public class MultiplayerQuizServer extends MultiplayerServer {
     protected void startPlaying() {
         Reader mReader = new MReader();
         questionList = mReader.getQuestionList();
+        questionIndex = 0;
         sendMessageToAllClients("start game");
         Collections.shuffle(questionList);
         playQuestion();
