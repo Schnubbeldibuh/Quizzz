@@ -17,7 +17,7 @@ public abstract class MultiplayerServer {
 
     private final int port;
     private final Map<String, ClientHandler> clients = new HashMap<>();
-    private final ExecutorService threadPool = Executors.newCachedThreadPool();
+    private final ExecutorService executor = Executors.newCachedThreadPool();
     private GameState gameState = GameState.CREATED;
     private Future<Void> joiningFuture;
     private ServerSocket serverSocket;
@@ -42,7 +42,7 @@ public abstract class MultiplayerServer {
 
     void startJoiningPhase() {
         checkIfShutDown();
-        joiningFuture = threadPool.submit(this::joiningPhase);
+        joiningFuture = executor.submit(this::joiningPhase);
     }
 
     void advanceGamestate() {
@@ -93,7 +93,7 @@ public abstract class MultiplayerServer {
         if (gameState == GameState.SHUTDOWN)
             return;
         gameState = GameState.SHUTDOWN;
-        threadPool.shutdownNow();
+        executor.shutdownNow();
         clients.values()
                 .forEach(ClientHandler::closeConnection);
     }
@@ -103,14 +103,14 @@ public abstract class MultiplayerServer {
     }
 
     private Void joiningPhase() {
-        ServerSocket serverSocket = null;
+        serverSocket = null;
         try (ServerSocket ss = new ServerSocket()) {
             serverSocket = ss;
             ss.setReuseAddress(true);
             ss.bind(new InetSocketAddress(port));
             while (gameState == GameState.JOIN) {
                 Socket socket = serverSocket.accept();
-                threadPool.submit(new ClientHandler(socket, this));
+                executor.submit(new ClientHandler(socket, this));
             }
         } catch (SocketException e) {
             if (serverSocket != null && serverSocket.isClosed())
