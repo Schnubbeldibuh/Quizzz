@@ -46,8 +46,10 @@ class ClientHandler implements Runnable {
 
             do {
                 line = in.readLine();
+                if (line == null)
+                    break;
                 server.processClientMessage(getUsername(), line);
-            } while (line != null);
+            } while (true);
             socket.close();
             server.removeClient(username);
         } catch (IOException e) {
