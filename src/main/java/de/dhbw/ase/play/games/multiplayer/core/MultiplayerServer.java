@@ -75,7 +75,7 @@ public abstract class MultiplayerServer {
         return true;
     }
 
-    void removeClient(String username) {
+    protected void removeClient(String username) {
         checkIfShutDown();
         if (username == null)
             return;

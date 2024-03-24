@@ -26,10 +26,7 @@ public class MultiplayerQuizServer extends MultiplayerServer {
             boolean outcome = currentAnswerList.get(answerIndex).isRight();
             String outgoingMsg = "Answer evaluation:" + outcome;
             sendMessageToClient(outgoingMsg, username);
-            synchronized(userList) {
-                userList.remove(username);
-                checkIfRoundClosed();
-            }
+            checkIfRoundClosed(username);
         }
     }
 
@@ -42,9 +39,18 @@ public class MultiplayerQuizServer extends MultiplayerServer {
         playQuestion();
     }
 
-    private void checkIfRoundClosed() {
-        if (userList.isEmpty()) {
-            playQuestion();
+    @Override
+    protected void removeClient(String username) {
+        super.removeClient(username);
+        checkIfRoundClosed(username);
+    }
+
+    private void checkIfRoundClosed(String username) {
+        synchronized(userList) {
+            userList.remove(username);
+            if (userList.isEmpty()) {
+                playQuestion();
+            }
         }
     }
 
