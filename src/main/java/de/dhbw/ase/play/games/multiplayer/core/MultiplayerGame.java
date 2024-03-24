@@ -86,6 +86,10 @@ public abstract class MultiplayerGame extends Game {
             try {
                 client.start();
             } catch (ExitException e) {
+                if (server != null) {
+                    server.shutdown();
+                }
+                client.disconnectClient();
                 return SelectedMenu.MenuSelection.BACK;
             }
             if (host)

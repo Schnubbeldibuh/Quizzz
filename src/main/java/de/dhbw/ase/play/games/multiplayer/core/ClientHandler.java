@@ -52,8 +52,8 @@ class ClientHandler implements Runnable {
             server.removeClient(username);
         } catch (IOException e) {
             server.removeClient(username);
-            System.out.println(username + " wurde entfernt.");
         }
+        System.out.println(username + " wurde entfernt.");
     }
 
     void sendMessage(String msg) {

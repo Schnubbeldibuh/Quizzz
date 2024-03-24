@@ -57,7 +57,7 @@ public abstract class MultiplayerClient {
                     String input;
                     do {
                         input = in.readLine();
-                    } while (!checkServerInput(input));
+                    } while (input != null && !checkServerInput(input));
                     return new ListeningResult(input, Source.SERVER);
                 });
             }
@@ -72,7 +72,6 @@ public abstract class MultiplayerClient {
                 return;
             } catch (ExecutionException e) {
                 if (e.getCause().getClass() == ExitException.class) {
-                    // TODO falls Host: Server herunterfahren?
                     executor.shutdownNow();
                     throw new ExitException();
                 }
@@ -92,9 +91,12 @@ public abstract class MultiplayerClient {
             } else {
                 if (clientThread != null)
                     clientThread.cancel(true);
+                if (res.input == null) {
+                    System.out.println("Host hat die Verbindung getrennt.");
+                    throw new ExitException();
+                }
                 listeningTo = processServerInput(res.input());
             }
-            // TODO was tun wenn listeningTo leer ist?
 
         } while (!listeningTo.isEmpty());
     }
@@ -137,5 +139,13 @@ public abstract class MultiplayerClient {
 
     protected enum Source {
         SERVER, USER
+    }
+
+    protected void disconnectClient() {
+        try {
+            socket.close();
+        } catch (IOException ignored) {
+
+        }
     }
 }
