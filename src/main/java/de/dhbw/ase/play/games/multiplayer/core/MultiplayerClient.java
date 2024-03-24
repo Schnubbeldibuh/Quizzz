@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,10 +76,10 @@ public abstract class MultiplayerClient {
                     executor.shutdownNow();
                     throw new ExitException();
                 }
-                if (e.getCause().getClass() == ServerClosedConnectionException.class) {
+                if (e.getCause().getClass() == SocketException.class) {
                     executor.shutdownNow();
-                    // TODO was tun wenn das hier der Host ist?
-                    // TODO was tun wenn nicht Host?
+                    System.out.println("Host hat die Verbindung getrennt");
+                    throw new ExitException();
                 }
                 // TODO
                 return;
