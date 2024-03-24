@@ -20,6 +20,7 @@ public abstract class MultiplayerServer {
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
     private GameState gameState = GameState.CREATED;
     private Future<Void> joiningFuture;
+    private ServerSocket serverSocket;
 
 
     protected MultiplayerServer(int port) {
@@ -53,7 +54,10 @@ public abstract class MultiplayerServer {
             }
             case JOIN -> {
                 gameState = GameState.PLAY;
-                joiningFuture.cancel(true);
+                try {
+                    serverSocket.close();
+                } catch (IOException ignored) {
+                }
                 startPlaying();
             }
             case PLAY ->

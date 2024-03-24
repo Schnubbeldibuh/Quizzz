@@ -142,6 +142,7 @@ public abstract class MultiplayerClient {
     }
 
     protected void disconnectClient() {
+        executor.shutdownNow();
         try {
             socket.close();
         } catch (IOException ignored) {

@@ -96,6 +96,7 @@ public abstract class MultiplayerGame extends Game {
                 server.advanceGamestate();
 
         } while (askUserForRetry());
+        client.disconnectClient();
 
         if (host)
             server.shutdown();
