@@ -24,7 +24,6 @@ public abstract class MultiplayerGame extends Game {
 
     @Override
     public SelectedMenu.MenuSelection start() {
-        indicateUser();
 
         boolean host;
         try {
@@ -36,8 +35,9 @@ public abstract class MultiplayerGame extends Game {
         MultiplayerClient client = null;
         do {
             if (host) {
+                indicateUser();
                 System.out.println("Zum Starten bitte <start> eingeben.");
-                System.out.println("Folgende Spieler sind bereits beigetreten:"); // TODO @Gloria Formulierung überarbeiten
+                System.out.println("Folgende SpielerInnen sind bereits beigetreten:");
                 if (server == null) {
                     // no previous game was played -> new server has to be started
                     server = createServer();
@@ -59,7 +59,7 @@ public abstract class MultiplayerGame extends Game {
                 } while (!s.equals("start"));
                 //TODO chekc for exit
                 server.advanceGamestate();
-            } else {
+            } else if (client == null){
                 ServerInfos serverInfos;
                 do {
                     try {
@@ -68,14 +68,15 @@ public abstract class MultiplayerGame extends Game {
                         return SelectedMenu.MenuSelection.BACK;
                     }
                     do {
+                        indicateUser();
                         client = createClient(getUsername(), null);
                         try {
                             client.registerClient(serverInfos.host(), serverInfos.port()); // TODO Rückgabewert verarbeiten
                         } catch (UnknownHostException e) {
-                            System.out.println("Der Host existiert nicht. Bitte erneut versuchen"); // TODO Formulierung prüfen
+                            System.out.println("Der Host existiert nicht. Bitte erneut versuchen");
                             serverInfos = null;
                         } catch (UsernameAlreadyExistsException e) {
-                            System.out.println("Username ist bereits vergeben. Bitte einen anderen wählen"); // TODO Formulierung prüfen
+                            System.out.println("Username ist bereits vergeben. Bitte einen anderen wählen.");
                             client = null;
                         }
 
