@@ -23,6 +23,7 @@ public abstract class MultiplayerClient {
     private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
+    private String questionIndex;
 
     private record ListeningResult(String input, Source source) {}
 
@@ -34,7 +35,6 @@ public abstract class MultiplayerClient {
     protected abstract boolean checkUserInput(String input) throws ExitException;
     protected abstract boolean checkServerInput(String input) throws ExitException;
     protected abstract List<Source> processServerInput(String input);
-    protected abstract List<Source> processUserInput(String input);
 
     protected void start() throws ExitException {
         List<Source> listeningTo = new ArrayList<>();
@@ -149,5 +149,30 @@ public abstract class MultiplayerClient {
         } catch (IOException ignored) {
 
         }
+    }
+
+    protected void showQuestion(String input) {
+        String question = input.substring("Next question:".length());
+        String[] questionAnswersArray = question.split(";");
+        System.out.println("Frage: " + questionAnswersArray[0]);
+        System.out.println("A: " + questionAnswersArray[1]);
+        System.out.println("B: " + questionAnswersArray[2]);
+        System.out.println("C: " + questionAnswersArray[3]);
+        System.out.println("D: " + questionAnswersArray[4]);
+        questionIndex = questionAnswersArray[5];
+    }
+
+    protected List<MultiplayerClient.Source> processUserInput(String input) {
+        Integer selection = switch (input) {
+            case "a" -> 0;
+            case "b" -> 1;
+            case "c" -> 2;
+            case "d" -> 3;
+            default -> throw new IllegalStateException("Unexpected value: " + input);
+        };
+        sendMessageToServer("Answer:" + selection + ";" + questionIndex);
+        List<MultiplayerClient.Source> sourceList = new ArrayList<>();
+        sourceList.add(Source.SERVER);
+        return sourceList;
     }
 }

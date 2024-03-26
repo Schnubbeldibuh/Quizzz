@@ -1,7 +1,8 @@
 package de.dhbw.ase.play;
 
 import de.dhbw.ase.SelectedMenu;
-import de.dhbw.ase.play.games.multiplayer.MultiplayerQuiz;
+import de.dhbw.ase.play.games.multiplayer.quickquiz.MultiplayerQuick;
+import de.dhbw.ase.play.games.multiplayer.quiz.MultiplayerQuiz;
 import de.dhbw.ase.Submenu;
 import de.dhbw.ase.play.games.singelplayer.FindQuestionsQuiz;
 import de.dhbw.ase.play.games.singelplayer.WerWirdMillionaer;
@@ -20,7 +21,7 @@ public class PlayMenu extends Submenu {
         Map<Character, SelectedMenu> map = new HashMap<>();
         map.put('1', new SelectedMenu(new WerWirdMillionaer(getSc())));
         map.put('2', new SelectedMenu(new MultiplayerQuiz(getSc())));
-        //map.put('3', new SelectedMenu(new MultiplayerQuick(getSc())));
+        map.put('3', new SelectedMenu(new MultiplayerQuick(getSc())));
         map.put('4', new SelectedMenu(new FindQuestionsQuiz(getSc())));
         map.put('5', new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put('6', new SelectedMenu(SelectedMenu.MenuSelection.EXIT));

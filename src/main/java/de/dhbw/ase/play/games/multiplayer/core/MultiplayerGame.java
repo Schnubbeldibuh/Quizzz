@@ -20,7 +20,7 @@ public abstract class MultiplayerGame extends Game {
     }
 
     protected abstract MultiplayerServer createServer();
-    protected abstract MultiplayerClient createClient(String Username, MultiplayerServer server);
+    protected abstract MultiplayerClient createClient(String username, MultiplayerServer server);
 
     @Override
     public SelectedMenu.MenuSelection start() {

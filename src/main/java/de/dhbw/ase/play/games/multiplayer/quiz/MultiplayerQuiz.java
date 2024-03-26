@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.multiplayer;
+package de.dhbw.ase.play.games.multiplayer.quiz;
 
 import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class MultiplayerQuiz extends MultiplayerGame {
 
-    Scanner sc;
+    private final Scanner sc;
     public MultiplayerQuiz(Scanner sc) {
         super(sc);
         this.sc = sc;

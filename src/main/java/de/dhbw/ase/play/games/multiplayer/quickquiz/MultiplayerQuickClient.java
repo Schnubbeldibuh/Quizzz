@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.multiplayer;
+package de.dhbw.ase.play.games.multiplayer.quickquiz;
 
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MultiplayerQuizClient extends MultiplayerClient {
-    public MultiplayerQuizClient(Scanner sc, String username) {
+public class MultiplayerQuickClient extends MultiplayerClient {
+
+    public MultiplayerQuickClient(Scanner sc, String username) {
         super(sc, username);
     }
 
@@ -28,11 +29,12 @@ public class MultiplayerQuizClient extends MultiplayerClient {
         return input.startsWith("Answer evaluation:")
                 || input.startsWith("Next question:")
                 || input.startsWith("Round is finished!")
-                || input.startsWith("start game");
+                || input.startsWith("start game")
+                || input.startsWith("Right answer:");
     }
 
     @Override
-    protected List<MultiplayerClient.Source> processServerInput(String input) {
+    protected List<Source> processServerInput(String input) {
         if (input.startsWith("Round is finished!")) {
             return new ArrayList<>();
         }
@@ -52,31 +54,13 @@ public class MultiplayerQuizClient extends MultiplayerClient {
             sourceList.add(Source.SERVER);
             return sourceList;
         }
+        if (input.startsWith("Right answer:")) {
+            System.out.println(input.substring("Right answer:".length()) + " hat richtig geantwortet.");
+        }
         if (input.startsWith("Next question:")) {
-            String question = input.substring("Next question:".length());
-            String[] questionAnswersArray = question.split(";");
-            System.out.println("Frage: " + questionAnswersArray[0]);
-            System.out.println("A: " + questionAnswersArray[1]);
-            System.out.println("B: " + questionAnswersArray[2]);
-            System.out.println("C: " + questionAnswersArray[3]);
-            System.out.println("D: " + questionAnswersArray[4]);
+            showQuestion(input);
         }
         sourceList.add(Source.USER);
-        return sourceList;
-    }
-
-    @Override
-    protected List<MultiplayerClient.Source> processUserInput(String input) {
-        Integer selection = switch (input) {
-            case "a" -> 0;
-            case "b" -> 1;
-            case "c" -> 2;
-            case "d" -> 3;
-            default -> throw new IllegalStateException("Unexpected value: " + input);
-        };
-        sendMessageToServer("Answer:" + selection);
-        List<MultiplayerClient.Source> sourceList = new ArrayList<>();
-        sourceList.add(Source.SERVER);
         return sourceList;
     }
 }
