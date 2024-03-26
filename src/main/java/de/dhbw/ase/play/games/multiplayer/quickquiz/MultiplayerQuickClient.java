@@ -56,11 +56,14 @@ public class MultiplayerQuickClient extends MultiplayerClient {
         }
         if (input.startsWith("Right answer:")) {
             System.out.println(input.substring("Right answer:".length()) + " hat richtig geantwortet.");
+            sourceList.add(Source.SERVER);
+            return sourceList;
         }
         if (input.startsWith("Next question:")) {
             showQuestion(input);
         }
         sourceList.add(Source.USER);
+        sourceList.add(Source.SERVER);
         return sourceList;
     }
 }
