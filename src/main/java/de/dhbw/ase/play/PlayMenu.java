@@ -1,11 +1,10 @@
 package de.dhbw.ase.play;
 
 import de.dhbw.ase.SelectedMenu;
+import de.dhbw.ase.play.games.multiplayer.MultiplayerQuiz;
 import de.dhbw.ase.Submenu;
-import de.dhbw.ase.play.games.FindQuestions;
-import de.dhbw.ase.play.games.WerWirdMillionaer;
-import de.dhbw.ase.play.games.Multiplayer;
-import de.dhbw.ase.play.games.MultiplayerQuick;
+import de.dhbw.ase.play.games.singelplayer.FindQuestionsQuiz;
+import de.dhbw.ase.play.games.singelplayer.WerWirdMillionaer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +19,9 @@ public class PlayMenu extends Submenu {
     protected Map<Character, SelectedMenu> createSelectionMap() {
         Map<Character, SelectedMenu> map = new HashMap<>();
         map.put('1', new SelectedMenu(new WerWirdMillionaer(getSc())));
-        map.put('2', new SelectedMenu(new Multiplayer(getSc())));
-        map.put('3', new SelectedMenu(new MultiplayerQuick(getSc())));
-        map.put('4', new SelectedMenu(new FindQuestions(getSc())));
+        map.put('2', new SelectedMenu(new MultiplayerQuiz(getSc())));
+        //map.put('3', new SelectedMenu(new MultiplayerQuick(getSc())));
+        map.put('4', new SelectedMenu(new FindQuestionsQuiz(getSc())));
         map.put('5', new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put('6', new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
