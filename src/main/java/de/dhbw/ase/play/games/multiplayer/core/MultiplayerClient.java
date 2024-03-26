@@ -18,8 +18,6 @@ public abstract class MultiplayerClient {
     private final Scanner sc;
     private final String username;
     private final ExecutorService executor = Executors.newFixedThreadPool(2);
-    private final CompletionService<ListeningResult> threadPool =
-            new ExecutorCompletionService<>(executor);
     private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
@@ -41,6 +39,7 @@ public abstract class MultiplayerClient {
         listeningTo.add(Source.SERVER);
 
         do {
+            CompletionService<ListeningResult> threadPool = new ExecutorCompletionService<>(executor);
             Future<ListeningResult> clientThread = null, serverThread = null;
             if (listeningTo.contains(Source.USER)) {
                 clientThread = threadPool.submit(() -> {
