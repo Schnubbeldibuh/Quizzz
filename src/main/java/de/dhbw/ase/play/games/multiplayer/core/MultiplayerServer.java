@@ -1,5 +1,6 @@
 package de.dhbw.ase.play.games.multiplayer.core;
 
+import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.reader.MReader;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.Reader;

@@ -1,6 +1,7 @@
 package de.dhbw.ase.play.games.multiplayer.core;
 
 import de.dhbw.ase.play.games.ExitException;
+import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 
 import java.io.BufferedReader;
 import java.io.IOException;

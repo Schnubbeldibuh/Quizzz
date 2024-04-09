@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.multiplayer.core;
+package de.dhbw.ase.play.games.multiplayer;
 
 public enum CommunicationPrefixes {
     USERNAME("username:"),

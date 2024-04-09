@@ -1,5 +1,7 @@
 package de.dhbw.ase.play.games.multiplayer.core;
 
+import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
