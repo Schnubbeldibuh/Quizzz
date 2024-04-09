@@ -19,6 +19,7 @@ public abstract class MultiplayerClient {
     private final Scanner sc;
     private final String username;
     private final ExecutorService executor = Executors.newFixedThreadPool(2);
+    protected final List<CommunicationPrefixes> validServerMessages = new ArrayList<>();
     private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
@@ -32,8 +33,19 @@ public abstract class MultiplayerClient {
     }
 
     protected abstract boolean checkUserInput(String input) throws ExitException;
-    protected abstract boolean checkServerInput(String input) throws ExitException;
     protected abstract List<Source> processServerInput(String input);
+
+    protected boolean checkServerInput(String input) {
+        CommunicationPrefixes communicationPrefixes;
+
+        try {
+            communicationPrefixes = CommunicationPrefixes.evaluateCase(input);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        return validServerMessages.contains(communicationPrefixes);
+    }
 
     protected void start() throws ExitException {
         List<Source> listeningTo = new ArrayList<>();

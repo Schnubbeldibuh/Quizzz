@@ -1,6 +1,7 @@
 package de.dhbw.ase.play.games.multiplayer.quickquiz;
 
 import de.dhbw.ase.play.games.ExitException;
+import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
 
 import java.util.ArrayList;
@@ -22,15 +23,6 @@ public class MultiplayerQuickClient extends MultiplayerClient {
                 || input.equalsIgnoreCase("b")
                 || input.equalsIgnoreCase("c")
                 || input.equalsIgnoreCase("d");
-    }
-
-    @Override
-    protected boolean checkServerInput(String input) {
-        return input.startsWith("Answer evaluation:")
-                || input.startsWith("Next question:")
-                || input.startsWith("Round is finished!")
-                || input.startsWith("start game")
-                || input.startsWith("Right answer:");
     }
 
     @Override

@@ -10,15 +10,13 @@ import java.util.Scanner;
 
 public class MultiplayerQuizClient extends MultiplayerClient {
 
-    private final CommunicationPrefixes[] validServerMessages = {
-            CommunicationPrefixes.ANSWER_EVALUATION,
-            CommunicationPrefixes.NEXT_QUESTION,
-            CommunicationPrefixes.ROUND_FINISHED,
-            CommunicationPrefixes.START_GAME
-    };
-
     public MultiplayerQuizClient(Scanner sc, String username) {
         super(sc, username);
+
+        validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
+        validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
+        validServerMessages.add(CommunicationPrefixes.ROUND_FINISHED);
+        validServerMessages.add(CommunicationPrefixes.START_GAME);
     }
 
     @Override
@@ -32,24 +30,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 || input.equalsIgnoreCase("d");
     }
 
-    @Override
-    protected boolean checkServerInput(String input) {
-        CommunicationPrefixes communicationPrefixes;
-
-        try {
-            communicationPrefixes = CommunicationPrefixes.evaluateCase(input);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-
-        for (CommunicationPrefixes c: validServerMessages) {
-            if (c == communicationPrefixes) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     @Override
     protected List<MultiplayerClient.Source> processServerInput(String input) {
