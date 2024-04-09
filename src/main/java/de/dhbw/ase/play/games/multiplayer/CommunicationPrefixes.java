@@ -11,7 +11,8 @@ public enum CommunicationPrefixes {
     ANSWER("answer:"),
     START_GAME("start_game"),
     ROUND_FINISHED("round_finished"),
-    ANSWER_EVALUATION("answer_evaluation");
+    ANSWER_EVALUATION("answer_evaluation:"),
+    RIGHT_ANSWER("right_answer:");
 
     private final String string;
 

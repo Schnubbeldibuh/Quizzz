@@ -12,6 +12,12 @@ public class MultiplayerQuickClient extends MultiplayerClient {
 
     public MultiplayerQuickClient(Scanner sc, String username) {
         super(sc, username);
+
+        validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
+        validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
+        validServerMessages.add(CommunicationPrefixes.ROUND_FINISHED);
+        validServerMessages.add(CommunicationPrefixes.START_GAME);
+        validServerMessages.add(CommunicationPrefixes.RIGHT_ANSWER);
     }
 
     @Override
@@ -27,35 +33,44 @@ public class MultiplayerQuickClient extends MultiplayerClient {
 
     @Override
     protected List<Source> processServerInput(String input) {
-        if (input.startsWith("Round is finished!")) {
-            return new ArrayList<>();
-        }
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
-        if (input.startsWith("start game")) {
-            System.out.println("Das Spiel startet.");
-            sourceList.add(Source.SERVER);
-            return sourceList;
+
+        switch (CommunicationPrefixes.evaluateCase(input)) {
+            case ROUND_FINISHED:
+                return new ArrayList<>();
+
+            case START_GAME:
+                System.out.println("Das Spiel startet.");
+                sourceList.add(Source.SERVER);
+                break;
+
+            case ANSWER_EVALUATION:
+                boolean evaluation =
+                        Boolean.parseBoolean(input.substring(CommunicationPrefixes.ANSWER_EVALUATION.getLength()));
+
+                if (evaluation) {
+                    System.out.println("Die Antwort ist richtig :)");
+                } else {
+                    System.out.println("DU DUMME SAU");
+                }
+
+                sourceList.add(Source.SERVER);
+                break;
+
+            case RIGHT_ANSWER:
+                System.out.println(
+                        input.substring(CommunicationPrefixes.RIGHT_ANSWER.getLength()) + " hat richtig geantwortet.");
+
+                sourceList.add(Source.SERVER);
+                break;
+
+            case NEXT_QUESTION:
+                showQuestion(input);
+                sourceList.add(Source.USER);
+                sourceList.add(Source.SERVER);
+                break;
         }
-        if (input.startsWith("Answer evaluation:")) {
-            boolean evaluation = Boolean.parseBoolean(input.substring("Answer evaluation:".length()));
-            if (evaluation) {
-                System.out.println("Die Antwort ist richtig :)");
-            } else {
-                System.out.println("DU DUMME SAU");
-            }
-            sourceList.add(Source.SERVER);
-            return sourceList;
-        }
-        if (input.startsWith("Right answer:")) {
-            System.out.println(input.substring("Right answer:".length()) + " hat richtig geantwortet.");
-            sourceList.add(Source.SERVER);
-            return sourceList;
-        }
-        if (input.startsWith("Next question:")) {
-            showQuestion(input);
-        }
-        sourceList.add(Source.USER);
-        sourceList.add(Source.SERVER);
+
         return sourceList;
     }
 }
