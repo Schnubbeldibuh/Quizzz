@@ -1,5 +1,6 @@
 package de.dhbw.ase.play.games.multiplayer.quiz;
 
+import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerServer;
 
 public class MultiplayerQuizServer extends MultiplayerServer {
@@ -10,11 +11,14 @@ public class MultiplayerQuizServer extends MultiplayerServer {
 
     @Override
     protected void processClientMessage(String username, String msg) {
-        if (msg.startsWith("Answer:")) {
+
+        if (CommunicationPrefixes.ANSWER.checkPrefix(msg)) {
             int answerIndex = Integer.parseInt(msg.substring("Answer:".length()));
             boolean outcome = currentAnswerList.get(answerIndex).isRight();
+
             String outgoingMsg = "Answer evaluation:" + outcome;
             sendMessageToClient(outgoingMsg, username);
+
             checkIfRoundClosed(username);
         }
     }

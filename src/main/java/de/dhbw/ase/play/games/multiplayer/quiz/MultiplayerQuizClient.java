@@ -1,6 +1,7 @@
 package de.dhbw.ase.play.games.multiplayer.quiz;
 
 import de.dhbw.ase.play.games.ExitException;
+import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
 
 import java.util.ArrayList;
@@ -8,6 +9,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MultiplayerQuizClient extends MultiplayerClient {
+
+    private final CommunicationPrefixes[] validServerMessages = {
+            CommunicationPrefixes.ANSWER_EVALUATION,
+            CommunicationPrefixes.NEXT_QUESTION,
+            CommunicationPrefixes.ROUND_FINISHED,
+            CommunicationPrefixes.START_GAME
+    };
+
     public MultiplayerQuizClient(Scanner sc, String username) {
         super(sc, username);
     }
@@ -25,37 +34,55 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
     @Override
     protected boolean checkServerInput(String input) {
-        return input.startsWith("Answer evaluation:")
-                || input.startsWith("Next question:")
-                || input.startsWith("Round is finished!")
-                || input.startsWith("start game");
+        CommunicationPrefixes communicationPrefixes;
+
+        try {
+            communicationPrefixes = CommunicationPrefixes.evaluateCase(input);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        for (CommunicationPrefixes c: validServerMessages) {
+            if (c == communicationPrefixes) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
     protected List<MultiplayerClient.Source> processServerInput(String input) {
-        if (input.startsWith("Round is finished!")) {
-            return new ArrayList<>();
-        }
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
-        if (input.startsWith("start game")) {
-            System.out.println("Das Spiel startet.");
-            sourceList.add(Source.SERVER);
-            return sourceList;
+
+        switch (CommunicationPrefixes.evaluateCase(input)) {
+            case ROUND_FINISHED:
+                return new ArrayList<>();
+
+            case START_GAME:
+                System.out.println("Das Spiel startet.");
+                sourceList.add(Source.SERVER);
+                break;
+
+            case ANSWER_EVALUATION:
+                boolean evaluation =
+                        Boolean.parseBoolean(input.substring(CommunicationPrefixes.ANSWER_EVALUATION.getLength()));
+
+                if (evaluation) {
+                    System.out.println("Die Antwort ist richtig :)");
+                } else {
+                    System.out.println("DU DUMME SAU");
+                }
+
+                sourceList.add(Source.SERVER);
+                break;
+
+            case NEXT_QUESTION:
+                showQuestion(input);
+                sourceList.add(Source.USER);
+                break;
         }
-        if (input.startsWith("Answer evaluation:")) {
-            boolean evaluation = Boolean.parseBoolean(input.substring("Answer evaluation:".length()));
-            if (evaluation) {
-                System.out.println("Die Antwort ist richtig :)");
-            } else {
-                System.out.println("DU DUMME SAU");
-            }
-            sourceList.add(Source.SERVER);
-            return sourceList;
-        }
-        if (input.startsWith("Next question:")) {
-            showQuestion(input);
-        }
-        sourceList.add(Source.USER);
+
         return sourceList;
     }
 }

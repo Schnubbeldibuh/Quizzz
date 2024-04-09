@@ -9,8 +9,9 @@ public enum CommunicationPrefixes {
     SUCCESSFULLY_JOINED("successfully_joined"),
     NEXT_QUESTION("next_question:"),
     ANSWER("answer:"),
-    START_GAME("startgame"),
-    ROUND_FINISHED("round_finished");
+    START_GAME("start_game"),
+    ROUND_FINISHED("round_finished"),
+    ANSWER_EVALUATION("answer_evaluation");
 
     private final String string;
 
