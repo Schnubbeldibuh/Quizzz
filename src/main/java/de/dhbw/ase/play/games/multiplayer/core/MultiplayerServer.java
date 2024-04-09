@@ -38,7 +38,7 @@ public abstract class MultiplayerServer {
         Reader mReader = new MReader();
         questionList = mReader.getQuestionList();
         questionIndex = -1;
-        sendMessageToAllClients("start game");
+        sendMessageToAllClients(CommunicationPrefixes.START_GAME.getString());
         Collections.shuffle(questionList);
         playQuestion();
     }
@@ -158,7 +158,7 @@ public abstract class MultiplayerServer {
     protected void playQuestion() {
         questionIndex++;
         if(questionList.size() == questionIndex) {
-            sendMessageToAllClients("Round is finished!");
+            sendMessageToAllClients(CommunicationPrefixes.ROUND_FINISHED.getString());
             //TODO Punktestand an alle Clients schicken
             return;
         }
@@ -166,7 +166,7 @@ public abstract class MultiplayerServer {
         currentAnswerList = question.getAnswerList();
         Collections.shuffle(currentAnswerList);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Next question:");
+        stringBuilder.append(CommunicationPrefixes.NEXT_QUESTION.getString());
         stringBuilder.append(question.getQuestion());
         currentAnswerList.forEach(a -> {
                     stringBuilder.append(";");

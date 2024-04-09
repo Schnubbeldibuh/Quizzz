@@ -32,16 +32,18 @@ class ClientHandler implements Runnable {
                     socket.close();
                     return;
                 }
-                if (line.startsWith("Username: ")) username = line.substring("Username: ".length()); // TODO String rausziehen
+                if (CommunicationPrefixes.USERNAME.checkPrefix(line)) {
+                    username = line.substring(CommunicationPrefixes.USERNAME.getLength());
+                }
             } while (username == null);
 
             boolean successfulAdded = server.addClient(this, username);
             if (!successfulAdded) {
-                out.println("duplicate Username"); // TODO String rausziehen
+                out.println(CommunicationPrefixes.DUPLIKATE_USERNAME.getString());
                 socket.close();
                 return;
             }
-            out.println("successful joined"); // TODO String rausziehen
+            out.println(CommunicationPrefixes.SUCCESSFULLY_JOINED.getString());
             System.out.println(username);
 
             do {

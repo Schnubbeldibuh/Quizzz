@@ -107,7 +107,7 @@ public abstract class MultiplayerClient {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            sendMessageToServer("Username: " + username); // TODO String rausziehen
+            sendMessageToServer(CommunicationPrefixes.USERNAME.getString() + username);
 
             String line;
             do {
@@ -117,11 +117,11 @@ public abstract class MultiplayerClient {
                     return false;
                 }
 
-                if (line.equals("duplicate Username")) { // TODO String rausziehen
+                if (CommunicationPrefixes.DUPLIKATE_USERNAME.checkPrefix(line)) {
                     socket.close();
                     throw new UsernameAlreadyExistsException();
                 }
-                if (line.equals("successful joined")) { // TODO String rausziehen
+                if (CommunicationPrefixes.SUCCESSFULLY_JOINED.checkPrefix(line)) {
                     return true;
                 }
             } while (true);
@@ -138,7 +138,8 @@ public abstract class MultiplayerClient {
     }
 
     protected enum Source {
-        SERVER, USER
+        SERVER,
+        USER
     }
 
     protected void disconnectClient() {
@@ -151,13 +152,16 @@ public abstract class MultiplayerClient {
     }
 
     protected void showQuestion(String input) {
-        String question = input.substring("Next question:".length());
+        String question = input.substring(
+                CommunicationPrefixes.NEXT_QUESTION.getLength());
+
         String[] questionAnswersArray = question.split(";");
         System.out.println("Frage: " + questionAnswersArray[0]);
         System.out.println("A: " + questionAnswersArray[1]);
         System.out.println("B: " + questionAnswersArray[2]);
         System.out.println("C: " + questionAnswersArray[3]);
         System.out.println("D: " + questionAnswersArray[4]);
+
         questionIndex = questionAnswersArray[5];
     }
 
@@ -169,7 +173,7 @@ public abstract class MultiplayerClient {
             case "d" -> 3;
             default -> throw new IllegalStateException("Unexpected value: " + input);
         };
-        sendMessageToServer("Answer:" + selection + ";" + questionIndex);
+        sendMessageToServer(CommunicationPrefixes.ANSWER.getString() + selection + ";" + questionIndex);
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
         sourceList.add(Source.SERVER);
         return sourceList;
