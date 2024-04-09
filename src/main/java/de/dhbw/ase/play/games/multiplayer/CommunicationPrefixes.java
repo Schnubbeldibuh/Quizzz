@@ -1,5 +1,8 @@
 package de.dhbw.ase.play.games.multiplayer;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public enum CommunicationPrefixes {
     USERNAME("username:"),
     DUPLIKATE_USERNAME("duplicate username"),
@@ -25,5 +28,16 @@ public enum CommunicationPrefixes {
 
     public int getLength() {
         return string.length();
+    }
+
+    public static CommunicationPrefixes evaluateCase(String input) {
+        Optional<CommunicationPrefixes> first = Arrays.stream(CommunicationPrefixes.values())
+                .filter(e -> e.checkPrefix(input))
+                .findFirst();
+
+        if (first.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        return first.get();
     }
 }
