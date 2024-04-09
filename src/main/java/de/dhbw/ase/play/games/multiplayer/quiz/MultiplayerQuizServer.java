@@ -13,10 +13,10 @@ public class MultiplayerQuizServer extends MultiplayerServer {
     protected void processClientMessage(String username, String msg) {
 
         if (CommunicationPrefixes.ANSWER.checkPrefix(msg)) {
-            int answerIndex = Integer.parseInt(msg.substring("Answer:".length()));
+            int answerIndex = Integer.parseInt(msg.substring(CommunicationPrefixes.ANSWER.getLength()));
             boolean outcome = currentAnswerList.get(answerIndex).isRight();
 
-            String outgoingMsg = "Answer evaluation:" + outcome;
+            String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.getString() + outcome;
             sendMessageToClient(outgoingMsg, username);
 
             checkIfRoundClosed(username);
