@@ -19,7 +19,7 @@ public class MultiplayerQuizServer extends MultiplayerServer {
             String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.getString() + outcome;
             sendMessageToClient(outgoingMsg, username);
 
-            checkIfRoundClosed(username);
+            removeUserAndPlayNextQuestionIfNeeded(username);
         }
     }
 }

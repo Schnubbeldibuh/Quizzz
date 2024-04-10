@@ -3,8 +3,6 @@ package de.dhbw.ase.play.games.multiplayer.quickquiz;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerServer;
 
-import java.util.HashSet;
-
 public class MultiplayerQuickServer extends MultiplayerServer {
 
     protected MultiplayerQuickServer(int port) {
@@ -30,10 +28,10 @@ public class MultiplayerQuickServer extends MultiplayerServer {
 
             if (outcome) {
                 sendMessageToAllClients(CommunicationPrefixes.RIGHT_ANSWER.getString() + username);
-                userList = new HashSet<>();
+                userList.clear();
             }
 
-            checkIfRoundClosed(username);
+            removeUserAndPlayNextQuestionIfNeeded(username);
         }
     }
 }

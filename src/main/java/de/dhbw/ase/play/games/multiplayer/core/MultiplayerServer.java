@@ -13,19 +13,17 @@ import java.net.SocketException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public abstract class MultiplayerServer {
 
     private final int port;
     private final Map<String, ClientHandler> clients = new HashMap<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    protected Set<String > userList;
+    protected final Set<String> userList = new HashSet<>();
     protected List<Question> questionList;
     protected int questionIndex;
     protected List<Question.Answer> currentAnswerList;
     private GameState gameState = GameState.CREATED;
-    private Future<Void> joiningFuture;
     private ServerSocket serverSocket;
 
 
@@ -55,7 +53,7 @@ public abstract class MultiplayerServer {
 
     void startJoiningPhase() {
         checkIfShutDown();
-        joiningFuture = executor.submit(this::joiningPhase);
+        executor.submit(this::joiningPhase);
     }
 
     void advanceGamestate() {
@@ -100,7 +98,7 @@ public abstract class MultiplayerServer {
         synchronized (clients) {
             clients.remove(username);
         }
-        checkIfRoundClosed(username);
+        removeUserAndPlayNextQuestionIfNeeded(username);
     }
 
     void shutdown() {
@@ -147,7 +145,7 @@ public abstract class MultiplayerServer {
             throw new IllegalStateException("Server is already shut down");
     }
 
-    protected void checkIfRoundClosed(String username) {
+    protected void removeUserAndPlayNextQuestionIfNeeded(String username) {
         synchronized(userList) {
             userList.remove(username);
             if (userList.isEmpty()) {
@@ -176,6 +174,6 @@ public abstract class MultiplayerServer {
         stringBuilder.append(";");
         stringBuilder.append(questionIndex);
         sendMessageToAllClients(stringBuilder.toString());
-        userList = getUsernames();
+        userList.addAll(getUsernames());
     }
 }
