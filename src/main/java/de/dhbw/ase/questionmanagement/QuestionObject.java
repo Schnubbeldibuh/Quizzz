@@ -34,6 +34,11 @@ public class QuestionObject {
         this.questionIndex = questionIndex;
     }
 
+    public String getQuestionIndex() {
+        splitCompleteLine();
+        return questionIndex;
+    }
+
     public void setQuestion(String question) {
         splitCompleteLine();
         this.question = question;
