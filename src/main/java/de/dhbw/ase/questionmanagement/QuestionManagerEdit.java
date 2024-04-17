@@ -1,19 +1,14 @@
 package de.dhbw.ase.questionmanagement;
 
 import de.dhbw.ase.SelectedMenu;
-import de.dhbw.ase.Startable;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-public class QuestionManagerEdit implements Startable {
+public class QuestionManagerEdit extends QuetionEditor {
 
     private Scanner sc;
     private QuestionManagerEditingMenu questionManagerEditingMenu;
-    private List<QuestionObject> file;
-    private int questionIndex;
+
     public QuestionManagerEdit(Scanner sc, QuestionManagerEditingMenu questionManagerEditingMenu) {
         this.sc = sc;
         this.questionManagerEditingMenu = questionManagerEditingMenu;
@@ -21,39 +16,19 @@ public class QuestionManagerEdit implements Startable {
 
     @Override
     public SelectedMenu.MenuSelection start() {
-        readFileContent();
-        getQuestionIndex();
+        readFileContent(questionManagerEditingMenu.getFilePath());
+        getQuestionIndex(questionManagerEditingMenu.getSelectedLine());
         editQuestion();
         editRightAnswer();
         for (int i = 2; i < 5; i++) {
             editWrongAnswer(i);
         }
-        writeBackToFile();
+        writeBackToFile(questionManagerEditingMenu.getFilePath());
         return SelectedMenu.MenuSelection.BACK;
     }
 
-    private void writeBackToFile() {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(questionManagerEditingMenu.getFilePath()))) {
-            for (QuestionObject questionObject : file) {
-                bufferedWriter.write(questionObject.getCompleteLine());
-                bufferedWriter.newLine();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-            //TODO
-        }
-    }
-
-    private void getQuestionIndex() {
-        for (int i = 0; i < file.size(); i++) {
-            if(file.get(i).getCompleteLine().startsWith(questionManagerEditingMenu.getSelectedLine())) {
-                questionIndex = i;
-                return;
-            }
-        }
-    }
-
     private void editWrongAnswer(int i) {
+        System.out.println();
         System.out.println("Falls du die falsche Antwort " + i + " ändern möchtest: Neue Frage eingeben.");
         System.out.println("Falls du die falsche Antwort " + i + " beibehalten möchtest: \";\" eingeben.");
         String input = sc.next();
@@ -70,6 +45,7 @@ public class QuestionManagerEdit implements Startable {
     }
 
     private void editRightAnswer() {
+        System.out.println();
         System.out.println("Falls du die richtige Antwort ändern möchtest: Neue Frage eingeben.");
         System.out.println("Falls du die richtige Antwort beibehalten möchtest: \";\" eingeben.");
         String input = sc.next();
@@ -80,6 +56,7 @@ public class QuestionManagerEdit implements Startable {
     }
 
     private void editQuestion() {
+        System.out.println();
         System.out.println("Falls du die Frage ändern möchtest: Neue Frage eingeben.");
         System.out.println("Falls du die Frage beibehalten möchtest: \";\" eingeben.");
 
@@ -90,15 +67,4 @@ public class QuestionManagerEdit implements Startable {
         file.get(questionIndex).setQuestion(input);
     }
 
-    private void readFileContent() {
-        try (BufferedReader bufferedReader =
-                     new BufferedReader(new FileReader(questionManagerEditingMenu.getFilePath()))) {
-            file = bufferedReader.lines().map(QuestionObject::new).toList();
-        } catch (FileNotFoundException e) {
-            //TODO
-        } catch (IOException e) {
-            System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
-            //TODO zurückspringen mit separater Exception
-        }
-    }
 }

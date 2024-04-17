@@ -5,7 +5,7 @@ import de.dhbw.ase.Startable;
 
 import java.util.Scanner;
 
-public class QuestionManagerDelete implements Startable {
+public class QuestionManagerDelete extends QuetionEditor {
 
     private QuestionManagerEditingMenu questionManagerEditingMenu;
 

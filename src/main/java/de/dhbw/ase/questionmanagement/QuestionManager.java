@@ -43,6 +43,7 @@ public class QuestionManager extends Submenu {
         } catch (IOException e) {
             //TODO
         }
+        System.out.println();
         System.out.println("Möchtest du eine Frage hinzufügen oder eine bestehende Frage bearbeiten?");
         System.out.println("1 - Hinzufügen");
         System.out.println("2 - Bearbeiten/ Löschen");

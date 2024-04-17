@@ -13,6 +13,7 @@ public class QuestionObject {
     public QuestionObject(String completeLine) {
         this.completeLine = completeLine;
     }
+    public QuestionObject() {}
 
     private void splitCompleteLine() {
         if (completeLine == null) {
