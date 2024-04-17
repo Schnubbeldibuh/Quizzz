@@ -20,11 +20,10 @@ public class QuestionManagerDelete extends QuetionEditor {
         QuestionObject questionObject = null;
         readFileContent(questionManagerEditingMenu.getFilePath());
         getQuestionIndex(questionManagerEditingMenu.getSelectedLine());
-        int tempIndex = questionIndex-1;
         for (int i = 0; i < file.size(); i++) {
             questionObject = file.get(i);
             System.out.println(questionObject);
-            if (Integer.parseInt(questionObject.getQuestionIndex()) == tempIndex) {
+            if (Integer.parseInt(questionObject.getQuestionIndex()) == (questionIndex-1)) {
                 break;
             }
         }
