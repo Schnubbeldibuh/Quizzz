@@ -48,8 +48,8 @@ public class QuestionManagerEditingMenu extends Submenu {
 
         do {
             System.out.println("Welche dieser Fragen möchtest du bearbeiten? Bitte gib die Fragennummer an.");
-            selectedLine = sc.nextLine();
-        } while (validateInput(selectedLine));
+            selectedLine = sc.next();
+        } while (!validateInput(selectedLine));
 
         return super.start();
     }

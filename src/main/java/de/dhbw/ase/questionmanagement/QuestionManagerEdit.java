@@ -54,10 +54,10 @@ public class QuestionManagerEdit implements Startable {
     }
 
     private void editWrongAnswer(int i) {
-        System.out.println("Falls du die falsche Antwort " + i + " beibehalten möchtest: Enter.");
         System.out.println("Falls du die falsche Antwort " + i + " ändern möchtest: Neue Frage eingeben.");
-        String input = sc.nextLine();
-        if (input.isEmpty()) {
+        System.out.println("Falls du die falsche Antwort " + i + " beibehalten möchtest: \";\" eingeben.");
+        String input = sc.next();
+        if (input.equals(";")) {
             return;
         }
         if (i == 1) {
@@ -70,10 +70,10 @@ public class QuestionManagerEdit implements Startable {
     }
 
     private void editRightAnswer() {
-        System.out.println("Falls du die richtige Antwort beibehalten möchtest: Enter.");
         System.out.println("Falls du die richtige Antwort ändern möchtest: Neue Frage eingeben.");
-        String input = sc.nextLine();
-        if (input.isEmpty()) {
+        System.out.println("Falls du die richtige Antwort beibehalten möchtest: \";\" eingeben.");
+        String input = sc.next();
+        if (input.equals(";")) {
             return;
         }
         file.get(questionIndex).setRightAnswer(input);
@@ -81,9 +81,10 @@ public class QuestionManagerEdit implements Startable {
 
     private void editQuestion() {
         System.out.println("Falls du die Frage ändern möchtest: Neue Frage eingeben.");
-        System.out.println("Falls du die Frage beibehalten möchtest: Enter.");
-        String input = sc.nextLine();
-        if (input.isEmpty()) {
+        System.out.println("Falls du die Frage beibehalten möchtest: \";\" eingeben.");
+
+        String input = sc.next();
+        if (input.equals(";")) {
             return;
         }
         file.get(questionIndex).setQuestion(input);
