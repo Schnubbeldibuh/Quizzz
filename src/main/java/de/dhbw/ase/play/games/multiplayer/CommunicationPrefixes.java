@@ -12,16 +12,14 @@ public enum CommunicationPrefixes {
     START_GAME("start_game"),
     ROUND_FINISHED("round_finished"),
     ANSWER_EVALUATION("answer_evaluation:"),
-    RIGHT_ANSWER("right_answer:");
+    RIGHT_ANSWER("right_answer:"),
+    STATS_TRANSFER("stats_transfer:"),
+    STATS_TRANSFER_FINISHED("stats_transfer_finished");
 
     private final String string;
 
     CommunicationPrefixes(String string) {
         this.string = string;
-    }
-
-    public String getString() {
-        return string;
     }
 
     public boolean checkPrefix(String input) {
@@ -41,5 +39,10 @@ public enum CommunicationPrefixes {
             throw new IllegalArgumentException();
         }
         return first.get();
+    }
+
+    @Override
+    public String toString() {
+        return string;
     }
 }

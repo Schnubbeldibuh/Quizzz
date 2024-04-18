@@ -18,17 +18,6 @@ public class Player {
         points += value;
     }
 
-    public int getRightAnswers() {
-        return rightAnswers;
-    }
-
-    public int getWrongAnswers() {
-        return wrongAnswers;
-    }
-
-    public int getPoints() {
-        return points;
-    }
 
     public String getUsername() {
         return username;
@@ -36,5 +25,20 @@ public class Player {
 
     public Player(String username) {
         this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(username);
+        builder.append(";");
+        builder.append(rightAnswers);
+        builder.append(";");
+        builder.append(wrongAnswers);
+        builder.append(";");
+        builder.append(points);
+
+        return builder.toString();
     }
 }

@@ -21,7 +21,7 @@ public class MultiplayerQuizServer extends MultiplayerServer {
             int answerIndex = Integer.parseInt(msg.substring(CommunicationPrefixes.ANSWER.getLength()));
             boolean outcome = currentAnswerList.get(answerIndex).isRight();
 
-            String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.getString() + outcome;
+            String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.toString() + outcome;
             sendMessageToClient(outgoingMsg, username);
 
             if (outcome) {
@@ -40,6 +40,14 @@ public class MultiplayerQuizServer extends MultiplayerServer {
                 playQuestion();
             }
         }
+    }
+
+    @Override
+    protected void sendStatsToAllClients() {
+        pointsMap.values()
+                .forEach(p -> sendMessageToAllClients(CommunicationPrefixes.STATS_TRANSFER + p.toString()));
+
+        sendMessageToAllClients(CommunicationPrefixes.STATS_TRANSFER_FINISHED.toString());
     }
 
     private void calculatePoints() {

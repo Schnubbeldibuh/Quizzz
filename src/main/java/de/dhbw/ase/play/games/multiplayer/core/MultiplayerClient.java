@@ -2,7 +2,6 @@ package de.dhbw.ase.play.games.multiplayer.core;
 
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
-import de.dhbw.ase.play.games.multiplayer.quiz.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,7 +32,6 @@ public abstract class MultiplayerClient {
         this.username = username;
     }
 
-    protected abstract void writeStats(List<Player> playerList);
 
     protected abstract boolean checkUserInput(String input) throws ExitException;
     protected abstract List<Source> processServerInput(String input);
@@ -125,7 +123,7 @@ public abstract class MultiplayerClient {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
 
-            sendMessageToServer(CommunicationPrefixes.USERNAME.getString() + username);
+            sendMessageToServer(CommunicationPrefixes.USERNAME + username);
 
             String line;
             do {
@@ -191,7 +189,7 @@ public abstract class MultiplayerClient {
             case "d" -> 3;
             default -> throw new IllegalStateException("Unexpected value: " + input);
         };
-        sendMessageToServer(CommunicationPrefixes.ANSWER.getString() + selection + ";" + questionIndex);
+        sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection + ";" + questionIndex);
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
         sourceList.add(Source.SERVER);
 

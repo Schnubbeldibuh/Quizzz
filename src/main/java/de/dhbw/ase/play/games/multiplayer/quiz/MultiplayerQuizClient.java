@@ -13,7 +13,9 @@ import java.util.Scanner;
 
 public class MultiplayerQuizClient extends MultiplayerClient {
 
-    private String filepath;
+    private final String filepath;
+
+    private List<PlayerStatsMPObject> stats = new ArrayList<>();
 
     public MultiplayerQuizClient(Scanner sc, String username, String filepath) {
         super(sc, username);
@@ -23,22 +25,22 @@ public class MultiplayerQuizClient extends MultiplayerClient {
         validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
         validServerMessages.add(CommunicationPrefixes.ROUND_FINISHED);
         validServerMessages.add(CommunicationPrefixes.START_GAME);
+        validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER_FINISHED);
+        validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER);
     }
 
-    @Override
-    protected void writeStats(List<Player> playerList) {
+
+    protected void writeStats() {
         List<PlayerStatsMPObject> file = new ArrayList<>(readFile());
 
-        for (Player p: playerList) {
-            PlayerStatsMPObject playerStatsMPObject =
-                    new PlayerStatsMPObject(p.getUsername(), p.getRightAnswers(), p.getWrongAnswers(), p.getPoints());
+        for (PlayerStatsMPObject p: stats) {
 
-            int index = file.indexOf(playerStatsMPObject);
+            int index = file.indexOf(p);
             if (index == -1) {
-                file.add(playerStatsMPObject);
+                file.add(p);
             } else {
                 PlayerStatsMPObject oldStats = file.get(index);
-                oldStats.add(playerStatsMPObject);
+                oldStats.add(p);
             }
         }
 
@@ -113,6 +115,18 @@ public class MultiplayerQuizClient extends MultiplayerClient {
             case NEXT_QUESTION:
                 showQuestion(input);
                 sourceList.add(Source.USER);
+                break;
+
+            case STATS_TRANSFER:
+                stats.add(
+                        new PlayerStatsMPObject(input.substring(CommunicationPrefixes.STATS_TRANSFER.getLength())));
+                sourceList.add(Source.SERVER);
+                break;
+
+            case STATS_TRANSFER_FINISHED:
+                writeStats();
+                stats = new ArrayList<>();
+                sourceList.add(Source.SERVER);
                 break;
         }
 

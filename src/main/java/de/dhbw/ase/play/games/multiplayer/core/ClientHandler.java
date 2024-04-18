@@ -41,11 +41,11 @@ class ClientHandler implements Runnable {
 
             boolean successfulAdded = server.addClient(this, username);
             if (!successfulAdded) {
-                out.println(CommunicationPrefixes.DUPLIKATE_USERNAME.getString());
+                out.println(CommunicationPrefixes.DUPLIKATE_USERNAME);
                 socket.close();
                 return;
             }
-            out.println(CommunicationPrefixes.SUCCESSFULLY_JOINED.getString());
+            out.println(CommunicationPrefixes.SUCCESSFULLY_JOINED);
             System.out.println(username);
 
             do {

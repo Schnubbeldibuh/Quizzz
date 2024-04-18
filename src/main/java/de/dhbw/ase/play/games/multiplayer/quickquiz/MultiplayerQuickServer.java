@@ -23,11 +23,11 @@ public class MultiplayerQuickServer extends MultiplayerServer {
             }
 
             boolean outcome = currentAnswerList.get(answerIndex).isRight();
-            String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.getString() + outcome;
+            String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.toString() + outcome;
             sendMessageToClient(outgoingMsg, username);
 
             if (outcome) {
-                sendMessageToAllClients(CommunicationPrefixes.RIGHT_ANSWER.getString() + username);
+                sendMessageToAllClients(CommunicationPrefixes.RIGHT_ANSWER + username);
                 userList.clear();
             }
 
@@ -36,6 +36,11 @@ public class MultiplayerQuickServer extends MultiplayerServer {
                 playQuestion();
             }
         }
+    }
+
+    @Override
+    protected void sendStatsToAllClients() {
+
     }
 
     @Override

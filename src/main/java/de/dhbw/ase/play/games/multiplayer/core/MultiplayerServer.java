@@ -34,13 +34,14 @@ public abstract class MultiplayerServer {
     protected abstract void initializeRound();
 
     protected abstract void processClientMessage(String username, String msg);
+    protected abstract void sendStatsToAllClients();
 
     protected void startPlaying() {
         initializeRound();
         Reader mReader = new MReader();
         questionList = mReader.getQuestionList();
         questionIndex = -1;
-        sendMessageToAllClients(CommunicationPrefixes.START_GAME.getString());
+        sendMessageToAllClients(CommunicationPrefixes.START_GAME.toString());
         Collections.shuffle(questionList);
         playQuestion();
     }
@@ -169,15 +170,18 @@ public abstract class MultiplayerServer {
     protected void playQuestion() {
         questionIndex++;
         if(questionList.size() == questionIndex) {
-            sendMessageToAllClients(CommunicationPrefixes.ROUND_FINISHED.getString());
-            //TODO Punktestand an alle Clients schicken
+            sendStatsToAllClients();
+            sendMessageToAllClients(CommunicationPrefixes.ROUND_FINISHED.toString());
             return;
         }
+
         Question question = questionList.get(questionIndex);
         currentAnswerList = question.getAnswerList();
+
         Collections.shuffle(currentAnswerList);
+
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(CommunicationPrefixes.NEXT_QUESTION.getString());
+        stringBuilder.append(CommunicationPrefixes.NEXT_QUESTION);
         stringBuilder.append(question.getQuestion());
         currentAnswerList.forEach(a -> {
                     stringBuilder.append(";");
@@ -185,7 +189,9 @@ public abstract class MultiplayerServer {
         });
         stringBuilder.append(";");
         stringBuilder.append(questionIndex);
+        
         sendMessageToAllClients(stringBuilder.toString());
+
         userList.addAll(getUsernames());
     }
 }
