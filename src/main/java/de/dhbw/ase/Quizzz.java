@@ -12,6 +12,7 @@ public class Quizzz {
     public static String FILE_FQ2 = "src/main/resources/FQ2.csv";
     public static String FILE_MP = "src/main/resources/MP.csv";
     public static String FILE_STATS_WWM = "src/main/resources/stats/wwmStats.csv";
+    public static String FILE_STATS_FQ = "src/main/resources/stats/fqStats.csv";
 
     public static int SERVER_PORT = 2400;
 

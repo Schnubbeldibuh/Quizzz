@@ -2,7 +2,7 @@ package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.WWMReader;
-import de.dhbw.ase.stats.PlayerStatsWWMObject;
+import de.dhbw.ase.stats.persistance.PlayerStatsWWMObject;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -167,6 +167,7 @@ public class WerWirdMillionaer extends SingeplayerGame {
         }
     }
 
+    @Override
     protected void writeStats() {
         List<PlayerStatsWWMObject> file = new ArrayList<>(readFile());
 

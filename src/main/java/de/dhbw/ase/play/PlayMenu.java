@@ -23,7 +23,7 @@ public class PlayMenu extends Submenu {
         map.put('1', new SelectedMenu(new WerWirdMillionaer(getSc(), Quizzz.FILE_STATS_WWM)));
         map.put('2', new SelectedMenu(new MultiplayerQuiz(getSc())));
         map.put('3', new SelectedMenu(new MultiplayerQuick(getSc())));
-        map.put('4', new SelectedMenu(new FindQuestionsQuiz(getSc())));
+        map.put('4', new SelectedMenu(new FindQuestionsQuiz(getSc(), Quizzz.FILE_STATS_FQ)));
         map.put('5', new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put('6', new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 

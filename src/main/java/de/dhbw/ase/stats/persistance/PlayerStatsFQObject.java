@@ -1,22 +1,20 @@
-package de.dhbw.ase.stats;
+package de.dhbw.ase.stats.persistance;
 
-public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
+public class PlayerStatsFQObject implements Comparable<PlayerStatsFQObject> {
 
     private String username;
-    private int points;
-    private int money;
     private int rightAnswers;
+    private int wrongAnswers;
     private String completeLine;
     private boolean changed;
 
-    public PlayerStatsWWMObject(String username, int points, int money, int rightAnswers) {
+    public PlayerStatsFQObject(String username, int rightAnswers, int wrongAnswers) {
         this.username = username;
-        this.points = points;
-        this.money = money;
         this.rightAnswers = rightAnswers;
+        this.wrongAnswers = wrongAnswers;
     }
 
-    public PlayerStatsWWMObject(String completeLine) {
+    public PlayerStatsFQObject(String completeLine) {
         this.completeLine = completeLine;
     }
 
@@ -26,9 +24,8 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
         }
         String[] splittedLine = completeLine.split(";");
         username = splittedLine[0];
-        points = Integer.parseInt(splittedLine[1]);
-        money = Integer.parseInt(splittedLine[2]);
-        rightAnswers = Integer.parseInt(splittedLine[3]);
+        wrongAnswers = Integer.parseInt(splittedLine[2]);
+        rightAnswers = Integer.parseInt(splittedLine[1]);
     }
 
     public String getCompleteLine() {
@@ -39,39 +36,36 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(username);
         stringBuilder.append(";");
-        stringBuilder.append(points);
-        stringBuilder.append(";");
-        stringBuilder.append(money);
-        stringBuilder.append(";");
         stringBuilder.append(rightAnswers);
+        stringBuilder.append(";");
+        stringBuilder.append(wrongAnswers);
         return stringBuilder.toString();
     }
 
-    public void add(PlayerStatsWWMObject playerStatsWWMObject) {
+    public void add(PlayerStatsFQObject playerStatsWWMObject) {
         splitCompleteLine();
         playerStatsWWMObject.splitCompleteLine();
 
-        this.money += playerStatsWWMObject.money;
-        this.points += playerStatsWWMObject.points;
+        this.wrongAnswers += playerStatsWWMObject.wrongAnswers;
         this.rightAnswers += playerStatsWWMObject.rightAnswers;
         changed = true;
     }
 
     @Override
-    public int compareTo(PlayerStatsWWMObject o) {
+    public int compareTo(PlayerStatsFQObject o) {
         splitCompleteLine();
 
-        if (points < o.points) {
+        if (rightAnswers < o.rightAnswers) {
             return -1;
         }
-        if (points > o.points) {
+        if (rightAnswers > o.rightAnswers) {
             return 1;
         }
 
-        if (money < o.money) {
+        if (wrongAnswers < o.wrongAnswers) {
             return -1;
         }
-        if (money > o.money) {
+        if (wrongAnswers > o.wrongAnswers) {
             return 1;
         }
         return 0;
@@ -85,12 +79,12 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof PlayerStatsWWMObject)) {
+        if (!(obj instanceof PlayerStatsFQObject)) {
             return false;
         }
 
 
-        PlayerStatsWWMObject o = (PlayerStatsWWMObject) obj;
+        PlayerStatsFQObject o = (PlayerStatsFQObject) obj;
         splitCompleteLine();
         o.splitCompleteLine();
 
