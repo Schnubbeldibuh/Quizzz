@@ -6,6 +6,7 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
     private int points;
     private int money;
     private String completeLine;
+    private boolean changed;
 
     public PlayerStatsWWMObject(String username, int points, int money) {
         this.username = username;
@@ -18,18 +19,17 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
     }
 
     private void splitCompleteLine() {
-        if (completeLine == null) {
+        if (completeLine == null || username != null) {
             return;
         }
         String[] splittedLine = completeLine.split(";");
         username = splittedLine[0];
         points = Integer.parseInt(splittedLine[1]);
         money = Integer.parseInt(splittedLine[2]);
-        completeLine = null;
     }
 
     public String getCompleteLine() {
-        if (completeLine != null) {
+        if (!changed && completeLine != null) {
             return completeLine;
         }
 
@@ -43,12 +43,16 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
     }
 
     public void add(PlayerStatsWWMObject playerStatsWWMObject) {
+        splitCompleteLine();
         this.money += playerStatsWWMObject.money;
         this.points += playerStatsWWMObject.points;
+        changed = true;
     }
 
     @Override
     public int compareTo(PlayerStatsWWMObject o) {
+        splitCompleteLine();
+
         if (points < o.points) {
             return -1;
         }
@@ -67,6 +71,7 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
 
     @Override
     public int hashCode() {
+        splitCompleteLine();
         return username.hashCode();
     }
 
@@ -76,7 +81,11 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
             return false;
         }
 
+
         PlayerStatsWWMObject o = (PlayerStatsWWMObject) obj;
+        splitCompleteLine();
+        o.splitCompleteLine();
+
         return username.equals(o.username);
     }
 
