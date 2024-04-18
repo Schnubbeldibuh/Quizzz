@@ -2,6 +2,7 @@ package de.dhbw.ase.play.games.multiplayer.core;
 
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
+import de.dhbw.ase.play.games.multiplayer.quiz.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,6 +32,8 @@ public abstract class MultiplayerClient {
         this.sc = sc;
         this.username = username;
     }
+
+    protected abstract void writeStats(List<Player> playerList);
 
     protected abstract boolean checkUserInput(String input) throws ExitException;
     protected abstract List<Source> processServerInput(String input);
@@ -62,6 +65,7 @@ public abstract class MultiplayerClient {
                         if (input.equals("exit"))
                             throw new ExitException();
                     } while (!checkUserInput(input));
+
                     return new ListeningResult(input, Source.USER);
                 });
             }
@@ -71,6 +75,7 @@ public abstract class MultiplayerClient {
                     do {
                         input = in.readLine();
                     } while (input != null && !checkServerInput(input));
+
                     return new ListeningResult(input, Source.SERVER);
                 });
             }
@@ -189,6 +194,7 @@ public abstract class MultiplayerClient {
         sendMessageToServer(CommunicationPrefixes.ANSWER.getString() + selection + ";" + questionIndex);
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
         sourceList.add(Source.SERVER);
+
         return sourceList;
     }
 }

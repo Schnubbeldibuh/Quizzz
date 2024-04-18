@@ -31,9 +31,12 @@ public abstract class MultiplayerServer {
         this.port = port;
     }
 
+    protected abstract void initializeRound();
+
     protected abstract void processClientMessage(String username, String msg);
 
     protected void startPlaying() {
+        initializeRound();
         Reader mReader = new MReader();
         questionList = mReader.getQuestionList();
         questionIndex = -1;
@@ -98,7 +101,10 @@ public abstract class MultiplayerServer {
         synchronized (clients) {
             clients.remove(username);
         }
-        removeUserAndPlayNextQuestionIfNeeded(username);
+        removeUser(username);
+        if (checkIfQuestionFinished()) {
+            playQuestion();
+        }
     }
 
     void shutdown() {
@@ -145,12 +151,18 @@ public abstract class MultiplayerServer {
             throw new IllegalStateException("Server is already shut down");
     }
 
-    protected void removeUserAndPlayNextQuestionIfNeeded(String username) {
+    protected void removeUser(String username) {
         synchronized(userList) {
             userList.remove(username);
+        }
+    }
+
+    protected Boolean checkIfQuestionFinished() {
+        synchronized (userList) {
             if (userList.isEmpty()) {
-                playQuestion();
+                return true;
             }
+            return false;
         }
     }
 

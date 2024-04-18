@@ -22,6 +22,6 @@ public class MultiplayerQuiz extends MultiplayerGame {
 
     @Override
     protected MultiplayerClient createClient(String username, MultiplayerServer server) {
-        return new MultiplayerQuizClient(sc, username);
+        return new MultiplayerQuizClient(sc, username, Quizzz.FILE_STATS_MP);
     }
 }

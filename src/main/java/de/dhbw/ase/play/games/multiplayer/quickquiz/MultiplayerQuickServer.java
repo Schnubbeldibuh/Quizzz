@@ -31,7 +31,16 @@ public class MultiplayerQuickServer extends MultiplayerServer {
                 userList.clear();
             }
 
-            removeUserAndPlayNextQuestionIfNeeded(username);
+            removeUser(username);
+            if (checkIfQuestionFinished()) {
+                playQuestion();
+            }
         }
+    }
+
+    @Override
+    protected void initializeRound() {
+        System.out.println("hahahaha");
+        //TODO
     }
 }
