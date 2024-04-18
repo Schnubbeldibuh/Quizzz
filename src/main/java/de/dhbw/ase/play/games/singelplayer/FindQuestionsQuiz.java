@@ -35,7 +35,7 @@ public class FindQuestionsQuiz extends SingeplayerGame {
                     .filter(Question.Answer::isRight)
                     .findFirst()
                     .get();
-            System.out.println("Die richtige Frage wäre \"" + rightAnswer + "\" gewesen."
+            System.out.println("Die richtige Frage wäre \"" + rightAnswer.answer() + "\" gewesen."
             );
         }
         System.out.println("Du hattest ingesamt " + rightAnswerCount + " richtige Antworten!");

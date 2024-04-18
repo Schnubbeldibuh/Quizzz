@@ -48,7 +48,7 @@ public class WerWirdMillionaer extends SingeplayerGame {
                     .filter(Question.Answer::isRight)
                     .findFirst()
                     .get();
-            System.out.println("Die richtige Antwort wäre \"" + rightAnswer + "\" gewesen.");
+            System.out.println("Die richtige Antwort wäre \"" + rightAnswer.answer() + "\" gewesen.");
 
             playerStatsWWMObject = new PlayerStatsWWMObject(getUsername(),
                     WWMLevels.values()[i].getPoints(),
@@ -70,26 +70,26 @@ public class WerWirdMillionaer extends SingeplayerGame {
 
     private void showQuestionLevel(int level) {
         System.out.println();
-        System.out.println("Level: " + level + ", Gewinnstufe: " + WWMLevels.values()[level].getLevel());
+        System.out.println("Level: " + level+1 + ", Gewinnstufe: " + WWMLevels.values()[level].getLevel());
     }
 
     private enum WWMLevels {
         ONE ("50€", 0, 0, 0),
         TWO ("100€", 1, 0, 50),
-        THREE ("200€", 1, 0, 100),
-        FOUR ("300€", 1, 0, 200),
-        FIVE ("500€", 1, 0, 300),
-        SIX ("1.000€", 1, 500, 500),
-        SEVEN ("2.000€",5, 500, 1000),
-        EIGHT ("4.000€", 5, 500, 2000),
-        NINE ("8.000€", 5, 500, 4000),
-        TEN ("16.000€", 5, 500, 8000),
-        ELEVEN ("32.000€", 10, 500, 16000),
-        TWELVE ("64.000€", 10, 500, 32000),
-        THIRTEEN ("125.000€", 10, 500, 64000),
-        FOURTEEN ("500.000€", 20, 500, 125000),
-        FIFTEEN ("1.000.000€", 20,500, 500000),
-        WON("WON", 50, 1000000, 1000000);
+        THREE ("200€", 2, 0, 100),
+        FOUR ("300€", 3, 0, 200),
+        FIVE ("500€", 4, 0, 300),
+        SIX ("1.000€", 5, 500, 500),
+        SEVEN ("2.000€",10, 500, 1000),
+        EIGHT ("4.000€", 15, 500, 2000),
+        NINE ("8.000€", 20, 500, 4000),
+        TEN ("16.000€", 25, 500, 8000),
+        ELEVEN ("32.000€", 35, 500, 16000),
+        TWELVE ("64.000€", 45, 500, 32000),
+        THIRTEEN ("125.000€", 55, 500, 64000),
+        FOURTEEN ("500.000€", 75, 500, 125000),
+        FIFTEEN ("1.000.000€", 95,500, 500000),
+        WON("WON", 200, 1000000, 1000000);
 
         private final String level;
         private final int points;
