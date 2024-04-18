@@ -63,10 +63,10 @@ public class PlayerStatsFQObject implements Comparable<PlayerStatsFQObject> {
         }
 
         if (wrongAnswers < o.wrongAnswers) {
-            return -1;
+            return 1;
         }
         if (wrongAnswers > o.wrongAnswers) {
-            return 1;
+            return -1;
         }
         return 0;
     }
