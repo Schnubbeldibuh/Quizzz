@@ -9,8 +9,7 @@ import java.util.List;
 public class MReader extends Reader{
     @Override
     public List<Question> getQuestionList() {
-        List<Question> questionsForOneRound = new ArrayList<>(readFile(new File(Quizzz.FILE_WWM_EASY), 5));
-        //TODO neuen Datensatz mit Fragen für Mulitplayer erstellen und hier anpassen
+        List<Question> questionsForOneRound = new ArrayList<>(readFile(new File(Quizzz.FILE_MP), 8));
         return questionsForOneRound;
     }
 }

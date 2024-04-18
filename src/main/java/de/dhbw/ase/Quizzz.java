@@ -10,6 +10,7 @@ public class Quizzz {
     public static String FILE_WWM_MEDIUM = "src/main/resources/WWMMedium.csv";
     public static String FILE_WWM_VERY_HARD = "src/main/resources/WWMVeryHard.csv";
     public static String FILE_FQ2 = "src/main/resources/FQ2.csv";
+    public static String FILE_MP = "src/main/resources/MP.csv";
 
     public static int SERVER_PORT = 2400;
 
