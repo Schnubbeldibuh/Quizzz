@@ -1,6 +1,9 @@
 package de.dhbw.ase;
 
-public record SelectedMenu(MenuSelection menuSelection, Startable startable) {
+public record SelectedMenu(
+        MenuSelection menuSelection,
+        Startable startable
+) {
 
     public SelectedMenu(MenuSelection menuSelection) {
         this(menuSelection, null);

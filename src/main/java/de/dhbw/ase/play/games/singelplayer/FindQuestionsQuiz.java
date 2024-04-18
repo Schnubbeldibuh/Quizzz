@@ -29,8 +29,25 @@ public class FindQuestionsQuiz extends SingeplayerGame {
                 continue;
             }
             System.out.println("Diese Antwort war leider Falsch.");
-            // bei falscher Antwort noch die Richtige anzeigen
+
+            Question.Answer rightAnswer = questionList.get(i).getAnswerList()
+                    .stream()
+                    .filter(Question.Answer::isRight)
+                    .findFirst()
+                    .get();
+            System.out.println("Die richtige Frage wäre \"" + rightAnswer + "\" gewesen."
+            );
         }
         System.out.println("Du hattest ingesamt " + rightAnswerCount + " richtige Antworten!");
+    }
+
+    @Override
+    protected String getStatsFilesPath() {
+        return null;
+    }
+
+    @Override
+    protected void writeStats() {
+
     }
 }

@@ -18,12 +18,15 @@ public abstract class SingeplayerGame extends Game {
     }
 
     protected abstract void startGame();
+    protected  abstract String getStatsFilesPath();
+    protected abstract void writeStats();
 
     @Override
     public SelectedMenu.MenuSelection start() {
         indicateUser();
         do {
             startGame();
+            writeStats();
         } while (askUserForRetry());
         return SelectedMenu.MenuSelection.BACK;
     }
@@ -58,4 +61,6 @@ public abstract class SingeplayerGame extends Game {
             System.out.println("Invalide Eingabe. Bitte erneut antworten.");
         } while (true);
     }
+
+
 }

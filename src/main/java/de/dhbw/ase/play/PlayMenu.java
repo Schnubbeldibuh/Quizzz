@@ -1,5 +1,6 @@
 package de.dhbw.ase.play;
 
+import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.play.games.multiplayer.quickquiz.MultiplayerQuick;
 import de.dhbw.ase.play.games.multiplayer.quiz.MultiplayerQuiz;
@@ -19,7 +20,7 @@ public class PlayMenu extends Submenu {
     @Override
     protected Map<Character, SelectedMenu> createSelectionMap() {
         Map<Character, SelectedMenu> map = new HashMap<>();
-        map.put('1', new SelectedMenu(new WerWirdMillionaer(getSc())));
+        map.put('1', new SelectedMenu(new WerWirdMillionaer(getSc(), Quizzz.FILE_STATS_WWM)));
         map.put('2', new SelectedMenu(new MultiplayerQuiz(getSc())));
         map.put('3', new SelectedMenu(new MultiplayerQuick(getSc())));
         map.put('4', new SelectedMenu(new FindQuestionsQuiz(getSc())));
