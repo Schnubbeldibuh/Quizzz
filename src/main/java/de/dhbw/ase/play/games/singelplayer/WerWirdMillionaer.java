@@ -82,7 +82,7 @@ public class WerWirdMillionaer extends SingeplayerGame {
             System.out.println();
 
             playerStatsWWMObject = new PlayerStatsWWMObject(getUsername(),
-                    currentLevel.getPoints(),
+                    currentLevel.getPointsIfLost(),
                     currentLevel.getMoneyWonIfLost(),
                     currentLevel.getRightAnswers());
 
@@ -161,24 +161,14 @@ public class WerWirdMillionaer extends SingeplayerGame {
         public int getMoneyWon() {
             return moneyWon;
         }
+
+        public int getPointsIfLost() {
+            return pointsIfLost;
+        }
     }
 
     protected void writeStats() {
-        List<PlayerStatsWWMObject> file;
-        List<PlayerStatsWWMObject> tempList = new ArrayList<>();
-
-        try (BufferedReader bufferedReader =
-                     new BufferedReader(new FileReader(getStatsFilesPath()))) {
-            tempList = bufferedReader.lines()
-                    .map(PlayerStatsWWMObject::new)
-                    .toList();
-        } catch (FileNotFoundException e) {
-            //TODO
-        } catch (IOException e) {
-            System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
-            //TODO zurückspringen mit separater Exception
-        }
-        file = new ArrayList<>(tempList);
+        List<PlayerStatsWWMObject> file = new ArrayList<>(readFile());
 
         int index = file.indexOf(playerStatsWWMObject);
         if (index == -1) {
@@ -199,5 +189,20 @@ public class WerWirdMillionaer extends SingeplayerGame {
             throw new RuntimeException(e);
             //TODO
         }
+    }
+
+    private List<PlayerStatsWWMObject> readFile() {
+        try (BufferedReader bufferedReader =
+                     new BufferedReader(new FileReader(getStatsFilesPath()))) {
+            return bufferedReader.lines()
+                    .map(PlayerStatsWWMObject::new)
+                    .toList();
+        } catch (FileNotFoundException e) {
+            return new ArrayList<>();
+        } catch (IOException e) {
+            System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
+            //TODO zurückspringen mit separater Exception
+        }
+        return new ArrayList<>();
     }
 }
