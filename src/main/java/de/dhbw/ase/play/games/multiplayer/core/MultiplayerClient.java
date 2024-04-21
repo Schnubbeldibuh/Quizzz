@@ -23,7 +23,7 @@ public abstract class MultiplayerClient {
     private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
-    private String questionIndex;
+    protected String questionIndex;
 
     private record ListeningResult(String input, Source source) {}
 
@@ -35,6 +35,7 @@ public abstract class MultiplayerClient {
 
     protected abstract boolean checkUserInput(String input) throws ExitException;
     protected abstract List<Source> processServerInput(String input);
+    protected abstract List<MultiplayerClient.Source> processUserInput(String input);
 
     protected boolean checkServerInput(String input) {
         CommunicationPrefixes communicationPrefixes;
@@ -179,20 +180,5 @@ public abstract class MultiplayerClient {
         System.out.println("D: " + questionAnswersArray[4]);
 
         questionIndex = questionAnswersArray[5];
-    }
-
-    protected List<MultiplayerClient.Source> processUserInput(String input) {
-        Integer selection = switch (input) {
-            case "a" -> 0;
-            case "b" -> 1;
-            case "c" -> 2;
-            case "d" -> 3;
-            default -> throw new IllegalStateException("Unexpected value: " + input);
-        };
-        sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection + ";" + questionIndex);
-        List<MultiplayerClient.Source> sourceList = new ArrayList<>();
-        sourceList.add(Source.SERVER);
-
-        return sourceList;
     }
 }

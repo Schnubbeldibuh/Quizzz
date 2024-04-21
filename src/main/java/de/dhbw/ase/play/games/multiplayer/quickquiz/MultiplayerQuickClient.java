@@ -73,4 +73,19 @@ public class MultiplayerQuickClient extends MultiplayerClient {
 
         return sourceList;
     }
+
+    protected List<MultiplayerClient.Source> processUserInput(String input) {
+        Integer selection = switch (input) {
+            case "a" -> 0;
+            case "b" -> 1;
+            case "c" -> 2;
+            case "d" -> 3;
+            default -> throw new IllegalStateException("Unexpected value: " + input);
+        };
+        sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection + ";" + questionIndex);
+        List<MultiplayerClient.Source> sourceList = new ArrayList<>();
+        sourceList.add(Source.SERVER);
+
+        return sourceList;
+    }
 }
