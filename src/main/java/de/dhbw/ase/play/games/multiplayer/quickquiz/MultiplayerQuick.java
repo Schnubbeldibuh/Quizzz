@@ -21,6 +21,6 @@ public class MultiplayerQuick extends MultiplayerGame {
 
     @Override
     protected MultiplayerClient createClient(String username, MultiplayerServer server) {
-        return new MultiplayerQuickClient(sc, username);
+        return new MultiplayerQuickClient(sc, username, Quizzz.FILE_STATS_MP_QUICK);
     }
 }

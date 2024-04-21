@@ -3,6 +3,7 @@ package de.dhbw.ase.play.games.multiplayer.quickquiz;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
+import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +11,16 @@ import java.util.Scanner;
 
 public class MultiplayerQuickClient extends MultiplayerClient {
 
-    public MultiplayerQuickClient(Scanner sc, String username) {
-        super(sc, username);
+    public MultiplayerQuickClient(Scanner sc, String username, String filepath) {
+        super(sc, username, filepath);
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
         validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
         validServerMessages.add(CommunicationPrefixes.ROUND_FINISHED);
         validServerMessages.add(CommunicationPrefixes.START_GAME);
         validServerMessages.add(CommunicationPrefixes.RIGHT_ANSWER);
+        validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER_FINISHED);
+        validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER);
     }
 
     @Override
@@ -67,6 +70,18 @@ public class MultiplayerQuickClient extends MultiplayerClient {
             case NEXT_QUESTION:
                 showQuestion(input);
                 sourceList.add(Source.USER);
+                sourceList.add(Source.SERVER);
+                break;
+
+            case STATS_TRANSFER:
+                stats.add(
+                        new PlayerStatsMPObject(input.substring(CommunicationPrefixes.STATS_TRANSFER.getLength())));
+                sourceList.add(Source.SERVER);
+                break;
+
+            case STATS_TRANSFER_FINISHED:
+                writeStats();
+                stats = new ArrayList<>();
                 sourceList.add(Source.SERVER);
                 break;
         }

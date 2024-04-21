@@ -3,7 +3,13 @@ package de.dhbw.ase.play.games.multiplayer.quickquiz;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerServer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MultiplayerQuickServer extends MultiplayerServer {
+
+    private Map<String, PlayerQuick> pointsMap = new HashMap<>();
+    private volatile boolean firstAnswer = true;
 
     protected MultiplayerQuickServer(int port) {
         super(port);
@@ -28,11 +34,19 @@ public class MultiplayerQuickServer extends MultiplayerServer {
 
             if (outcome) {
                 sendMessageToAllClients(CommunicationPrefixes.RIGHT_ANSWER + username);
+                pointsMap.get(username).increaseRightAnswer();
+                if (firstAnswer) {
+                    pointsMap.get(username).increaseFastesAnswer();
+                }
                 userList.clear();
+            } else {
+                firstAnswer = false;
+                pointsMap.get(username).increaseWrongAnswer();
+                removeUser(username);
             }
 
-            removeUser(username);
             if (checkIfQuestionFinished()) {
+                firstAnswer = true;
                 playQuestion();
             }
         }
@@ -40,12 +54,15 @@ public class MultiplayerQuickServer extends MultiplayerServer {
 
     @Override
     protected void sendStatsToAllClients() {
+        pointsMap.values()
+                .forEach(p -> sendMessageToAllClients(CommunicationPrefixes.STATS_TRANSFER + p.toString()));
 
+        sendMessageToAllClients(CommunicationPrefixes.STATS_TRANSFER_FINISHED.toString());
     }
 
     @Override
     protected void initializeRound() {
-        System.out.println("hahahaha");
-        //TODO
+        pointsMap = new HashMap<>();
+        getUsernames().forEach(a -> pointsMap.put(a, new PlayerQuick(a)));
     }
 }

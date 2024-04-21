@@ -14,6 +14,7 @@ public class Quizzz {
     public static String FILE_STATS_WWM = "src/main/resources/stats/wwmStats.csv";
     public static String FILE_STATS_FQ = "src/main/resources/stats/fqStats.csv";
     public static String FILE_STATS_MP = "src/main/resources/stats/mpStats.csv";
+    public static String FILE_STATS_MP_QUICK = "src/main/resources/stats/mpQuickStats.csv";
 
     public static int SERVER_PORT = 2400;
 
