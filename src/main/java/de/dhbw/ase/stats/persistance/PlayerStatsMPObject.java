@@ -103,4 +103,24 @@ public class PlayerStatsMPObject implements Comparable<PlayerStatsMPObject> {
 
         return username.equals(o.username);
     }
+
+    public String getUsername() {
+        splitCompleteLine();
+        return username;
+    }
+
+    public int getRightAnswers() {
+        splitCompleteLine();
+        return rightAnswers;
+    }
+
+    public int getWrongAnswers() {
+        splitCompleteLine();
+        return wrongAnswers;
+    }
+
+    public int getPoints() {
+        splitCompleteLine();
+        return points;
+    }
 }

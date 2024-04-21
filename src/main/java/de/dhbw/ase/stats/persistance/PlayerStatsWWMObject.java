@@ -97,4 +97,22 @@ public class PlayerStatsWWMObject implements Comparable<PlayerStatsWWMObject> {
         return username.equals(o.username);
     }
 
+    public String getUsername() {
+        splitCompleteLine();
+        return username;
+    }
+
+    public int getRightAnswers() {
+        splitCompleteLine();
+        return rightAnswers;
+    }
+
+    public int getPoints() {
+        splitCompleteLine();
+        return points;
+    }
+
+    public int getMoney() {
+        return money;
+    }
 }
