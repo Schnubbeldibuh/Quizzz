@@ -15,6 +15,13 @@ public class Quizzz {
     public static String FILE_STATS_FQ = "src/main/resources/stats/fqStats.csv";
     public static String FILE_STATS_MP = "src/main/resources/stats/mpStats.csv";
     public static String FILE_STATS_MP_QUICK = "src/main/resources/stats/mpQuickStats.csv";
+    public static String FILE_STATS_SP_RANDOM = "src/main/resources/SPRandom.csv";
+    public static String FILE_STATS_SP_GENERAL = "src/main/resources/SPGeneral.csv";
+    public static String FILE_STATS_SP_GEOGRAPHY = "src/main/resources/SPGeography.csv";
+    public static String FILE_STATS_SP_CINEMA_TV = "src/main/resources/SPCinemaTV.csv";
+    public static String FILE_STATS_SP_TECHNOLOGY = "src/main/resources/SPTechnology.csv";
+    public static String FILE_STATS_SP_SPORTS = "src/main/resources/SPSports.csv";
+    public static String FILE_STATS_SP_FOOD = "src/main/resources/SPFood.csv";
 
     public static int SERVER_PORT = 2400;
 
