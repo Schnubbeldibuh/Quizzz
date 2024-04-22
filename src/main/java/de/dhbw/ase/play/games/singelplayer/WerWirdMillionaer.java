@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class WerWirdMillionaer extends SingeplayerGame {
+public class WerWirdMillionaer extends SingleplayerGame {
 
     private PlayerStatsWWMObject playerStatsWWMObject;
     private final String statsFilesPath;
