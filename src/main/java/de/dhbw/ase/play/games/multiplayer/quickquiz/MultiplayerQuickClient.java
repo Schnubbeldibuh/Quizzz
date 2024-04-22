@@ -11,8 +11,6 @@ import java.util.Scanner;
 
 public class MultiplayerQuickClient extends MultiplayerClient {
 
-    private boolean discardUserinput;
-
     public MultiplayerQuickClient(Scanner sc, String username, String filepath) {
         super(username, filepath);
 
@@ -30,7 +28,7 @@ public class MultiplayerQuickClient extends MultiplayerClient {
         if (input.equalsIgnoreCase("exit")) {
             throw new ExitException();
         }
-        if (!discardUserinput) {
+        if (discardUserinput) {
             return false;
         }
 
@@ -53,6 +51,7 @@ public class MultiplayerQuickClient extends MultiplayerClient {
 
             case ANSWER_EVALUATION:
                 discardUserinput = true;
+
                 boolean evaluation =
                         Boolean.parseBoolean(input.substring(CommunicationPrefixes.ANSWER_EVALUATION.getLength()));
 
@@ -91,6 +90,9 @@ public class MultiplayerQuickClient extends MultiplayerClient {
     }
 
     protected boolean processUserInput(String input) {
+        if (discardUserinput) {
+            return true;
+        }
         input = input.charAt(0) + "";
         Integer selection = switch (input) {
             case "a" -> 0;

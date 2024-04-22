@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 public class MultiplayerQuizClient extends MultiplayerClient {
 
+    private boolean discardUserinput;
+
     public MultiplayerQuizClient(Scanner sc, String username, String filepath) {
         super(username, filepath);
 
@@ -27,6 +29,10 @@ public class MultiplayerQuizClient extends MultiplayerClient {
     protected boolean checkUserInput(String input) throws ExitException {
         if (input.equalsIgnoreCase("exit")) {
             throw new ExitException();
+        }
+
+        if (discardUserinput) {
+            return false;
         }
 
         return input.equalsIgnoreCase("a")
@@ -50,6 +56,8 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 break;
 
             case ANSWER_EVALUATION:
+                discardUserinput = true;
+
                 boolean evaluation =
                         Boolean.parseBoolean(input.substring(CommunicationPrefixes.ANSWER_EVALUATION.getLength()));
 
@@ -63,6 +71,7 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 break;
 
             case NEXT_QUESTION:
+                discardUserinput = false;
                 showQuestion(input);
                 sourceList.add(Source.USER);
                 break;
@@ -85,6 +94,10 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
     @Override
     protected boolean processUserInput(String input) {
+        if (discardUserinput) {
+            return false;
+        }
+
         Integer selection = switch (input) {
             case "a" -> 0;
             case "b" -> 1;

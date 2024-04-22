@@ -20,6 +20,7 @@ public abstract class MultiplayerClient {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     protected final List<CommunicationPrefixes> validServerMessages = new ArrayList<>();
     protected List<PlayerStatsMPObject> stats = new ArrayList<>();
+    protected boolean discardUserinput;
     private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
