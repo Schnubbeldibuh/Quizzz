@@ -42,16 +42,14 @@ public abstract class Submenu implements Startable {
         SelectedMenu selection;
         do {
             String input = sc.next();
-            if (input.length() == 1) {
-                selection = scanSelection(input.charAt(0));
-                if (selection.menuSelection() != SelectedMenu.MenuSelection.INVALID)
-                    return selection;
-            }
+            selection = scanSelection(input);
+            if (selection.menuSelection() != SelectedMenu.MenuSelection.INVALID)
+                return selection;
             System.out.println("Invalide Eingabe. Bitte erneut wählen.");
         } while (true);
     }
 
-    private SelectedMenu scanSelection(char input) {
+    private SelectedMenu scanSelection(String input) {
         return selectionMap.getOrDefault(input, new SelectedMenu(SelectedMenu.MenuSelection.INVALID));
     }
 
