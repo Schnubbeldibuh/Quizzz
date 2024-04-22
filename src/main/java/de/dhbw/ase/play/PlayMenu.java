@@ -7,6 +7,7 @@ import de.dhbw.ase.play.games.multiplayer.quickquiz.MultiplayerQuick;
 import de.dhbw.ase.play.games.multiplayer.quiz.MultiplayerQuiz;
 import de.dhbw.ase.Submenu;
 import de.dhbw.ase.play.games.singelplayer.FindQuestionsQuiz;
+import de.dhbw.ase.play.games.singelplayer.SingleplayerQuiz;
 import de.dhbw.ase.play.games.singelplayer.SingleplayerMenu;
 import de.dhbw.ase.play.games.singelplayer.WerWirdMillionaer;
 
