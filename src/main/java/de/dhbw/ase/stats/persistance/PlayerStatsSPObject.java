@@ -1,20 +1,23 @@
 package de.dhbw.ase.stats.persistance;
 
-public class PlayerStatsFQObject implements Comparable<PlayerStatsFQObject> {
+public class PlayerStatsSPObject implements Comparable<PlayerStatsSPObject>{
 
     private String username;
     private int rightAnswers;
     private int wrongAnswers;
+    private long averageAnswerTime;
+    private String category;
     private String completeLine;
     private boolean changed;
 
-    public PlayerStatsFQObject(String username, int rightAnswers, int wrongAnswers) {
+    public PlayerStatsSPObject(String username, int rightAnswers, int wrongAnswers, String category) {
         this.username = username;
         this.rightAnswers = rightAnswers;
         this.wrongAnswers = wrongAnswers;
+        this.category = category;
     }
 
-    public PlayerStatsFQObject(String completeLine) {
+    public PlayerStatsSPObject(String completeLine) {
         this.completeLine = completeLine;
     }
 
@@ -24,6 +27,7 @@ public class PlayerStatsFQObject implements Comparable<PlayerStatsFQObject> {
         }
         String[] splittedLine = completeLine.split(";");
         username = splittedLine[0];
+        averageAnswerTime = Long.parseLong(splittedLine[3]);
         wrongAnswers = Integer.parseInt(splittedLine[2]);
         rightAnswers = Integer.parseInt(splittedLine[1]);
     }
@@ -39,20 +43,28 @@ public class PlayerStatsFQObject implements Comparable<PlayerStatsFQObject> {
         stringBuilder.append(rightAnswers);
         stringBuilder.append(";");
         stringBuilder.append(wrongAnswers);
+        stringBuilder.append(";");
+        stringBuilder.append(averageAnswerTime);
         return stringBuilder.toString();
     }
 
-    public void add(PlayerStatsFQObject playerStatsWWMObject) {
+    public void add(PlayerStatsSPObject playerStatsSPObject) {
         splitCompleteLine();
-        playerStatsWWMObject.splitCompleteLine();
+        playerStatsSPObject.splitCompleteLine();
+        int totalQuestionsBefore = wrongAnswers + rightAnswers;
+        int totalQuestionsAfter = playerStatsSPObject.wrongAnswers + playerStatsSPObject.rightAnswers;
 
-        this.wrongAnswers += playerStatsWWMObject.wrongAnswers;
-        this.rightAnswers += playerStatsWWMObject.rightAnswers;
+        this.wrongAnswers += playerStatsSPObject.wrongAnswers;
+        this.rightAnswers += playerStatsSPObject.rightAnswers;
+        this.averageAnswerTime =
+                ((totalQuestionsBefore * averageAnswerTime)
+                        + (totalQuestionsAfter * playerStatsSPObject.averageAnswerTime))
+                / (totalQuestionsBefore + totalQuestionsAfter);
         changed = true;
     }
 
     @Override
-    public int compareTo(PlayerStatsFQObject o) {
+    public int compareTo(PlayerStatsSPObject o) {
         splitCompleteLine();
 
         if (rightAnswers < o.rightAnswers) {
@@ -68,6 +80,14 @@ public class PlayerStatsFQObject implements Comparable<PlayerStatsFQObject> {
         if (wrongAnswers > o.wrongAnswers) {
             return -1;
         }
+
+        if (averageAnswerTime < o.averageAnswerTime) {
+            return 1;
+        }
+        if (averageAnswerTime > o.averageAnswerTime) {
+            return -1;
+        }
+
         return 0;
     }
 
@@ -79,11 +99,11 @@ public class PlayerStatsFQObject implements Comparable<PlayerStatsFQObject> {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof PlayerStatsFQObject)) {
+        if (!(obj instanceof PlayerStatsSPObject)) {
             return false;
         }
 
-        PlayerStatsFQObject o = (PlayerStatsFQObject) obj;
+        PlayerStatsSPObject o = (PlayerStatsSPObject) obj;
         splitCompleteLine();
         o.splitCompleteLine();
 
@@ -103,5 +123,10 @@ public class PlayerStatsFQObject implements Comparable<PlayerStatsFQObject> {
     public int getWrongAnswers() {
         splitCompleteLine();
         return wrongAnswers;
+    }
+
+    public long getAverageAnswerTime() {
+        splitCompleteLine();
+        return averageAnswerTime;
     }
 }

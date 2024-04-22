@@ -4,42 +4,53 @@ import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.Reader;
 import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
+import de.dhbw.ase.stats.persistance.PlayerStatsSPObject;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
-public class FindQuestionsQuiz extends SingleplayerGame {
+public class SPQuiz extends SingleplayerGame {
 
     private final String filePath;
+    private String statsFilePath;
+    private PlayerStatsSPObject playerStatsSPObject;
+    private Categories category;
 
-    private PlayerStatsFQObject playerStatsFQObject;
-
-    public FindQuestionsQuiz(Scanner sc, String filePath) {
+    public SPQuiz(Scanner sc, String filePath, Categories category, String statsFilePath) {
         super(sc);
         this.filePath = filePath;
+        this.category = category;
+        this.statsFilePath = statsFilePath;
     }
 
     @Override
     protected void startGame() {
-        Reader fqReader = new Reader(Quizzz.FILE_FQ2, 15);
-        List<Question> questionList = fqReader.getQuestionList();
+        Reader spReader = new Reader(filePath, 8);
+        List<Question> questionList = spReader.getQuestionList();
         int rightAnswerCount = 0;
         int wrongAnswerCount = 0;
+        long averageAnswerTime;
+        long totalAnswerTime = 0;
 
         System.out.println();
         System.out.println("------------- Neue Runde WWM -------------");
 
         for (int i = 0; i < questionList.size(); i++) {
+            long beforeQuestion = System.nanoTime();
             boolean answerEvaluation = playQuestion(questionList.get(i));
+            long afterQuestion = System.nanoTime();
+
             if (answerEvaluation) {
                 System.out.println("Richtige Antwort!");
                 rightAnswerCount++;
                 continue;
             }
             System.out.println("Diese Antwort war leider Falsch.");
+            totalAnswerTime += Math.abs(afterQuestion - beforeQuestion);
 
             Question.Answer rightAnswer = questionList.get(i).getAnswerList()
                     .stream()
@@ -52,8 +63,10 @@ public class FindQuestionsQuiz extends SingleplayerGame {
             wrongAnswerCount++;
         }
         System.out.println("Du hattest ingesamt " + rightAnswerCount + " richtige Antworten!");
+        averageAnswerTime = TimeUnit.NANOSECONDS.toMillis(totalAnswerTime / (questionList.size()));
+        System.out.println("Du hast eine durchschnittliche Antwortzeit von " + averageAnswerTime + " Millisekunden.");
 
-        playerStatsFQObject = new PlayerStatsFQObject(getUsername(), rightAnswerCount, wrongAnswerCount);
+        playerStatsSPObject = new PlayerStatsSPObject(getUsername(), rightAnswerCount, wrongAnswerCount, category.getString());
     }
 
     @Override
@@ -63,22 +76,21 @@ public class FindQuestionsQuiz extends SingleplayerGame {
 
     @Override
     protected void writeStats() {
+        List<PlayerStatsSPObject> file = new ArrayList<>(readFile());
 
-        List<PlayerStatsFQObject> file = new ArrayList<>(readFile());
-
-        int index = file.indexOf(playerStatsFQObject);
+        int index = file.indexOf(playerStatsSPObject);
         if (index == -1) {
-            file.add(playerStatsFQObject);
+            file.add(playerStatsSPObject);
         } else {
-            PlayerStatsFQObject oldStats = file.get(index);
-            oldStats.add(playerStatsFQObject);
+            PlayerStatsSPObject oldStats = file.get(index);
+            oldStats.add(playerStatsSPObject);
         }
 
         Collections.sort(file);
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(getStatsFilesPath()))) {
-            for (PlayerStatsFQObject playerStatsWWMObject1 : file) {
-                bufferedWriter.write(playerStatsWWMObject1.getCompleteLine());
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(statsFilePath))) {
+            for (PlayerStatsSPObject playerStatsSPObject1 : file) {
+                bufferedWriter.write(playerStatsSPObject1.getCompleteLine());
                 bufferedWriter.newLine();
             }
         } catch (IOException e) {
@@ -87,11 +99,11 @@ public class FindQuestionsQuiz extends SingleplayerGame {
         }
     }
 
-    private List<PlayerStatsFQObject> readFile() {
+    private List<PlayerStatsSPObject> readFile() {
         try (BufferedReader bufferedReader =
-                     new BufferedReader(new FileReader(getStatsFilesPath()))) {
+                     new BufferedReader(new FileReader(statsFilePath))) {
             return bufferedReader.lines()
-                    .map(PlayerStatsFQObject::new)
+                    .map(PlayerStatsSPObject::new)
                     .toList();
         } catch (FileNotFoundException e) {
             return new ArrayList<>();

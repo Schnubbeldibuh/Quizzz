@@ -8,11 +8,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public abstract class SingeplayerGame extends Game {
+public abstract class SingleplayerGame extends Game {
 
     private final Scanner sc;
 
-    public SingeplayerGame(Scanner sc) {
+    public SingleplayerGame(Scanner sc) {
         super(sc);
         this.sc = sc;
     }

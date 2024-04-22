@@ -7,14 +7,14 @@ public abstract class Submenu implements Startable {
 
     private final Scanner sc;
 
-    private final Map<Character, SelectedMenu> selectionMap;
+    private final Map<String, SelectedMenu> selectionMap;
 
     public Submenu(Scanner sc) {
         this.sc = sc;
         selectionMap = createSelectionMap();
     }
 
-    protected abstract Map<Character, SelectedMenu> createSelectionMap();
+    protected abstract Map<String, SelectedMenu> createSelectionMap();
 
     protected abstract void showOptions();
 
@@ -42,16 +42,14 @@ public abstract class Submenu implements Startable {
         SelectedMenu selection;
         do {
             String input = sc.next();
-            if (input.length() == 1) {
-                selection = scanSelection(input.charAt(0));
-                if (selection.menuSelection() != SelectedMenu.MenuSelection.INVALID)
-                    return selection;
-            }
+            selection = scanSelection(input);
+            if (selection.menuSelection() != SelectedMenu.MenuSelection.INVALID)
+                return selection;
             System.out.println("Invalide Eingabe. Bitte erneut wählen.");
         } while (true);
     }
 
-    private SelectedMenu scanSelection(char input) {
+    private SelectedMenu scanSelection(String input) {
         return selectionMap.getOrDefault(input, new SelectedMenu(SelectedMenu.MenuSelection.INVALID));
     }
 
