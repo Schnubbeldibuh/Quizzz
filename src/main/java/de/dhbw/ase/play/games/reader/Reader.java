@@ -6,15 +6,27 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public abstract class Reader {
+public class Reader {
     private final Random random;
+    private String filePath;
+    private int amount;
+
+    public Reader(String filePath, int amount) {
+        random = new Random();
+        this.filePath = filePath;
+        this.amount = amount;
+    }
 
     public Reader() {
-        random = new Random();
+        random  = new Random();
     }
-    public abstract List<Question> getQuestionList();
 
-    protected List<Question> readFile(File file, int amount) {
+    public List<Question> getQuestionList() {
+        List<Question> questionsForOneRound = new ArrayList<>(readFile(filePath, amount));
+        return questionsForOneRound;
+    }
+
+    protected List<Question> readFile(String file, int amount) {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
             bufferedReader.mark(1000);
             String l1 = bufferedReader.readLine();

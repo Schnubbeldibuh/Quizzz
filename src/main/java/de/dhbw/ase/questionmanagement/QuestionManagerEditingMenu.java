@@ -24,12 +24,12 @@ public class QuestionManagerEditingMenu extends Submenu {
     }
 
     @Override
-    protected Map<Character, SelectedMenu> createSelectionMap() {
-        Map<Character, SelectedMenu> map = new HashMap<>();
-        map.put('1', new SelectedMenu(new QuestionManagerEdit(getSc(),this)));
-        map.put('2', new SelectedMenu(new QuestionManagerDelete(getSc(), this)));
-        map.put('3', new SelectedMenu(SelectedMenu.MenuSelection.BACK));
-        map.put('4', new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
+    protected Map<String, SelectedMenu> createSelectionMap() {
+        Map<String, SelectedMenu> map = new HashMap<>();
+        map.put("1", new SelectedMenu(new QuestionManagerEdit(getSc(),this)));
+        map.put("2", new SelectedMenu(new QuestionManagerDelete(getSc(), this)));
+        map.put("3", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
+        map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
         return map;
     }

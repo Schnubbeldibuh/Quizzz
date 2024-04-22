@@ -7,14 +7,14 @@ public abstract class Submenu implements Startable {
 
     private final Scanner sc;
 
-    private final Map<Character, SelectedMenu> selectionMap;
+    private final Map<String, SelectedMenu> selectionMap;
 
     public Submenu(Scanner sc) {
         this.sc = sc;
         selectionMap = createSelectionMap();
     }
 
-    protected abstract Map<Character, SelectedMenu> createSelectionMap();
+    protected abstract Map<String, SelectedMenu> createSelectionMap();
 
     protected abstract void showOptions();
 

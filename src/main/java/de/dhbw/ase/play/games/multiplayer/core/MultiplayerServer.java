@@ -1,7 +1,7 @@
 package de.dhbw.ase.play.games.multiplayer.core;
 
+import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
-import de.dhbw.ase.play.games.reader.MReader;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.Reader;
 
@@ -38,7 +38,7 @@ public abstract class MultiplayerServer {
 
     protected void startPlaying() {
         initializeRound();
-        Reader mReader = new MReader();
+        Reader mReader = new Reader(Quizzz.FILE_MP, 8);
         questionList = mReader.getQuestionList();
         questionIndex = -1;
         sendMessageToAllClients(CommunicationPrefixes.START_GAME.toString());

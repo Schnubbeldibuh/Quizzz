@@ -20,12 +20,12 @@ public class PlayMenu extends Submenu {
         super(sc);
     }
     @Override
-    protected Map<Character, SelectedMenu> createSelectionMap() {
-        Map<Character, SelectedMenu> map = new HashMap<>();
-        map.put('1', new SelectedMenu(new MultiplayerMenu(getSc())));
-        map.put('2', new SelectedMenu(new SingleplayerMenu(getSc())));
-        map.put('3', new SelectedMenu(SelectedMenu.MenuSelection.BACK));
-        map.put('4', new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
+    protected Map<String, SelectedMenu> createSelectionMap() {
+        Map<String, SelectedMenu> map = new HashMap<>();
+        map.put("1", new SelectedMenu(new MultiplayerMenu(getSc())));
+        map.put("2", new SelectedMenu(new SingleplayerMenu(getSc())));
+        map.put("3", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
+        map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
         return map;
     }

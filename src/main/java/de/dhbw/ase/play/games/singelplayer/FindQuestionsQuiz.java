@@ -1,7 +1,8 @@
 package de.dhbw.ase.play.games.singelplayer;
 
-import de.dhbw.ase.play.games.reader.FQReader;
+import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.reader.Question;
+import de.dhbw.ase.play.games.reader.Reader;
 import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
 
 import java.io.*;
@@ -23,7 +24,7 @@ public class FindQuestionsQuiz extends SingleplayerGame {
 
     @Override
     protected void startGame() {
-        FQReader fqReader = new FQReader();
+        Reader fqReader = new Reader(Quizzz.FILE_FQ2, 15);
         List<Question> questionList = fqReader.getQuestionList();
         int rightAnswerCount = 0;
         int wrongAnswerCount = 0;
