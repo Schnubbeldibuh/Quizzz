@@ -11,7 +11,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.*;
 
 public abstract class MultiplayerClient {
@@ -130,7 +129,8 @@ public abstract class MultiplayerClient {
                     throw new ExitException();
                 }
 
-                if (checkUserInput(input)) {
+                if (!checkUserInput(input)) {
+                    System.out.println("Ungültige Eingabe");
                     continue;
                 }
 
