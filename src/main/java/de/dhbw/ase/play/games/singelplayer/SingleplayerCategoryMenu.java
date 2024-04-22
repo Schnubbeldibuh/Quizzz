@@ -18,12 +18,12 @@ public class SingleplayerCategoryMenu extends Submenu {
 
         Map<Character, SelectedMenu> map = new HashMap<>();
         map.put('1', new SelectedMenu(new SPRandom(getSc())));
-        map.put('2', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_STATS_SP_GENERAL)));
-        map.put('3', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_STATS_SP_GEOGRAPHY)));
-        map.put('4', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_STATS_SP_CINEMA_TV)));
-        map.put('5', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_STATS_SP_TECHNOLOGY)));
-        map.put('6', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_STATS_SP_SPORTS)));
-        map.put('7', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_STATS_SP_FOOD)));
+        map.put('2', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_SP_GENERAL)));
+        map.put('3', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_SP_GEOGRAPHY)));
+        map.put('4', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_SP_CINEMA_TV)));
+        map.put('5', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_SP_TECHNOLOGY)));
+        map.put('6', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_SP_SPORTS)));
+        map.put('7', new SelectedMenu(new SPQuiz(getSc(), Quizzz.FILE_SP_FOOD)));
         map.put('8', new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put('9', new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
