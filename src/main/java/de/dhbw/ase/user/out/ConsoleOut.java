@@ -5,4 +5,9 @@ public class ConsoleOut implements UserOut {
     public void printLn(String out) {
         System.out.println(out);
     }
+
+    @Override
+    public void printf(String format, Object... args) {
+        System.out.printf(format, args);
+    }
 }
