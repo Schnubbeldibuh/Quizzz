@@ -11,8 +11,10 @@ import java.util.Scanner;
 
 public class MultiplayerQuickClient extends MultiplayerClient {
 
+    private boolean discardUserinput;
+
     public MultiplayerQuickClient(Scanner sc, String username, String filepath) {
-        super(sc, username, filepath);
+        super(username, filepath);
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
         validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
@@ -28,6 +30,10 @@ public class MultiplayerQuickClient extends MultiplayerClient {
         if (input.equalsIgnoreCase("exit")) {
             throw new ExitException();
         }
+        if (!discardUserinput) {
+            return false;
+        }
+
         return input.equalsIgnoreCase("a")
                 || input.equalsIgnoreCase("b")
                 || input.equalsIgnoreCase("c")
@@ -35,19 +41,18 @@ public class MultiplayerQuickClient extends MultiplayerClient {
     }
 
     @Override
-    protected List<Source> processServerInput(String input) {
-        List<MultiplayerClient.Source> sourceList = new ArrayList<>();
+    protected boolean processServerInput(String input) {
 
         switch (CommunicationPrefixes.evaluateCase(input)) {
             case ROUND_FINISHED:
-                return new ArrayList<>();
+                return false;
 
             case START_GAME:
                 System.out.println("Das Spiel startet.");
-                sourceList.add(Source.SERVER);
-                break;
+                return true;
 
             case ANSWER_EVALUATION:
+                discardUserinput = true;
                 boolean evaluation =
                         Boolean.parseBoolean(input.substring(CommunicationPrefixes.ANSWER_EVALUATION.getLength()));
 
@@ -57,50 +62,49 @@ public class MultiplayerQuickClient extends MultiplayerClient {
                     System.out.println("DU DUMME SAU");
                 }
 
-                sourceList.add(Source.SERVER);
-                break;
+                return true;
 
             case RIGHT_ANSWER:
+                discardUserinput = true;
                 System.out.println(
                         input.substring(CommunicationPrefixes.RIGHT_ANSWER.getLength()) + " hat richtig geantwortet.");
 
-                sourceList.add(Source.SERVER);
-                break;
+                return true;
 
             case NEXT_QUESTION:
                 showQuestion(input);
-                sourceList.add(Source.USER);
-                sourceList.add(Source.SERVER);
-                break;
+                discardUserinput = false;
+                return true;
 
             case STATS_TRANSFER:
                 stats.add(
                         new PlayerStatsMPObject(input.substring(CommunicationPrefixes.STATS_TRANSFER.getLength())));
-                sourceList.add(Source.SERVER);
-                break;
+                return true;
 
             case STATS_TRANSFER_FINISHED:
                 writeStats();
                 stats = new ArrayList<>();
-                sourceList.add(Source.SERVER);
-                break;
+                return true;
         }
 
-        return sourceList;
+        throw new IllegalStateException();
     }
 
-    protected List<MultiplayerClient.Source> processUserInput(String input) {
+    protected boolean processUserInput(String input) {
+        input = input.charAt(0) + "";
         Integer selection = switch (input) {
             case "a" -> 0;
             case "b" -> 1;
             case "c" -> 2;
             case "d" -> 3;
-            default -> throw new IllegalStateException("Unexpected value: " + input);
+            default -> {
+                throw new IllegalStateException("Unexpected value: " + input);
+            }
         };
         sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection + ";" + questionIndex);
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
         sourceList.add(Source.SERVER);
 
-        return sourceList;
+        return true;
     }
 }

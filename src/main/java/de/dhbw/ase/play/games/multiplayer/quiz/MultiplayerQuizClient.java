@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class MultiplayerQuizClient extends MultiplayerClient {
 
     public MultiplayerQuizClient(Scanner sc, String username, String filepath) {
-        super(sc, username, filepath);
+        super(username, filepath);
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
         validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
@@ -37,12 +37,12 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
 
     @Override
-    protected List<MultiplayerClient.Source> processServerInput(String input) {
+    protected boolean processServerInput(String input) {
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
 
         switch (CommunicationPrefixes.evaluateCase(input)) {
             case ROUND_FINISHED:
-                return new ArrayList<>();
+                return false;
 
             case START_GAME:
                 System.out.println("Das Spiel startet.");
@@ -80,11 +80,11 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 break;
         }
 
-        return sourceList;
+        return true;
     }
 
     @Override
-    protected List<Source> processUserInput(String input) {
+    protected boolean processUserInput(String input) {
         Integer selection = switch (input) {
             case "a" -> 0;
             case "b" -> 1;
@@ -96,6 +96,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
         sourceList.add(Source.SERVER);
 
-        return sourceList;
+        return true;
     }
 }
