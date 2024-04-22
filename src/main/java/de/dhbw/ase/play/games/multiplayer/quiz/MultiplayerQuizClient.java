@@ -11,8 +11,10 @@ import java.util.Scanner;
 
 public class MultiplayerQuizClient extends MultiplayerClient {
 
+    private boolean discardUserinput;
+
     public MultiplayerQuizClient(Scanner sc, String username, String filepath) {
-        super(sc, username, filepath);
+        super(username, filepath);
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
         validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
@@ -29,6 +31,10 @@ public class MultiplayerQuizClient extends MultiplayerClient {
             throw new ExitException();
         }
 
+        if (discardUserinput) {
+            return false;
+        }
+
         return input.equalsIgnoreCase("a")
                 || input.equalsIgnoreCase("b")
                 || input.equalsIgnoreCase("c")
@@ -37,12 +43,12 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
 
     @Override
-    protected List<MultiplayerClient.Source> processServerInput(String input) {
+    protected boolean processServerInput(String input) {
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
 
         switch (CommunicationPrefixes.evaluateCase(input)) {
             case ROUND_FINISHED:
-                return new ArrayList<>();
+                return false;
 
             case START_GAME:
                 System.out.println("Das Spiel startet.");
@@ -50,6 +56,8 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 break;
 
             case ANSWER_EVALUATION:
+                discardUserinput = true;
+
                 boolean evaluation =
                         Boolean.parseBoolean(input.substring(CommunicationPrefixes.ANSWER_EVALUATION.getLength()));
 
@@ -63,6 +71,7 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 break;
 
             case NEXT_QUESTION:
+                discardUserinput = false;
                 showQuestion(input);
                 sourceList.add(Source.USER);
                 break;
@@ -80,11 +89,15 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 break;
         }
 
-        return sourceList;
+        return true;
     }
 
     @Override
-    protected List<Source> processUserInput(String input) {
+    protected boolean processUserInput(String input) {
+        if (discardUserinput) {
+            return false;
+        }
+
         Integer selection = switch (input) {
             case "a" -> 0;
             case "b" -> 1;
@@ -96,6 +109,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
         List<MultiplayerClient.Source> sourceList = new ArrayList<>();
         sourceList.add(Source.SERVER);
 
-        return sourceList;
+        return true;
     }
 }

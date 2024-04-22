@@ -11,25 +11,23 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.*;
 
 public abstract class MultiplayerClient {
     protected final String filepath;
-    private final Scanner sc;
     private final String username;
-    private final ExecutorService executor = Executors.newFixedThreadPool(2);
+    private final ExecutorService listeningExecutor = Executors.newFixedThreadPool(2);
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     protected final List<CommunicationPrefixes> validServerMessages = new ArrayList<>();
     protected List<PlayerStatsMPObject> stats = new ArrayList<>();
+    protected boolean discardUserinput;
     private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
     protected String questionIndex;
 
-    private record ListeningResult(String input, Source source) {}
 
-    public MultiplayerClient(Scanner sc, String username, String filepath) {
-        this.sc = sc;
+    public MultiplayerClient(String username, String filepath) {
         this.username = username;
         this.filepath = filepath;
     }
@@ -37,15 +35,22 @@ public abstract class MultiplayerClient {
 
     protected abstract boolean checkUserInput(String input) throws ExitException;
 
-    protected abstract List<Source> processServerInput(String input);
+    protected abstract boolean processServerInput(String input);
 
-    protected abstract List<MultiplayerClient.Source> processUserInput(String input);
+    protected abstract boolean processUserInput(String input);
 
 
     protected void writeStats() {
-        List<PlayerStatsMPObject> file = new ArrayList<>(readFile());
+        List<PlayerStatsMPObject> file;
+        try {
+            file = new ArrayList<>(readFile());
+        } catch (IOException e) {
+            System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
+            System.out.println("Die Stats wurden nicht gespeichert.");
+            return;
+        }
 
-        for (PlayerStatsMPObject p: stats) {
+        for (PlayerStatsMPObject p : stats) {
 
             int index = file.indexOf(p);
             if (index == -1) {
@@ -58,17 +63,32 @@ public abstract class MultiplayerClient {
 
         Collections.sort(file);
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {
+        File f = new File(filepath);
+        if (!f.exists()) {
+            f.mkdirs();
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
+                System.out.println("Die Stats wurden nicht gespeichert.");
+                return;
+            }
+        }
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(f))) {
             for (PlayerStatsMPObject playerStatsMPObject : file) {
                 bufferedWriter.write(playerStatsMPObject.getCompleteLine());
                 bufferedWriter.newLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
-            //TODO
+            e.printStackTrace();
+            System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
+            System.out.println("Die Stats wurden möglicherweise nicht gespeichert.");
+            return;
         }
     }
-    private List<PlayerStatsMPObject> readFile() {
+
+    private List<PlayerStatsMPObject> readFile() throws IOException {
         try (BufferedReader bufferedReader =
                      new BufferedReader(new FileReader(filepath))) {
             return bufferedReader.lines()
@@ -76,12 +96,7 @@ public abstract class MultiplayerClient {
                     .toList();
         } catch (FileNotFoundException e) {
             return new ArrayList<>();
-        } catch (IOException e) {
-            System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
-            //TODO zurückspringen mit separater Exception
         }
-
-        return new ArrayList<>();
     }
 
     protected boolean checkServerInput(String input) {
@@ -97,72 +112,70 @@ public abstract class MultiplayerClient {
     }
 
     protected void start() throws ExitException {
-        List<Source> listeningTo = new ArrayList<>();
-        listeningTo.add(Source.SERVER);
+        CompletionService<Boolean> threadPool = new ExecutorCompletionService<>(listeningExecutor);
+        threadPool.submit(() -> {
+            Future<Boolean> submit;
+            do {
+                StringBuilder builder = new StringBuilder();
+                do {
+                    int inputInt = System.in.read();
+                    if (inputInt == 10) {
+                        break;
+                    }
+                    builder.append((char) inputInt);
+                } while (true);
 
-        do {
-            CompletionService<ListeningResult> threadPool = new ExecutorCompletionService<>(executor);
-            Future<ListeningResult> clientThread = null, serverThread = null;
-            if (listeningTo.contains(Source.USER)) {
-                clientThread = threadPool.submit(() -> {
-                    String input;
-                    do {
-                        input = sc.next();
-                        if (input.equals("exit"))
-                            throw new ExitException();
-                    } while (!checkUserInput(input));
-
-                    return new ListeningResult(input, Source.USER);
-                });
-            }
-            if (listeningTo.contains(Source.SERVER)) {
-                serverThread = threadPool.submit(() -> {
-                    String input;
-                    do {
-                        input = in.readLine();
-                    } while (input != null && !checkServerInput(input));
-
-                    return new ListeningResult(input, Source.SERVER);
-                });
-            }
-
-            ListeningResult res;
-            try {
-                Future<ListeningResult> take = threadPool.take();
-                res = take.get();
-            } catch (InterruptedException e) {
-                // TODO
-                executor.shutdownNow();
-                return;
-            } catch (ExecutionException e) {
-                if (e.getCause().getClass() == ExitException.class) {
-                    executor.shutdownNow();
+                String input = builder.toString();
+                if (input.equals("exit")) {
                     throw new ExitException();
                 }
-                if (e.getCause().getClass() == SocketException.class) {
-                    executor.shutdownNow();
-                    System.out.println("Host hat die Verbindung getrennt");
-                    throw new ExitException();
-                }
-                // TODO
-                return;
-            }
 
-            if (res.source() == Source.USER) {
-                if (serverThread != null)
-                    serverThread.cancel(true);
-                listeningTo = processUserInput(res.input());
-            } else {
-                if (clientThread != null)
-                    clientThread.cancel(true);
-                if (res.input == null) {
-                    System.out.println("Host hat die Verbindung getrennt.");
-                    throw new ExitException();
+                if (!checkUserInput(input)) {
+                    System.out.println("Ungültige Eingabe");
+                    continue;
                 }
-                listeningTo = processServerInput(res.input());
-            }
 
-        } while (!listeningTo.isEmpty());
+                submit = executor.submit(() -> processUserInput(input));
+                submit.get();
+            } while (true);
+        });
+
+        threadPool.submit(() -> {
+            Future<Boolean> submit;
+            do {
+                String input;
+                do {
+                    input = in.readLine();
+                } while (input != null && !checkServerInput(input));
+                String finalInput = input;
+                //System.out.println(input);
+                submit = executor.submit(() -> processServerInput(finalInput));
+            } while (submit.get());
+            return true;
+        });
+
+        try {
+            threadPool.take().get();
+        } catch (InterruptedException e) {
+            // TODO
+            listeningExecutor.shutdownNow();
+            return;
+        } catch (ExecutionException e) {
+            if (e.getCause().getClass() == ExitException.class) {
+                listeningExecutor.shutdownNow();
+                throw new ExitException();
+            }
+            if (e.getCause().getClass() == SocketException.class) {
+                listeningExecutor.shutdownNow();
+                System.out.println("Host hat die Verbindung getrennt");
+                throw new ExitException();
+            }
+            // TODO
+            e.printStackTrace();
+            return;
+        }
+
+        listeningExecutor.shutdownNow();
     }
 
     boolean registerClient(String host, int port) throws UsernameAlreadyExistsException, UnknownHostException {
@@ -207,7 +220,7 @@ public abstract class MultiplayerClient {
     }
 
     protected void disconnectClient() {
-        executor.shutdownNow();
+        listeningExecutor.shutdownNow();
         try {
             socket.close();
         } catch (IOException ignored) {
@@ -220,6 +233,7 @@ public abstract class MultiplayerClient {
                 CommunicationPrefixes.NEXT_QUESTION.getLength());
 
         String[] questionAnswersArray = question.split(";");
+        System.out.println();
         System.out.println("Frage: " + questionAnswersArray[0]);
         System.out.println("A: " + questionAnswersArray[1]);
         System.out.println("B: " + questionAnswersArray[2]);
