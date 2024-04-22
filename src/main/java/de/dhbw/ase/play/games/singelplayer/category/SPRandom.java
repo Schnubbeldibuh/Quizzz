@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class SPRandom implements Startable {
 
-    public SPRandom(Scanner sc, String filename) {
+    public SPRandom(Scanner sc) {
     }
 
     @Override
