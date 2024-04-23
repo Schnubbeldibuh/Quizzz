@@ -30,7 +30,7 @@ public class FindQuestionsQuiz extends SingleplayerGame {
         int wrongAnswerCount = 0;
 
         System.out.println();
-        System.out.println("------------- Neue Runde WWM -------------");
+        System.out.println("------------- Neue Runde Fragenfinder -------------");
 
         for (int i = 0; i < questionList.size(); i++) {
             boolean answerEvaluation = playQuestion(questionList.get(i));

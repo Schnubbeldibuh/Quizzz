@@ -35,7 +35,7 @@ public class SPQuiz extends SingleplayerGame {
         long totalAnswerTime = 0;
 
         System.out.println();
-        System.out.println("------------- Neue Runde WWM -------------");
+        System.out.println("------------- Neue Runde Singleplayer " + category.getString() + " -------------");
 
         for (int i = 0; i < questionList.size(); i++) {
             long beforeQuestion = System.nanoTime();
