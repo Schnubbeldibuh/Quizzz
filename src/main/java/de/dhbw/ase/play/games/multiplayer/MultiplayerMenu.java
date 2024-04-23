@@ -2,8 +2,9 @@ package de.dhbw.ase.play.games.multiplayer;
 
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
-import de.dhbw.ase.play.games.multiplayer.quickquiz.MultiplayerQuick;
-import de.dhbw.ase.play.games.multiplayer.quiz.MultiplayerQuiz;
+import de.dhbw.ase.play.games.multiplayer.core.MultiplayerGame;
+import de.dhbw.ase.play.games.multiplayer.quickquiz.MultiplayerQuickServerClientFactory;
+import de.dhbw.ase.play.games.multiplayer.quiz.MultiplayerQuizServerClientFactory;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
@@ -16,9 +17,11 @@ public class MultiplayerMenu extends Submenu {
 
     @Override
     protected Map<String, SelectedMenu> createSelectionMap() {
+        UserIn sc = getSc();
+
         Map<String, SelectedMenu> map = new HashMap<>();
-        map.put("1", new SelectedMenu(new MultiplayerQuiz(getSc())));
-        map.put("2", new SelectedMenu(new MultiplayerQuick(getSc())));
+        map.put("1", new SelectedMenu(new MultiplayerGame(sc, new MultiplayerQuizServerClientFactory(sc))));
+        map.put("2", new SelectedMenu(new MultiplayerGame(sc, new MultiplayerQuickServerClientFactory(sc))));
         map.put("3", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 

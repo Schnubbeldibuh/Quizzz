@@ -3,6 +3,7 @@ package de.dhbw.ase.play.games.multiplayer.core;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.io.*;
 import java.net.Socket;
@@ -25,11 +26,13 @@ public abstract class MultiplayerClient {
     private PrintWriter out;
     private Socket socket;
     protected String questionIndex;
+    private final UserIn sc;
 
 
-    public MultiplayerClient(String username, String filepath) {
+    public MultiplayerClient(UserIn sc, String username, String filepath) {
         this.username = username;
         this.filepath = filepath;
+        this.sc = sc;
     }
 
 
@@ -125,46 +128,9 @@ public abstract class MultiplayerClient {
 
     protected void start() throws ExitException {
         CompletionService<Boolean> threadPool = new ExecutorCompletionService<>(listeningExecutor);
-        threadPool.submit(() -> {
-            Future<Boolean> submit;
-            do {
-                StringBuilder builder = new StringBuilder();
-                do {
-                    int inputInt = System.in.read();
-                    if (inputInt == 10) {
-                        break;
-                    }
-                    builder.append((char) inputInt);
-                } while (true);
+        threadPool.submit(this::litenToClient);
 
-                String input = builder.toString();
-                if (input.equals("exit")) {
-                    throw new ExitException();
-                }
-
-                if (!checkUserInput(input)) {
-                    System.out.println("Ungültige Eingabe");
-                    continue;
-                }
-
-                submit = executor.submit(() -> processUserInput(input));
-                submit.get();
-            } while (true);
-        });
-
-        threadPool.submit(() -> {
-            Future<Boolean> submit;
-            do {
-                String input;
-                do {
-                    input = in.readLine();
-                } while (input != null && !checkServerInput(input));
-                String finalInput = input;
-                //System.out.println(input);
-                submit = executor.submit(() -> processServerInput(finalInput));
-            } while (submit.get());
-            return true;
-        });
+        threadPool.submit(this::listenToServer);
 
         try {
             threadPool.take().get();
@@ -188,6 +154,39 @@ public abstract class MultiplayerClient {
         }
 
         listeningExecutor.shutdownNow();
+    }
+
+    private boolean listenToServer() throws IOException, InterruptedException, ExecutionException {
+        Future<Boolean> submit;
+        do {
+            String input;
+            do {
+                input = in.readLine();
+            } while (input != null && !checkServerInput(input));
+
+            String finalInput = input;
+            submit = executor.submit(() -> processServerInput(finalInput));
+        } while (submit.get());
+        return true;
+    }
+
+    private boolean litenToClient() throws ExitException, InterruptedException, ExecutionException {
+        Future<Boolean> submit;
+        do {
+            String input = sc.waitForNextLine(this);
+
+            if (input.equals("exit")) {
+                throw new ExitException();
+            }
+
+            if (!checkUserInput(input)) {
+                System.out.println("Ungültige Eingabe");
+                continue;
+            }
+
+            submit = executor.submit(() -> processUserInput(input));
+            submit.get();
+        } while (true);
     }
 
     boolean registerClient(String host, int port) throws UsernameAlreadyExistsException, UnknownHostException {

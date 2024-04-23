@@ -4,6 +4,7 @@ import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
 import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.ArrayList;
 
@@ -11,8 +12,8 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
     private boolean discardUserinput;
 
-    public MultiplayerQuizClient(String username, String filepath) {
-        super(username, filepath);
+    public MultiplayerQuizClient(UserIn sc, String username, String filepath) {
+        super(sc, username, filepath);
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
         validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);

@@ -8,22 +8,21 @@ import de.dhbw.ase.user.in.UserIn;
 
 import java.net.UnknownHostException;
 
-public abstract class MultiplayerGame extends Game {
+public class MultiplayerGame extends Game {
 
     private final UserIn sc;
+    private final ServerClientFactory factory;
     private boolean host;
     private MultiplayerServer server;
     private MultiplayerClient client;
 
     private record ServerInfos(String host, int port) {}
 
-    public MultiplayerGame(UserIn sc) {
+    public MultiplayerGame(UserIn sc, ServerClientFactory factory) {
         super(sc);
         this.sc = sc;
+        this.factory = factory;
     }
-
-    protected abstract MultiplayerServer createServer();
-    protected abstract MultiplayerClient createClient(String username, MultiplayerServer server);
 
     @Override
     public SelectedMenu.MenuSelection start() {
@@ -77,7 +76,7 @@ public abstract class MultiplayerGame extends Game {
             serverInfos = askForServerInfos();
             do {
                 indicateUser();
-                client = createClient(getUsername(), null);
+                client = factory.createClient(getUsername());
                 boolean successfullyRegistered;
                 try {
                     successfullyRegistered = client.registerClient(serverInfos.host(), serverInfos.port());
@@ -119,7 +118,7 @@ public abstract class MultiplayerGame extends Game {
         if (server == null) {
             // no previous game was played -> new server has to be started
             server = startServer();
-            client = createClient(getUsername(), server);
+            client = factory.createClient(getUsername());
             try {
                 client.registerClient("localhost", Quizzz.SERVER_PORT); // TODO rückgabewert verarbeiten
             } catch (UsernameAlreadyExistsException ignored) {
@@ -141,7 +140,7 @@ public abstract class MultiplayerGame extends Game {
 
     private MultiplayerServer startServer() {
         MultiplayerServer server;
-        server = createServer();
+        server = factory.createServer();
         server.advanceGamestate();
         return server;
     }
