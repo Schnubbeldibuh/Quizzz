@@ -1,26 +1,24 @@
 package de.dhbw.ase.play.games.singelplayer;
 
-import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.Reader;
-import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
 import de.dhbw.ase.stats.persistance.PlayerStatsSPObject;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class SPQuiz extends SingleplayerGame {
 
     private final String filePath;
-    private String statsFilePath;
+    private final String statsFilePath;
+    private final Categories category;
     private PlayerStatsSPObject playerStatsSPObject;
-    private Categories category;
 
-    public SPQuiz(Scanner sc, String filePath, Categories category, String statsFilePath) {
+    public SPQuiz(UserIn sc, String filePath, Categories category, String statsFilePath) {
         super(sc);
         this.filePath = filePath;
         this.category = category;

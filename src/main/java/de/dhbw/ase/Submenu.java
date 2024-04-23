@@ -1,15 +1,16 @@
 package de.dhbw.ase;
 
+import de.dhbw.ase.user.in.UserIn;
+
 import java.util.Map;
-import java.util.Scanner;
 
 public abstract class Submenu implements Startable {
 
-    private final Scanner sc;
+    private final UserIn sc;
 
     private final Map<String, SelectedMenu> selectionMap;
 
-    public Submenu(Scanner sc) {
+    public Submenu(UserIn sc) {
         this.sc = sc;
         selectionMap = createSelectionMap();
     }
@@ -41,7 +42,9 @@ public abstract class Submenu implements Startable {
     private SelectedMenu scanUntilValidInput() {
         SelectedMenu selection;
         do {
-            String input = sc.next();
+            String input;
+            input = sc.waitForNextLine(this);
+
             selection = scanSelection(input);
             if (selection.menuSelection() != SelectedMenu.MenuSelection.INVALID)
                 return selection;
@@ -53,7 +56,7 @@ public abstract class Submenu implements Startable {
         return selectionMap.getOrDefault(input, new SelectedMenu(SelectedMenu.MenuSelection.INVALID));
     }
 
-    protected Scanner getSc() {
+    protected UserIn getSc() {
         return sc;
     }
 }

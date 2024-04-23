@@ -4,12 +4,12 @@ import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.Reader;
 import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class FindQuestionsQuiz extends SingleplayerGame {
 
@@ -17,7 +17,7 @@ public class FindQuestionsQuiz extends SingleplayerGame {
 
     private PlayerStatsFQObject playerStatsFQObject;
 
-    public FindQuestionsQuiz(Scanner sc, String filePath) {
+    public FindQuestionsQuiz(UserIn sc, String filePath) {
         super(sc);
         this.filePath = filePath;
     }

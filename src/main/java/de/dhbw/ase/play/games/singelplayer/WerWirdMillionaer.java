@@ -3,21 +3,21 @@ package de.dhbw.ase.play.games.singelplayer;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.WWMReader;
 import de.dhbw.ase.stats.persistance.PlayerStatsWWMObject;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class WerWirdMillionaer extends SingleplayerGame {
 
     private PlayerStatsWWMObject playerStatsWWMObject;
     private final String statsFilesPath;
 
-    private final Scanner sc;
+    private final UserIn sc;
 
-    public WerWirdMillionaer(Scanner sc, String statsFilesPath) {
+    public WerWirdMillionaer(UserIn sc, String statsFilesPath) {
         super(sc);
         this.sc = sc;
         this.statsFilesPath = statsFilesPath;
@@ -45,7 +45,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
 
                 String input;
                 do {
-                    input = sc.next();
+                    input = sc.waitForNextLine(this);
                 } while (!(input.equals("1") || input.equals("2")));
 
                 if (input.equals("1")) {

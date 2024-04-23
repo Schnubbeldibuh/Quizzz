@@ -4,15 +4,12 @@ import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerGame;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerServer;
-
-import java.util.Scanner;
+import de.dhbw.ase.user.in.UserIn;
 
 public class MultiplayerQuiz extends MultiplayerGame {
 
-    private final Scanner sc;
-    public MultiplayerQuiz(Scanner sc) {
+    public MultiplayerQuiz(UserIn sc) {
         super(sc);
-        this.sc = sc;
     }
 
     @Override
@@ -22,6 +19,6 @@ public class MultiplayerQuiz extends MultiplayerGame {
 
     @Override
     protected MultiplayerClient createClient(String username, MultiplayerServer server) {
-        return new MultiplayerQuizClient(sc, username, Quizzz.FILE_STATS_MP);
+        return new MultiplayerQuizClient(username, Quizzz.FILE_STATS_MP);
     }
 }

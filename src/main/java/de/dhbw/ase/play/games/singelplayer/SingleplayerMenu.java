@@ -3,14 +3,16 @@ package de.dhbw.ase.play.games.singelplayer;
 import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class SingleplayerMenu extends Submenu {
 
-    public SingleplayerMenu(Scanner sc) {super(sc);}
+    public SingleplayerMenu(UserIn sc) {
+        super(sc);
+    }
 
     @Override
     protected Map<String, SelectedMenu> createSelectionMap() {

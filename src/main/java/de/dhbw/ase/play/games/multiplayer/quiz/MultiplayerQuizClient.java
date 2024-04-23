@@ -4,16 +4,16 @@ import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
 import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class MultiplayerQuizClient extends MultiplayerClient {
 
     private boolean discardUserinput;
 
-    public MultiplayerQuizClient(Scanner sc, String username, String filepath) {
+    public MultiplayerQuizClient(String username, String filepath) {
         super(username, filepath);
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
@@ -44,7 +44,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
     @Override
     protected boolean processServerInput(String input) {
-        List<MultiplayerClient.Source> sourceList = new ArrayList<>();
 
         switch (CommunicationPrefixes.evaluateCase(input)) {
             case ROUND_FINISHED:
@@ -52,7 +51,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
             case START_GAME:
                 System.out.println("Das Spiel startet.");
-                sourceList.add(Source.SERVER);
                 break;
 
             case ANSWER_EVALUATION:
@@ -67,25 +65,21 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                     System.out.println("DU DUMME SAU");
                 }
 
-                sourceList.add(Source.SERVER);
                 break;
 
             case NEXT_QUESTION:
                 discardUserinput = false;
                 showQuestion(input);
-                sourceList.add(Source.USER);
                 break;
 
             case STATS_TRANSFER:
                 stats.add(
                         new PlayerStatsMPObject(input.substring(CommunicationPrefixes.STATS_TRANSFER.getLength())));
-                sourceList.add(Source.SERVER);
                 break;
 
             case STATS_TRANSFER_FINISHED:
                 writeStats();
                 stats = new ArrayList<>();
-                sourceList.add(Source.SERVER);
                 break;
         }
 
@@ -106,9 +100,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
             default -> throw new IllegalStateException("Unexpected value: " + input);
         };
         sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection);
-        List<MultiplayerClient.Source> sourceList = new ArrayList<>();
-        sourceList.add(Source.SERVER);
-
         return true;
     }
 }

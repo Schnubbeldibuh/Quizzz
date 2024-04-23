@@ -4,13 +4,13 @@ import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
 import de.dhbw.ase.play.games.multiplayer.quickquiz.MultiplayerQuick;
 import de.dhbw.ase.play.games.multiplayer.quiz.MultiplayerQuiz;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class MultiplayerMenu extends Submenu {
-    public MultiplayerMenu(Scanner sc) {
+    public MultiplayerMenu(UserIn sc) {
         super(sc);
     }
 

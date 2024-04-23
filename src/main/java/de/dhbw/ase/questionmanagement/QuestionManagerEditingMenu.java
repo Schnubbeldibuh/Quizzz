@@ -1,8 +1,8 @@
 package de.dhbw.ase.questionmanagement;
 
 import de.dhbw.ase.SelectedMenu;
-import de.dhbw.ase.Startable;
 import de.dhbw.ase.Submenu;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -10,14 +10,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class QuestionManagerEditingMenu extends Submenu {
-    private QuestionManager questionManager;
-    private Scanner sc;
+    private final QuestionManager questionManager;
+    private final UserIn sc;
     private int numberOfLines;
     private String selectedLine;
-    public QuestionManagerEditingMenu(Scanner sc, QuestionManager questionManager) {
+    public QuestionManagerEditingMenu(UserIn sc, QuestionManager questionManager) {
         super(sc);
         this.sc = sc;
         this.questionManager = questionManager;
@@ -27,7 +26,7 @@ public class QuestionManagerEditingMenu extends Submenu {
     protected Map<String, SelectedMenu> createSelectionMap() {
         Map<String, SelectedMenu> map = new HashMap<>();
         map.put("1", new SelectedMenu(new QuestionManagerEdit(getSc(),this)));
-        map.put("2", new SelectedMenu(new QuestionManagerDelete(getSc(), this)));
+        map.put("2", new SelectedMenu(new QuestionManagerDelete(this)));
         map.put("3", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
@@ -48,7 +47,7 @@ public class QuestionManagerEditingMenu extends Submenu {
 
         do {
             System.out.println("Welche dieser Fragen möchtest du bearbeiten? Bitte gib die Fragennummer an.");
-            selectedLine = sc.next();
+            selectedLine = sc.waitForNextLine(this);
         } while (!validateInput(selectedLine));
 
         return super.start();

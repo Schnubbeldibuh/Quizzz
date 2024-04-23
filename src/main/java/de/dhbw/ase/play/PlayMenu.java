@@ -1,23 +1,17 @@
 package de.dhbw.ase.play;
 
-import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
-import de.dhbw.ase.play.games.multiplayer.MultiplayerMenu;
-import de.dhbw.ase.play.games.multiplayer.quickquiz.MultiplayerQuick;
-import de.dhbw.ase.play.games.multiplayer.quiz.MultiplayerQuiz;
 import de.dhbw.ase.Submenu;
-import de.dhbw.ase.play.games.singelplayer.FindQuestionsQuiz;
-import de.dhbw.ase.play.games.singelplayer.SingleplayerQuiz;
+import de.dhbw.ase.play.games.multiplayer.MultiplayerMenu;
 import de.dhbw.ase.play.games.singelplayer.SingleplayerMenu;
-import de.dhbw.ase.play.games.singelplayer.WerWirdMillionaer;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class PlayMenu extends Submenu {
 
-    public PlayMenu(Scanner sc) {
+    public PlayMenu(UserIn sc) {
         super(sc);
     }
     @Override

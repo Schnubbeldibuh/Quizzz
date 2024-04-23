@@ -7,14 +7,14 @@ import de.dhbw.ase.stats.show.ShowStatsFQ;
 import de.dhbw.ase.stats.show.ShowStatsMP;
 import de.dhbw.ase.stats.show.ShowStatsMPQuick;
 import de.dhbw.ase.stats.show.ShowStatsWWM;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class StatsMenu extends Submenu {
 
-    public StatsMenu(Scanner sc) {
+    public StatsMenu(UserIn sc) {
         super(sc);
     }
 

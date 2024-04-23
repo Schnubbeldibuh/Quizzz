@@ -1,6 +1,6 @@
 package de.dhbw.ase;
 
-import java.util.Scanner;
+import de.dhbw.ase.user.in.ConsoleIn;
 
 public class Quizzz {
 
@@ -36,7 +36,7 @@ public class Quizzz {
     public static int SERVER_PORT = 2400;
 
     public static void main(String[] args) {
-        Mainmenu menu = new Mainmenu(new Scanner(System.in));
+        Mainmenu menu = new Mainmenu(new ConsoleIn(System.in));
         menu.startGame();
     }
 }

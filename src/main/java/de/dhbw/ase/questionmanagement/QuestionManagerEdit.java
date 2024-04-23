@@ -1,15 +1,14 @@
 package de.dhbw.ase.questionmanagement;
 
 import de.dhbw.ase.SelectedMenu;
-
-import java.util.Scanner;
+import de.dhbw.ase.user.in.UserIn;
 
 public class QuestionManagerEdit extends QuetionEditor {
 
-    private Scanner sc;
-    private QuestionManagerEditingMenu questionManagerEditingMenu;
+    private final UserIn sc;
+    private final QuestionManagerEditingMenu questionManagerEditingMenu;
 
-    public QuestionManagerEdit(Scanner sc, QuestionManagerEditingMenu questionManagerEditingMenu) {
+    public QuestionManagerEdit(UserIn sc, QuestionManagerEditingMenu questionManagerEditingMenu) {
         this.sc = sc;
         this.questionManagerEditingMenu = questionManagerEditingMenu;
     }
@@ -31,7 +30,8 @@ public class QuestionManagerEdit extends QuetionEditor {
         System.out.println();
         System.out.println("Falls du die falsche Antwort " + i + " ändern möchtest: Neue Frage eingeben.");
         System.out.println("Falls du die falsche Antwort " + i + " beibehalten möchtest: \";\" eingeben.");
-        String input = sc.next();
+        String input;
+        input = sc.waitForNextLine(this);
         if (input.equals(";")) {
             return;
         }
@@ -48,7 +48,7 @@ public class QuestionManagerEdit extends QuetionEditor {
         System.out.println();
         System.out.println("Falls du die richtige Antwort ändern möchtest: Neue Frage eingeben.");
         System.out.println("Falls du die richtige Antwort beibehalten möchtest: \";\" eingeben.");
-        String input = sc.next();
+        String input = sc.waitForNextLine(this);
         if (input.equals(";")) {
             return;
         }
@@ -60,7 +60,7 @@ public class QuestionManagerEdit extends QuetionEditor {
         System.out.println("Falls du die Frage ändern möchtest: Neue Frage eingeben.");
         System.out.println("Falls du die Frage beibehalten möchtest: \";\" eingeben.");
 
-        String input = sc.next();
+        String input = sc.waitForNextLine(this);
         if (input.equals(";")) {
             return;
         }

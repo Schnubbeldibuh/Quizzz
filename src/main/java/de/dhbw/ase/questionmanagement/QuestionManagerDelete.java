@@ -1,14 +1,13 @@
 package de.dhbw.ase.questionmanagement;
 
 import de.dhbw.ase.SelectedMenu;
-
-import java.util.Scanner;
+import de.dhbw.ase.user.in.UserIn;
 
 public class QuestionManagerDelete extends QuetionEditor {
 
     private final QuestionManagerEditingMenu questionManagerEditingMenu;
 
-    public QuestionManagerDelete(Scanner sc, QuestionManagerEditingMenu questionManagerEditingMenu) {
+    public QuestionManagerDelete(QuestionManagerEditingMenu questionManagerEditingMenu) {
         this.questionManagerEditingMenu = questionManagerEditingMenu;
     }
 

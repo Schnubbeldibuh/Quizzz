@@ -1,9 +1,8 @@
 package de.dhbw.ase.questionmanagement;
 
-import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
-import de.dhbw.ase.Startable;
 import de.dhbw.ase.Submenu;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,12 +10,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class QuestionManager extends Submenu {
-    private String filePath;
+    private final String filePath;
 
-    public QuestionManager(Scanner sc, String file) {
+    public QuestionManager(UserIn sc, String file) {
         super(sc);
         this.filePath = file;
     }

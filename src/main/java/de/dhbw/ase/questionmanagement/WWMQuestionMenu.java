@@ -3,13 +3,13 @@ package de.dhbw.ase.questionmanagement;
 import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class WWMQuestionMenu extends Submenu {
-    public WWMQuestionMenu(Scanner sc) {
+    public WWMQuestionMenu(UserIn sc) {
         super(sc);
     }
 

@@ -3,13 +3,13 @@ package de.dhbw.ase.play.games.singelplayer;
 import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class SingleplayerCategoryMenu extends Submenu {
-    public SingleplayerCategoryMenu(Scanner sc) {
+    public SingleplayerCategoryMenu(UserIn sc) {
         super(sc);
     }
 

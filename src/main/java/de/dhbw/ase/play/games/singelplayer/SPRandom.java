@@ -1,13 +1,10 @@
 package de.dhbw.ase.play.games.singelplayer;
 
-import de.dhbw.ase.SelectedMenu;
-
-import java.util.Scanner;
+import de.dhbw.ase.user.in.UserIn;
 
 public class SPRandom extends SingleplayerGame {
 
-    private String filePath;
-    public SPRandom(Scanner sc) {
+    public SPRandom(UserIn sc) {
         super(sc);
     }
 

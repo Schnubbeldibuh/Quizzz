@@ -3,16 +3,16 @@ package de.dhbw.ase.play.games.singelplayer;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.play.games.Game;
 import de.dhbw.ase.play.games.reader.Question;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public abstract class SingleplayerGame extends Game {
 
-    private final Scanner sc;
+    private final UserIn sc;
 
-    public SingleplayerGame(Scanner sc) {
+    public SingleplayerGame(UserIn sc) {
         super(sc);
         this.sc = sc;
     }
@@ -46,7 +46,7 @@ public abstract class SingleplayerGame extends Game {
     protected int scanUntilValidInput() {
         int selection;
         do {
-            String input = sc.next().toLowerCase();
+            String input = sc.waitForNextLine(this).toLowerCase();
             if (input.length() == 1) {
                 selection = switch (input.charAt(0)) {
                     case 'a' -> 0;

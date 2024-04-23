@@ -4,17 +4,17 @@ import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.Game;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
 public abstract class MultiplayerGame extends Game {
 
-    private final Scanner sc;
+    private final UserIn sc;
 
     private record ServerInfos(String host, int port) {}
 
-    public MultiplayerGame(Scanner sc) {
+    public MultiplayerGame(UserIn sc) {
         super(sc);
         this.sc = sc;
     }
@@ -55,7 +55,7 @@ public abstract class MultiplayerGame extends Game {
                 }
                 String s;
                 do {
-                    s = sc.nextLine();
+                    s = sc.waitForNextLine(this);
                 } while (!s.equals("start"));
                 //TODO chekc for exit
                 server.advanceGamestate();
@@ -108,7 +108,7 @@ public abstract class MultiplayerGame extends Game {
         ServerInfos serverInfos;
         do {
             System.out.println("Bitte gebe den Hostnamen und Port an in der Form <hostname:port>.");
-            String input = sc.nextLine();
+            String input = sc.waitForNextLine(this);
             if (input.equals("exit"))
                 throw new ExitException();
             serverInfos = parseServerInfos(input);
@@ -139,7 +139,7 @@ public abstract class MultiplayerGame extends Game {
 
         Boolean p;
         do {
-            String input = sc.nextLine();
+            String input = sc.waitForNextLine(this);
             p = switch(input) {
                 case "1" -> true;
                 case "2" -> false;

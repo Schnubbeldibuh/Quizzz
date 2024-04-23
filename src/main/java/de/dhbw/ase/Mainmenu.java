@@ -3,21 +3,26 @@ package de.dhbw.ase;
 import de.dhbw.ase.play.PlayMenu;
 import de.dhbw.ase.questionmanagement.QuestionMenu;
 import de.dhbw.ase.stats.StatsMenu;
+import de.dhbw.ase.user.in.UserIn;
+import de.dhbw.ase.user.out.ConsoleOut;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Mainmenu extends Submenu {
 
+    private final UserIn sc;
 
-    public Mainmenu(Scanner sc) {
+    public Mainmenu(UserIn sc) {
         super(sc);
+        this.sc = sc;
     }
 
     public void startGame() {
         System.out.println("Herzlichen Willkommen bei Quizzz!");
         start();
+        //System.exit(0);
+        sc.stop(new ConsoleOut());
     }
 
     @Override

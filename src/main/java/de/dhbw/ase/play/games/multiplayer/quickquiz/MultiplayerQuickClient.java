@@ -4,14 +4,14 @@ import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
 import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
+import de.dhbw.ase.user.in.UserIn;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class MultiplayerQuickClient extends MultiplayerClient {
 
-    public MultiplayerQuickClient(Scanner sc, String username, String filepath) {
+    public MultiplayerQuickClient(String username, String filepath) {
         super(username, filepath);
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
@@ -104,9 +104,6 @@ public class MultiplayerQuickClient extends MultiplayerClient {
             }
         };
         sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection + ";" + questionIndex);
-        List<MultiplayerClient.Source> sourceList = new ArrayList<>();
-        sourceList.add(Source.SERVER);
-
         return true;
     }
 }
