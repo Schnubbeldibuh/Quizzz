@@ -1,6 +1,7 @@
 package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.Quizzz;
+import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.Reader;
 import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
@@ -23,7 +24,7 @@ public class FindQuestionsQuiz extends SingleplayerGame {
     }
 
     @Override
-    protected void startGame() {
+    protected void startGame() throws ExitException {
         Reader fqReader = new Reader(Quizzz.FILE_FQ2, 15);
         List<Question> questionList = fqReader.getQuestionList();
         int rightAnswerCount = 0;

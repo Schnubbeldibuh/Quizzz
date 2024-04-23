@@ -1,5 +1,6 @@
 package de.dhbw.ase.play.games.singelplayer;
 
+import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.Reader;
 import de.dhbw.ase.stats.persistance.PlayerStatsSPObject;
@@ -26,7 +27,7 @@ public class SPQuiz extends SingleplayerGame {
     }
 
     @Override
-    protected void startGame() {
+    protected void startGame() throws ExitException {
         Reader spReader = new Reader(filePath, 8);
         List<Question> questionList = spReader.getQuestionList();
         int rightAnswerCount = 0;

@@ -1,5 +1,6 @@
 package de.dhbw.ase.play.games.singelplayer;
 
+import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.play.games.reader.WWMReader;
 import de.dhbw.ase.stats.persistance.PlayerStatsWWMObject;
@@ -24,7 +25,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
     }
 
     @Override
-    protected void startGame() {
+    protected void startGame() throws ExitException {
         /* Man könnte auch noch eine Version machen bei der die Antworten nicht mit A, B, C, D angegebenen werden
            sondern mit W, A, S, D. Für einfacherer Bedienbarkeit */
         WWMReader wwmReader = new WWMReader();

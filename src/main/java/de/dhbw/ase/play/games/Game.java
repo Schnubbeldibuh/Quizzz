@@ -14,11 +14,15 @@ public abstract class Game implements Startable {
     }
 
 
-    protected void indicateUser () {
+    protected void indicateUser () throws ExitException {
         System.out.println();
         System.out.println("Bitte gebe deinen Usernamen ein:");
-        username = sc.waitForNextLine(this);
+        String temp = sc.waitForNextLine(this);
+        if (temp.equalsIgnoreCase("exit")){
+            throw new ExitException();
+        }
 
+        username = temp;
     }
 
     protected boolean askUserForRetry() {

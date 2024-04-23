@@ -1,6 +1,7 @@
 package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.SelectedMenu;
+import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.Game;
 import de.dhbw.ase.play.games.reader.Question;
 import de.dhbw.ase.user.in.UserIn;
@@ -17,21 +18,30 @@ public abstract class SingleplayerGame extends Game {
         this.sc = sc;
     }
 
-    protected abstract void startGame();
+    protected abstract void startGame() throws ExitException;
     protected  abstract String getStatsFilesPath();
     protected abstract void writeStats();
 
     @Override
     public SelectedMenu.MenuSelection start() {
-        indicateUser();
+        try {
+            indicateUser();
+        } catch (ExitException e) {
+            return SelectedMenu.MenuSelection.EXIT;
+        }
+
         do {
-            startGame();
+            try {
+                startGame();
+            } catch (ExitException e) {
+                return SelectedMenu.MenuSelection.EXIT;
+            }
             writeStats();
         } while (askUserForRetry());
         return SelectedMenu.MenuSelection.BACK;
     }
 
-    protected boolean playQuestion(Question question) {
+    protected boolean playQuestion(Question question) throws ExitException {
         List<Question.Answer> answerList = question.getAnswerList();
         Collections.shuffle(answerList);
         System.out.println(question.getQuestion());
@@ -43,10 +53,13 @@ public abstract class SingleplayerGame extends Game {
         return answerList.get(answer).isRight();
     }
 
-    protected int scanUntilValidInput() {
+    protected int scanUntilValidInput() throws ExitException {
         int selection;
         do {
             String input = sc.waitForNextLine(this).toLowerCase();
+            if (input.equalsIgnoreCase("exit")) {
+                throw new ExitException();
+            }
             if (input.length() == 1) {
                 selection = switch (input.charAt(0)) {
                     case 'a' -> 0;
