@@ -215,8 +215,6 @@ public abstract class MultiplayerClient {
                 }
             } while (true);
 
-        } catch (UnknownHostException e) {
-            throw e;
         } catch (IOException e) {
             return false;
         }
