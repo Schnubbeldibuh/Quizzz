@@ -95,6 +95,7 @@ public abstract class MultiplayerGame extends Game {
                     System.out.println("Der Host hat unerwartet die Verbindung getrennt.");
                     return;
                 }
+                System.out.println("Erfolgreich beigetreten");
             } while (client == null);
         } while (serverInfos == null);
     }
