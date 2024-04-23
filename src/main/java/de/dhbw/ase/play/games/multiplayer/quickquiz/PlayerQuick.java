@@ -19,7 +19,6 @@ public class PlayerQuick {
         fastestAnswer++;
     }
 
-
     public String getUsername() {
         return username;
     }

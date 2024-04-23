@@ -23,7 +23,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
         validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER);
     }
 
-
     @Override
     protected boolean checkUserInput(String input) throws ExitException {
         if (input.equalsIgnoreCase("exit")) {
@@ -39,7 +38,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 || input.equalsIgnoreCase("c")
                 || input.equalsIgnoreCase("d");
     }
-
 
     @Override
     protected boolean processServerInput(String input) {

@@ -23,5 +23,4 @@ public class MultiplayerQuickServerClientFactory implements ServerClientFactory 
     public MultiplayerClient createClient(String username) {
         return new MultiplayerQuickClient(sc, username, Quizzz.FILE_STATS_MP_QUICK);
     }
-
 }
