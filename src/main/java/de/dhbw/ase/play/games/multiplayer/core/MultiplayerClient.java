@@ -37,7 +37,19 @@ public abstract class MultiplayerClient {
 
     protected abstract boolean processServerInput(String input);
 
-    protected abstract boolean processUserInput(String input);
+    protected boolean processUserInput(String input) {
+        Integer selection = switch (input) {
+            case "a" -> 0;
+            case "b" -> 1;
+            case "c" -> 2;
+            case "d" -> 3;
+            default -> {
+                throw new IllegalStateException("Unexpected value: " + input);
+            }
+        };
+        sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection + ";" + questionIndex);
+        return true;
+    }
 
 
     protected void writeStats() {
@@ -212,11 +224,6 @@ public abstract class MultiplayerClient {
 
     protected void sendMessageToServer(String msg) {
         out.println(msg);
-    }
-
-    protected enum Source {
-        SERVER,
-        USER
     }
 
     protected void disconnectClient() {

@@ -4,10 +4,8 @@ import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
 import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
-import de.dhbw.ase.user.in.UserIn;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MultiplayerQuizClient extends MultiplayerClient {
 
@@ -92,14 +90,6 @@ public class MultiplayerQuizClient extends MultiplayerClient {
             return false;
         }
 
-        Integer selection = switch (input) {
-            case "a" -> 0;
-            case "b" -> 1;
-            case "c" -> 2;
-            case "d" -> 3;
-            default -> throw new IllegalStateException("Unexpected value: " + input);
-        };
-        sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection);
-        return true;
+        return super.processUserInput(input);
     }
 }
