@@ -59,7 +59,7 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
 
     private Set<Integer> getRandomLinenumbers(int amount, int lines) {
         Set<Integer> randomNumberList = new HashSet<>();
-        while (randomNumberList.size() <= amount) {
+        while (randomNumberList.size() < amount) {
             randomNumberList.add(random.nextInt(lines+1));
         }
         return randomNumberList;
