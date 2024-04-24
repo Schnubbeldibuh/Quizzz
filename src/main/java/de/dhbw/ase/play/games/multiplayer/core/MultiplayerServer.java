@@ -111,6 +111,10 @@ public abstract class MultiplayerServer {
             clients.remove(username);
         }
         removeUser(username);
+        if (gameState != GameState.PLAY) {
+            return;
+        }
+
         if (checkIfQuestionFinished()) {
             playQuestion();
         }
