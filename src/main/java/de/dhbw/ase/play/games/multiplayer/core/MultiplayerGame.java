@@ -50,12 +50,12 @@ public class MultiplayerGame extends Game {
                         registerClient();
                     } catch (ExitException e) {
                         exit();
-                        return SelectedMenu.MenuSelection.EXIT;
+                        return SelectedMenu.MenuSelection.BACK;
                     }
                 }
                 System.out.println();
                 System.out.println("Warte auf den Host");
-                System.out.println(("<exit> eingeben um das Programm zu beenden"));
+                System.out.println(("<exit> eingeben um zurück ins Menü zu gelangen"));
             }
             try {
                 contine = client.start();
@@ -64,7 +64,7 @@ public class MultiplayerGame extends Game {
                     server.shutdown();
                 }
                 exit();
-                return SelectedMenu.MenuSelection.EXIT;
+                return SelectedMenu.MenuSelection.BACK;
             }
             if (host)
                 server.advanceGamestate();
