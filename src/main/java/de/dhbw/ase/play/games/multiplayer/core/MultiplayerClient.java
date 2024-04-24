@@ -82,7 +82,8 @@ public abstract class MultiplayerClient {
                 listeningExecutor.shutdownNow();
                 throw new ExitException();
             }
-            if (e.getCause().getClass() == SocketException.class) {
+            if (e.getCause().getClass() == SocketException.class
+                    || e.getCause().getClass() == HostDisconnectedException.class) {
                 listeningExecutor.shutdownNow();
                 System.out.println("Host hat die Verbindung getrennt");
                 return false;
@@ -95,13 +96,18 @@ public abstract class MultiplayerClient {
         return true;
     }
 
-    private boolean listenToServer() throws IOException, InterruptedException, ExecutionException {
+    private boolean listenToServer()
+            throws IOException, InterruptedException, ExecutionException, HostDisconnectedException {
         Future<Boolean> submit;
         do {
             String input;
             do {
                 input = in.readLine();
             } while (input != null && !checkServerInput(input));
+
+            if (input == null) {
+                throw new HostDisconnectedException();
+            }
 
             String finalInput = input;
             submit = executor.submit(() -> processServerInput(finalInput));
