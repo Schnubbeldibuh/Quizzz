@@ -17,8 +17,8 @@ public class MultiplayerQuickClient extends MultiplayerClient {
     protected final StatsRepository statsRepository;
     protected List<PlayerStatsMPQuickObject> stats = new ArrayList<>();
 
-    public MultiplayerQuickClient(UserIn sc, String username, StatsRepository statsRepository) {
-        super(sc, username);
+    public MultiplayerQuickClient(UserIn sc, String username, StatsRepository statsRepository, String gameMode) {
+        super(sc, username, gameMode);
         this.statsRepository = statsRepository;
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);

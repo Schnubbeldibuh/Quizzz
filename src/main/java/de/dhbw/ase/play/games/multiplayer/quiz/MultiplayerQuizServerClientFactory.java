@@ -10,6 +10,8 @@ import de.dhbw.ase.user.in.UserIn;
 
 public class MultiplayerQuizServerClientFactory implements ServerClientFactory {
 
+    public static final String GAMEMODE = "normal";
+
     private final UserIn userIn;
 
     public MultiplayerQuizServerClientFactory(UserIn sc) {
@@ -18,11 +20,17 @@ public class MultiplayerQuizServerClientFactory implements ServerClientFactory {
 
     @Override
     public MultiplayerServer createServer() {
-        return new MultiplayerQuizServer(Quizzz.SERVER_PORT, QuestionRepositoryFilebased.getInstance(Quizzz.FILE_MP));
+        return new MultiplayerQuizServer(
+                Quizzz.SERVER_PORT,
+                QuestionRepositoryFilebased.getInstance(Quizzz.FILE_MP),
+                GAMEMODE);
     }
 
     @Override
     public MultiplayerClient createClient(String username) {
-        return new MultiplayerQuizClient(userIn, username, StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_MP));
+        return new MultiplayerQuizClient(
+                userIn, username,
+                StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_MP),
+                GAMEMODE);
     }
 }

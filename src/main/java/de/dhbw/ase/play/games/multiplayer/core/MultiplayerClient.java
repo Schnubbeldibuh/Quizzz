@@ -20,17 +20,19 @@ public abstract class MultiplayerClient {
     private final ExecutorService listeningExecutor = Executors.newFixedThreadPool(2);
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     protected final List<CommunicationPrefixes> validServerMessages = new ArrayList<>();
+    private final String gameMode;
+    private final UserIn sc;
     protected boolean discardUserinput;
     private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
     protected String questionIndex;
-    private final UserIn sc;
 
 
-    public MultiplayerClient(UserIn sc, String username) {
+    public MultiplayerClient(UserIn sc, String username, String gameMode) {
         this.username = username;
         this.sc = sc;
+        this.gameMode = gameMode;
     }
 
 
@@ -134,28 +136,35 @@ public abstract class MultiplayerClient {
         } while (true);
     }
 
-    boolean registerClient(String host, int port) throws UsernameAlreadyExistsException, UnknownHostException {
+    boolean registerClient(String host, int port)
+            throws UsernameAlreadyExistsException, UnknownHostException, ExitException {
         try {
             socket = new Socket(host, port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+            String line;
 
+            sendMessageToServer(CommunicationPrefixes.GAMEMODE + gameMode);
             sendMessageToServer(CommunicationPrefixes.USERNAME + username);
 
-            String line;
             do {
                 line = in.readLine();
                 if (line == null) {
-                    // TODO Server hat unerwartet die verbindung geschlossen
+                    System.out.println("Der Server hat die Verbindung getrennt");
                     return false;
                 }
 
                 if (CommunicationPrefixes.DUPLIKATE_USERNAME.checkPrefix(line)) {
                     socket.close();
                     throw new UsernameAlreadyExistsException();
-                }
-                if (CommunicationPrefixes.SUCCESSFULLY_JOINED.checkPrefix(line)) {
+
+                } else if (CommunicationPrefixes.SUCCESSFULLY_JOINED.checkPrefix(line)) {
                     return true;
+
+                } else if (CommunicationPrefixes.WRONG_GAMEMODE.checkPrefix(line)) {
+                    socket.close();
+                    System.out.println("Der Server hat einen anderen Spielmodus");
+                    throw new ExitException();
                 }
             } while (true);
 

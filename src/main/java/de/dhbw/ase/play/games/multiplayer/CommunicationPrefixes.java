@@ -14,7 +14,10 @@ public enum CommunicationPrefixes {
     ANSWER_EVALUATION("answer_evaluation:"),
     RIGHT_ANSWER("right_answer:"),
     STATS_TRANSFER("stats_transfer:"),
-    STATS_TRANSFER_FINISHED("stats_transfer_finished");
+    STATS_TRANSFER_FINISHED("stats_transfer_finished"),
+    GAMEMODE("gamemode:"),
+    WRONG_GAMEMODE("wrong_gamemode");
+
 
     private final String string;
 

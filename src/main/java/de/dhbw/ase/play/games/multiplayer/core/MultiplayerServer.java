@@ -21,6 +21,7 @@ public abstract class MultiplayerServer {
     private final ExecutorService executor = Executors.newCachedThreadPool();
     protected final Set<String> userList = new HashSet<>();
     private final QuestionRepository questionRepository;
+    private final String gameMode;
     protected List<Question> questionList;
     protected int questionIndex;
     protected List<Question.Answer> currentAnswerList;
@@ -28,9 +29,10 @@ public abstract class MultiplayerServer {
     private ServerSocket serverSocket;
 
 
-    protected MultiplayerServer(int port, QuestionRepository questionRepository) {
+    protected MultiplayerServer(int port, QuestionRepository questionRepository, String gameMode) {
         this.port = port;
         this.questionRepository = questionRepository;
+        this.gameMode = gameMode;
     }
 
     protected abstract void initializeRound();
@@ -145,7 +147,7 @@ public abstract class MultiplayerServer {
             ss.bind(new InetSocketAddress(port));
             while (gameState == GameState.JOIN) {
                 Socket socket = serverSocket.accept();
-                executor.submit(new ClientHandler(socket, this));
+                executor.submit(new ClientHandler(socket, this, gameMode));
             }
         } catch (SocketException e) {
             if (serverSocket != null && serverSocket.isClosed())

@@ -17,8 +17,8 @@ public class MultiplayerQuizClient extends MultiplayerClient {
     protected final StatsRepository statsRepository;
     protected List<PlayerStatsMPObject> stats = new ArrayList<>();
 
-    public MultiplayerQuizClient(UserIn sc, String username, StatsRepository statsRepository) {
-        super(sc, username);
+    public MultiplayerQuizClient(UserIn sc, String username, StatsRepository statsRepository, String gameMode) {
+        super(sc, username, gameMode);
         this.statsRepository = statsRepository;
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);

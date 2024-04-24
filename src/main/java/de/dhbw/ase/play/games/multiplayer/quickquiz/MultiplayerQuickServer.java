@@ -12,8 +12,8 @@ public class MultiplayerQuickServer extends MultiplayerServer {
     private Map<String, PlayerQuick> pointsMap = new HashMap<>();
     private volatile boolean firstAnswer = true;
 
-    public MultiplayerQuickServer(int port, QuestionRepository questionRepository) {
-        super(port, questionRepository);
+    public MultiplayerQuickServer(int port, QuestionRepository questionRepository, String gameMode) {
+        super(port, questionRepository, gameMode);
     }
 
     @Override

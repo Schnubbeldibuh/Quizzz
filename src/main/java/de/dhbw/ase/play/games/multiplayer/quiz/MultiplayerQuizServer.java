@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class MultiplayerQuizServer extends MultiplayerServer {
 
-    public MultiplayerQuizServer(int port, QuestionRepository questionRepository) {
-        super(port, questionRepository);
+    public MultiplayerQuizServer(int port, QuestionRepository questionRepository, String gameMode) {
+        super(port, questionRepository, gameMode);
     }
 
     private Map<String, Player> pointsMap = new HashMap<>();

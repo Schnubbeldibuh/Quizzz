@@ -12,12 +12,14 @@ class ClientHandler implements Runnable {
 
     private final Socket socket;
     private final MultiplayerServer server;
+    private final String gameMode;
     private String username;
     private PrintWriter out;
 
-    public ClientHandler(Socket socket, MultiplayerServer server) {
+    public ClientHandler(Socket socket, MultiplayerServer server, String gameMode) {
         this.socket = socket;
         this.server = server;
+        this.gameMode = gameMode;
     }
 
     @Override
@@ -27,6 +29,7 @@ class ClientHandler implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
 
             String line;
+            boolean gameModChecked = false;
             do {
                 line = in.readLine();
                 if (line == null) {
@@ -36,8 +39,16 @@ class ClientHandler implements Runnable {
                 }
                 if (CommunicationPrefixes.USERNAME.checkPrefix(line)) {
                     username = line.substring(CommunicationPrefixes.USERNAME.getLength());
+
+                } else if (CommunicationPrefixes.GAMEMODE.checkPrefix(line)) {
+                    String gamemode = line.substring(CommunicationPrefixes.GAMEMODE.getLength());
+                    if (!gamemode.equals(gameMode)) {
+                        out.println(CommunicationPrefixes.WRONG_GAMEMODE);
+                        return;
+                    }
+                    gameModChecked = true;
                 }
-            } while (username == null);
+            } while (username == null && gameModChecked);
 
             boolean successfulAdded = server.addClient(this, username);
             if (!successfulAdded) {
