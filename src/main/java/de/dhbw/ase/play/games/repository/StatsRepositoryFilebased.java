@@ -28,6 +28,7 @@ public class StatsRepositoryFilebased implements StatsRepository {
         try (BufferedReader bufferedReader =
                      new BufferedReader(new FileReader(filePath))) {
             return bufferedReader.lines()
+                    .filter((l) -> !l.isEmpty())
                     .map(lineMapper)
                     .toList();
         } catch (FileNotFoundException e) {
