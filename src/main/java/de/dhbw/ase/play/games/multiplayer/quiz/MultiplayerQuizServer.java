@@ -20,7 +20,10 @@ public class MultiplayerQuizServer extends MultiplayerServer {
     protected void processClientMessage(String username, String msg) {
 
         if (CommunicationPrefixes.ANSWER.checkPrefix(msg)) {
-            int answerIndex = Integer.parseInt(msg.substring(CommunicationPrefixes.ANSWER.getLength()));
+            String answer = msg.substring(CommunicationPrefixes.ANSWER.getLength());
+            String[] answerArray = answer.split(";");
+            int answerIndex = Integer.parseInt(answerArray[0]);
+            int answerId = Integer.parseInt(answerArray[1]);
             boolean outcome = currentAnswerList.get(answerIndex).isRight();
 
             String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.toString() + outcome;
