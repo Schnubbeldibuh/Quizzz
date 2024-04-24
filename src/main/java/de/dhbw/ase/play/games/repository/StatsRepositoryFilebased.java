@@ -3,7 +3,6 @@ package de.dhbw.ase.play.games.repository;
 import java.io.*;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class StatsRepositoryFilebased implements StatsRepository {
 
@@ -26,17 +25,13 @@ public class StatsRepositoryFilebased implements StatsRepository {
 
     @Override
     public <T> List<T> readStats(Function<String, T> lineMapper) throws CouldNotAccessFileException {
-        return lines(lineMapper).toList();
-    }
-
-    @Override
-    public <T> Stream<T> lines(Function<String, T> lineMapper) throws CouldNotAccessFileException {
         try (BufferedReader bufferedReader =
                      new BufferedReader(new FileReader(filePath))) {
             return bufferedReader.lines()
-                    .map(lineMapper);
+                    .map(lineMapper)
+                    .toList();
         } catch (FileNotFoundException e) {
-            return Stream.empty();
+            return new ArrayList<>();
         } catch (IOException e) {
             throw new CouldNotAccessFileException();
         }

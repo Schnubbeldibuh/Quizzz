@@ -102,7 +102,7 @@ public class MultiplayerQuizClient extends MultiplayerClient {
     protected void writeStats() {
         List<PlayerStatsMPObject> file;
         try {
-            file = statsRepository.readStats(PlayerStatsMPObject::fromLine);
+            file = new ArrayList<>(statsRepository.readStats(PlayerStatsMPObject::fromLine));
         } catch (CouldNotAccessFileException e) {
             System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
             System.out.println("Die Stats wurden nicht gespeichert.");

@@ -26,7 +26,7 @@ public abstract class ShowStats<T extends StatsObject> implements Startable {
 
         try {
             statsRepository
-                    .lines(this::mapLine)
+                    .readStats(this::mapLine)
                     .forEach(this::displayStats);
         } catch (CouldNotAccessFileException e) {
             System.out.println("Beim lesen der Stats ist ein Fehler aufgetreten");

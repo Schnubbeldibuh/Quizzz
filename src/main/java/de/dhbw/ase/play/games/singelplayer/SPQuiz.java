@@ -8,6 +8,7 @@ import de.dhbw.ase.play.games.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsSPObject;
 import de.dhbw.ase.user.in.UserIn;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +73,8 @@ public class SPQuiz extends SingleplayerGame {
 
     @Override
     protected void writeStats() throws CouldNotAccessFileException {
-        List<PlayerStatsSPObject> file = statsRepository.readStats(PlayerStatsSPObject::fromLine);
+        List<PlayerStatsSPObject> file =
+                new ArrayList<>(statsRepository.readStats(PlayerStatsSPObject::fromLine));
 
         int index = file.indexOf(playerStatsSPObject);
         if (index == -1) {

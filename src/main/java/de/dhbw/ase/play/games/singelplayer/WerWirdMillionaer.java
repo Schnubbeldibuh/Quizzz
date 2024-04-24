@@ -188,7 +188,8 @@ public class WerWirdMillionaer extends SingleplayerGame {
 
     @Override
     protected void writeStats() throws CouldNotAccessFileException {
-        List<PlayerStatsWWMObject> file = statsRepository.readStats(PlayerStatsWWMObject::fromLine);
+        List<PlayerStatsWWMObject> file =
+                new ArrayList<>(statsRepository.readStats(PlayerStatsWWMObject::fromLine));
 
         int index = file.indexOf(playerStatsWWMObject);
         if (index == -1) {

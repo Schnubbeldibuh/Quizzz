@@ -8,6 +8,7 @@ import de.dhbw.ase.play.games.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
 import de.dhbw.ase.user.in.UserIn;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,7 +61,8 @@ public class FindQuestionsQuiz extends SingleplayerGame {
 
     @Override
     protected void writeStats() throws CouldNotAccessFileException {
-        List<PlayerStatsFQObject> file = statsRepository.readStats(PlayerStatsFQObject::fromLine);
+        List<PlayerStatsFQObject> file =
+                new ArrayList<>(statsRepository.readStats(PlayerStatsFQObject::fromLine));
 
         int index = file.indexOf(playerStatsFQObject);
         if (index == -1) {

@@ -108,7 +108,7 @@ public class MultiplayerQuickClient extends MultiplayerClient {
     protected void writeStats() {
         List<PlayerStatsMPQuickObject> file;
         try {
-            file = statsRepository.readStats(PlayerStatsMPQuickObject::fromeLine);
+            file = new ArrayList<>(statsRepository.readStats(PlayerStatsMPQuickObject::fromeLine));
         } catch (CouldNotAccessFileException e) {
             System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
             System.out.println("Die Stats wurden nicht gespeichert.");
