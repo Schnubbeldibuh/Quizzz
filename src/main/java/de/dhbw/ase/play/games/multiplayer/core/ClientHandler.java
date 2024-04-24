@@ -46,7 +46,7 @@ class ClientHandler implements Runnable {
                 return;
             }
             out.println(CommunicationPrefixes.SUCCESSFULLY_JOINED);
-            System.out.println(username);
+            System.out.println(username + " ist beigetreten");
 
             do {
                 line = in.readLine();

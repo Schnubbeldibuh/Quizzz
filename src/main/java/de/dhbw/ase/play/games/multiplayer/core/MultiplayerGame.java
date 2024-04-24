@@ -44,13 +44,18 @@ public class MultiplayerGame extends Game {
                     exit();
                     return SelectedMenu.MenuSelection.BACK;
                 }
-            } else if (client == null) {
-                try {
-                    registerClient();
-                } catch (ExitException e) {
-                    exit();
-                    return SelectedMenu.MenuSelection.EXIT;
+            } else {
+                if (client == null) {
+                    try {
+                        registerClient();
+                    } catch (ExitException e) {
+                        exit();
+                        return SelectedMenu.MenuSelection.EXIT;
+                    }
                 }
+                System.out.println();
+                System.out.println("Warte auf den Host");
+                System.out.println(("<exit> eingeben um das Programm zu beenden"));
             }
             try {
                 contine = client.start();
