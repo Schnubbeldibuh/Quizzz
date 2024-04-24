@@ -124,6 +124,10 @@ public abstract class MultiplayerServer {
         if (gameState == GameState.SHUTDOWN)
             return;
         gameState = GameState.SHUTDOWN;
+        try {
+            serverSocket.close();
+        } catch (IOException ignored) {
+        }
         executor.shutdownNow();
         clients.values()
                 .forEach(ClientHandler::closeConnection);

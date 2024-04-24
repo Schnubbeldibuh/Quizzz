@@ -39,9 +39,6 @@ public class MultiplayerGame extends Game {
                     startServerAndResgisterHostclient();
                 } catch (ExitException e) {
                     exit();
-                    return SelectedMenu.MenuSelection.EXIT;
-                } catch (UnknownHostException e) {
-                    exit();
                     return SelectedMenu.MenuSelection.BACK;
                 }
             } else {
@@ -117,7 +114,7 @@ public class MultiplayerGame extends Game {
         client = null;
     }
 
-    private void startServerAndResgisterHostclient() throws UnknownHostException, ExitException {
+    private void startServerAndResgisterHostclient() throws ExitException {
         if (getUsername() == null) {
             indicateUser();
         }
@@ -129,7 +126,7 @@ public class MultiplayerGame extends Game {
             client = factory.createClient(getUsername());
             try {
                 client.registerClient("localhost", Quizzz.SERVER_PORT);
-            } catch (UsernameAlreadyExistsException ignored) {
+            } catch (UsernameAlreadyExistsException | UnknownHostException ignored) {
             }
         } else {
             server.advanceGamestate();
