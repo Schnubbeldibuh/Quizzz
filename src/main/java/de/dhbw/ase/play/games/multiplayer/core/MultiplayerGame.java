@@ -32,6 +32,7 @@ public class MultiplayerGame extends Game {
         } catch (ExitException e) {
             return SelectedMenu.MenuSelection.EXIT;
         }
+        boolean contine;
         do {
             if (host) {
                 try {
@@ -52,19 +53,18 @@ public class MultiplayerGame extends Game {
                 }
             }
             try {
-                client.start();
+                contine = client.start();
             } catch (ExitException e) {
                 if (server != null) {
                     server.shutdown();
                 }
-                client.disconnectClient();
+                exit();
                 return SelectedMenu.MenuSelection.EXIT;
             }
             if (host)
                 server.advanceGamestate();
 
-        } while (askUserForRetry());
-        client.disconnectClient();
+        } while (contine && askUserForRetry());
 
         exit();
         return SelectedMenu.MenuSelection.BACK;

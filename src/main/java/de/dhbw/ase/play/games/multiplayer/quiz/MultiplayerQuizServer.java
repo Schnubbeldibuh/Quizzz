@@ -2,15 +2,17 @@ package de.dhbw.ase.play.games.multiplayer.quiz;
 
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerServer;
+import de.dhbw.ase.play.games.repository.QuestionRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MultiplayerQuizServer extends MultiplayerServer {
 
-    protected MultiplayerQuizServer(int port) {
-        super(port);
+    public MultiplayerQuizServer(int port, QuestionRepository questionRepository) {
+        super(port, questionRepository);
     }
+
     private Map<String, Player> pointsMap = new HashMap<>();
     private Map<String, Boolean> rightAnswerMap = new HashMap<>();
 

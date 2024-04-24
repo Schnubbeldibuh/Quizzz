@@ -1,32 +1,32 @@
 package de.dhbw.ase.play.games.singelplayer;
 
-import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.ExitException;
-import de.dhbw.ase.play.games.reader.Question;
-import de.dhbw.ase.play.games.reader.Reader;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.Question;
+import de.dhbw.ase.play.games.repository.QuestionRepository;
+import de.dhbw.ase.play.games.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
 import de.dhbw.ase.user.in.UserIn;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class FindQuestionsQuiz extends SingleplayerGame {
 
-    private final String filePath;
+    private final QuestionRepository questionRepository;
+    private final StatsRepository statsRepository;
 
     private PlayerStatsFQObject playerStatsFQObject;
 
-    public FindQuestionsQuiz(UserIn sc, String filePath) {
+    public FindQuestionsQuiz(UserIn sc, QuestionRepository questionRepository, StatsRepository statsRepository) {
         super(sc);
-        this.filePath = filePath;
+        this.questionRepository = questionRepository;
+        this.statsRepository = statsRepository;
     }
 
     @Override
-    protected void startGame() throws ExitException {
-        Reader fqReader = new Reader(Quizzz.FILE_FQ2, 15);
-        List<Question> questionList = fqReader.getQuestionList();
+    protected void startGame() throws ExitException, CouldNotAccessFileException {
+        List<Question> questionList = questionRepository.getQuestionList(15);
         int rightAnswerCount = 0;
         int wrongAnswerCount = 0;
 
@@ -57,15 +57,10 @@ public class FindQuestionsQuiz extends SingleplayerGame {
         playerStatsFQObject = new PlayerStatsFQObject(getUsername(), rightAnswerCount, wrongAnswerCount);
     }
 
-    @Override
-    protected String getStatsFilesPath() {
-        return filePath;
-    }
 
     @Override
-    protected void writeStats() {
-
-        List<PlayerStatsFQObject> file = new ArrayList<>(readFile());
+    protected void writeStats() throws CouldNotAccessFileException {
+        List<PlayerStatsFQObject> file = statsRepository.readStats(PlayerStatsFQObject::fromLine);
 
         int index = file.indexOf(playerStatsFQObject);
         if (index == -1) {
@@ -76,30 +71,8 @@ public class FindQuestionsQuiz extends SingleplayerGame {
         }
 
         Collections.sort(file);
+        Collections.reverse(file);
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(getStatsFilesPath()))) {
-            for (PlayerStatsFQObject playerStatsWWMObject1 : file) {
-                bufferedWriter.write(playerStatsWWMObject1.getCompleteLine());
-                bufferedWriter.newLine();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-            //TODO
-        }
-    }
-
-    private List<PlayerStatsFQObject> readFile() {
-        try (BufferedReader bufferedReader =
-                     new BufferedReader(new FileReader(getStatsFilesPath()))) {
-            return bufferedReader.lines()
-                    .map(PlayerStatsFQObject::new)
-                    .toList();
-        } catch (FileNotFoundException e) {
-            return new ArrayList<>();
-        } catch (IOException e) {
-            System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
-            //TODO zurückspringen mit separater Exception
-        }
-        return new ArrayList<>();
+        statsRepository.writeStats(file);
     }
 }

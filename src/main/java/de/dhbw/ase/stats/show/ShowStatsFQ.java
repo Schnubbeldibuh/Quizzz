@@ -1,19 +1,25 @@
 package de.dhbw.ase.stats.show;
 
+import de.dhbw.ase.play.games.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
 
-public class ShowStatsFQ extends ShowStats{
-    public ShowStatsFQ(String filename) {
-        super(filename);
+public class ShowStatsFQ extends ShowStats<PlayerStatsFQObject>{
+
+    public ShowStatsFQ(StatsRepository statsRepository) {
+        super(statsRepository);
     }
 
     @Override
-    protected void displayStats(String string) {
-        PlayerStatsFQObject playerStatsFQObject = new PlayerStatsFQObject(string);
+    protected void displayStats(PlayerStatsFQObject state) {
         System.out.printf("| %-14s | %13s | %14s |%n",
-                playerStatsFQObject.getUsername(),
-                playerStatsFQObject.getRightAnswers(),
-                playerStatsFQObject.getWrongAnswers());
+                state.getUsername(),
+                state.getRightAnswers(),
+                state.getWrongAnswers());
+    }
+
+    @Override
+    protected PlayerStatsFQObject mapLine(String line) {
+        return PlayerStatsFQObject.fromLine(line);
     }
 
     @Override

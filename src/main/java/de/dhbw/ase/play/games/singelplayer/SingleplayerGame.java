@@ -3,7 +3,8 @@ package de.dhbw.ase.play.games.singelplayer;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.Game;
-import de.dhbw.ase.play.games.reader.Question;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.Question;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.Collections;
@@ -18,9 +19,8 @@ public abstract class SingleplayerGame extends Game {
         this.sc = sc;
     }
 
-    protected abstract void startGame() throws ExitException;
-    protected  abstract String getStatsFilesPath();
-    protected abstract void writeStats();
+    protected abstract void startGame() throws ExitException, CouldNotAccessFileException;
+    protected abstract void writeStats() throws CouldNotAccessFileException;
 
     @Override
     public SelectedMenu.MenuSelection start() {
@@ -35,8 +35,17 @@ public abstract class SingleplayerGame extends Game {
                 startGame();
             } catch (ExitException e) {
                 return SelectedMenu.MenuSelection.EXIT;
+            } catch (CouldNotAccessFileException e) {
+                System.out.println("Das Spiel konnte nicht gestartet werden.");
+                System.out.println("Möglicherweise sind die Gamedaten kompromittiert");
+                return SelectedMenu.MenuSelection.BACK;
             }
-            writeStats();
+            try {
+                writeStats();
+            } catch (CouldNotAccessFileException e) {
+                System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
+                System.out.println("Die Stats wurden nicht gespeichert.");
+            }
         } while (askUserForRetry());
         return SelectedMenu.MenuSelection.BACK;
     }

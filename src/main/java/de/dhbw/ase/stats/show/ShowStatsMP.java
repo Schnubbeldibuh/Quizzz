@@ -1,21 +1,26 @@
 package de.dhbw.ase.stats.show;
 
+import de.dhbw.ase.play.games.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
-import de.dhbw.ase.stats.persistance.PlayerStatsWWMObject;
 
-public class ShowStatsMP extends ShowStats{
-    public ShowStatsMP(String filename) {
-        super(filename);
+public class ShowStatsMP extends ShowStats<PlayerStatsMPObject>{
+
+    public ShowStatsMP(StatsRepository statsRepository) {
+        super(statsRepository);
     }
 
     @Override
-    protected void displayStats(String string) {
-        PlayerStatsMPObject playerStatsMPObject = new PlayerStatsMPObject(string);
+    protected PlayerStatsMPObject mapLine(String line) {
+        return PlayerStatsMPObject.fromLine(line);
+    }
+
+    @Override
+    protected void displayStats(PlayerStatsMPObject state) {
         System.out.printf("| %-15s | %13s | %14s |%6s |%n",
-                playerStatsMPObject.getUsername(),
-                playerStatsMPObject.getRightAnswers(),
-                playerStatsMPObject.getWrongAnswers(),
-                playerStatsMPObject.getPoints());
+                state.getUsername(),
+                state.getRightAnswers(),
+                state.getWrongAnswers(),
+                state.getPoints());
     }
 
     @Override

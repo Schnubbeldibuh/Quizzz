@@ -3,15 +3,23 @@ package de.dhbw.ase.play.games.multiplayer.quickquiz;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
-import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.StatsRepository;
+import de.dhbw.ase.stats.persistance.PlayerStatsMPQuickObject;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MultiplayerQuickClient extends MultiplayerClient {
 
-    public MultiplayerQuickClient(UserIn sc, String username, String filepath) {
-        super(sc, username, filepath);
+    protected final StatsRepository statsRepository;
+    protected List<PlayerStatsMPQuickObject> stats = new ArrayList<>();
+
+    public MultiplayerQuickClient(UserIn sc, String username, StatsRepository statsRepository) {
+        super(sc, username);
+        this.statsRepository = statsRepository;
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
         validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
@@ -76,7 +84,8 @@ public class MultiplayerQuickClient extends MultiplayerClient {
 
             case STATS_TRANSFER:
                 stats.add(
-                        new PlayerStatsMPObject(input.substring(CommunicationPrefixes.STATS_TRANSFER.getLength())));
+                        PlayerStatsMPQuickObject.fromeLine(
+                                input.substring(CommunicationPrefixes.STATS_TRANSFER.getLength())));
                 return true;
 
             case STATS_TRANSFER_FINISHED:
@@ -94,5 +103,37 @@ public class MultiplayerQuickClient extends MultiplayerClient {
         }
 
         return super.processUserInput(input);
+    }
+
+    protected void writeStats() {
+        List<PlayerStatsMPQuickObject> file;
+        try {
+            file = statsRepository.readStats(PlayerStatsMPQuickObject::fromeLine);
+        } catch (CouldNotAccessFileException e) {
+            System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
+            System.out.println("Die Stats wurden nicht gespeichert.");
+            return;
+        }
+
+        for (PlayerStatsMPQuickObject p : stats) {
+            int index = file.indexOf(p);
+            if (index == -1) {
+                file.add(p);
+            } else {
+                PlayerStatsMPQuickObject oldStats = file.get(index);
+                oldStats.add(p);
+            }
+        }
+
+        Collections.sort(file);
+        Collections.reverse(file);
+
+        try {
+            statsRepository.writeStats(file);
+        } catch (CouldNotAccessFileException e) {
+            System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
+            System.out.println("Die Stats wurden möglicherweise nicht vollständig gespeichert.");
+            return;
+        }
     }
 }

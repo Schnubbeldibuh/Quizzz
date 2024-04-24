@@ -2,35 +2,35 @@ package de.dhbw.ase.stats.show;
 
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Startable;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.StatsRepository;
+import de.dhbw.ase.stats.persistance.StatsObject;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Set;
+public abstract class ShowStats<T extends StatsObject> implements Startable {
 
-public abstract class ShowStats implements Startable {
-
-    private String filename;
-    public ShowStats(String filename) {
-        this.filename = filename;
+    private final StatsRepository statsRepository;
+    public ShowStats(StatsRepository statsRepository) {
+        this.statsRepository = statsRepository;
     }
 
-    protected abstract void displayStats(String string);
+    protected abstract T mapLine(String line);
+    protected abstract void displayStats(T state);
     protected abstract void displayFittingHeader();
 
     @Override
     public SelectedMenu.MenuSelection start() {
 
         System.out.printf("---------------------------------------------------------%n");
-        System.out.printf("                        STATS MENU                       %n");
+        System.out.printf("                          STATS                          %n");
         displayFittingHeader();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filename))){
-            bufferedReader.lines()
+        try {
+            statsRepository
+                    .lines(this::mapLine)
                     .forEach(this::displayStats);
-        } catch (IOException e) {
-            // TODO
-            throw new RuntimeException();
+        } catch (CouldNotAccessFileException e) {
+            System.out.println("Beim lesen der Stats ist ein Fehler aufgetreten");
+            return SelectedMenu.MenuSelection.BACK;
         }
 
         return SelectedMenu.MenuSelection.BACK;

@@ -2,6 +2,7 @@ package de.dhbw.ase.play.games.multiplayer.quickquiz;
 
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerServer;
+import de.dhbw.ase.play.games.repository.QuestionRepository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +12,8 @@ public class MultiplayerQuickServer extends MultiplayerServer {
     private Map<String, PlayerQuick> pointsMap = new HashMap<>();
     private volatile boolean firstAnswer = true;
 
-    protected MultiplayerQuickServer(int port) {
-        super(port);
+    public MultiplayerQuickServer(int port, QuestionRepository questionRepository) {
+        super(port, questionRepository);
     }
 
     @Override

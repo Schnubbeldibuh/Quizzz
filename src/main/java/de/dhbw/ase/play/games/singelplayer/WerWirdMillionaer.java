@@ -1,35 +1,48 @@
 package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.play.games.ExitException;
-import de.dhbw.ase.play.games.reader.Question;
-import de.dhbw.ase.play.games.reader.WWMReader;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.Question;
+import de.dhbw.ase.play.games.repository.QuestionRepository;
+import de.dhbw.ase.play.games.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsWWMObject;
 import de.dhbw.ase.user.in.UserIn;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class WerWirdMillionaer extends SingleplayerGame {
 
+    private final QuestionRepository easyRepo;
+    private final QuestionRepository mediumRepo;
+    private final QuestionRepository hardRepo;
+    private final QuestionRepository veryHardRepo;
+    private final QuestionRepository expertRepo;
+    private final StatsRepository statsRepository;
     private PlayerStatsWWMObject playerStatsWWMObject;
-    private final String statsFilesPath;
 
     private final UserIn sc;
 
-    public WerWirdMillionaer(UserIn sc, String statsFilesPath) {
+    public WerWirdMillionaer(UserIn sc, StatsRepository statsRepository,
+                             QuestionRepository easyRepo,
+                             QuestionRepository mediumRepo,
+                             QuestionRepository hardRepo,
+                             QuestionRepository veryHardRepo,
+                             QuestionRepository expertRepo) {
         super(sc);
         this.sc = sc;
-        this.statsFilesPath = statsFilesPath;
+        this.easyRepo = easyRepo;
+        this.mediumRepo = mediumRepo;
+        this.hardRepo = hardRepo;
+        this.veryHardRepo = veryHardRepo;
+        this.expertRepo = expertRepo;
+        this.statsRepository = statsRepository;
     }
 
     @Override
-    protected void startGame() throws ExitException {
-        /* Man könnte auch noch eine Version machen bei der die Antworten nicht mit A, B, C, D angegebenen werden
-           sondern mit W, A, S, D. Für einfacherer Bedienbarkeit */
-        WWMReader wwmReader = new WWMReader();
-        List<Question> questionList = wwmReader.getQuestionList();
+    protected void startGame() throws ExitException, CouldNotAccessFileException {
+        List<Question> questionList = generateQuestionList();
 
         System.out.println();
         System.out.println("------------- Neue Runde WWM -------------");
@@ -97,11 +110,16 @@ public class WerWirdMillionaer extends SingleplayerGame {
                 WWMLevels.WON.getRightAnswers());
     }
 
-
-    @Override
-    protected String getStatsFilesPath() {
-        return statsFilesPath;
+    private List<Question> generateQuestionList() throws CouldNotAccessFileException {
+        List<Question> questionList = new ArrayList<>();
+        questionList.addAll(easyRepo.getQuestionList(5));
+        questionList.addAll(mediumRepo.getQuestionList(4));
+        questionList.addAll(hardRepo.getQuestionList(3));
+        questionList.addAll(veryHardRepo.getQuestionList(2));
+        questionList.addAll(expertRepo.getQuestionList(1));
+        return questionList;
     }
+
 
     private void showQuestionLevel(int level) {
         System.out.println();
@@ -169,8 +187,8 @@ public class WerWirdMillionaer extends SingleplayerGame {
     }
 
     @Override
-    protected void writeStats() {
-        List<PlayerStatsWWMObject> file = new ArrayList<>(readFile());
+    protected void writeStats() throws CouldNotAccessFileException {
+        List<PlayerStatsWWMObject> file = statsRepository.readStats(PlayerStatsWWMObject::fromLine);
 
         int index = file.indexOf(playerStatsWWMObject);
         if (index == -1) {
@@ -181,30 +199,8 @@ public class WerWirdMillionaer extends SingleplayerGame {
         }
 
         Collections.sort(file);
+        Collections.reverse(file);
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(getStatsFilesPath()))) {
-            for (PlayerStatsWWMObject playerStatsWWMObject1 : file) {
-                bufferedWriter.write(playerStatsWWMObject1.getCompleteLine());
-                bufferedWriter.newLine();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-            //TODO
-        }
-    }
-
-    private List<PlayerStatsWWMObject> readFile() {
-        try (BufferedReader bufferedReader =
-                     new BufferedReader(new FileReader(getStatsFilesPath()))) {
-            return bufferedReader.lines()
-                    .map(PlayerStatsWWMObject::new)
-                    .toList();
-        } catch (FileNotFoundException e) {
-            return new ArrayList<>();
-        } catch (IOException e) {
-            System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
-            //TODO zurückspringen mit separater Exception
-        }
-        return new ArrayList<>();
+        statsRepository.writeStats(file);
     }
 }

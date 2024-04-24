@@ -2,25 +2,24 @@ package de.dhbw.ase.play.games.multiplayer.core;
 
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
-import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
 import de.dhbw.ase.user.in.UserIn;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.*;
 
 public abstract class MultiplayerClient {
-    protected final String filepath;
     private final String username;
     private final ExecutorService listeningExecutor = Executors.newFixedThreadPool(2);
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     protected final List<CommunicationPrefixes> validServerMessages = new ArrayList<>();
-    protected List<PlayerStatsMPObject> stats = new ArrayList<>();
     protected boolean discardUserinput;
     private BufferedReader in;
     private PrintWriter out;
@@ -29,9 +28,8 @@ public abstract class MultiplayerClient {
     private final UserIn sc;
 
 
-    public MultiplayerClient(UserIn sc, String username, String filepath) {
+    public MultiplayerClient(UserIn sc, String username) {
         this.username = username;
-        this.filepath = filepath;
         this.sc = sc;
     }
 
@@ -55,65 +53,6 @@ public abstract class MultiplayerClient {
     }
 
 
-    protected void writeStats() {
-        List<PlayerStatsMPObject> file;
-        try {
-            file = new ArrayList<>(readFile());
-        } catch (IOException e) {
-            System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
-            System.out.println("Die Stats wurden nicht gespeichert.");
-            return;
-        }
-
-        for (PlayerStatsMPObject p : stats) {
-
-            int index = file.indexOf(p);
-            if (index == -1) {
-                file.add(p);
-            } else {
-                PlayerStatsMPObject oldStats = file.get(index);
-                oldStats.add(p);
-            }
-        }
-
-        Collections.sort(file);
-
-        File f = new File(filepath);
-        if (!f.exists()) {
-            f.mkdirs();
-            try {
-                f.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
-                System.out.println("Die Stats wurden nicht gespeichert.");
-                return;
-            }
-        }
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(f))) {
-            for (PlayerStatsMPObject playerStatsMPObject : file) {
-                bufferedWriter.write(playerStatsMPObject.getCompleteLine());
-                bufferedWriter.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
-            System.out.println("Die Stats wurden möglicherweise nicht gespeichert.");
-            return;
-        }
-    }
-
-    private List<PlayerStatsMPObject> readFile() throws IOException {
-        try (BufferedReader bufferedReader =
-                     new BufferedReader(new FileReader(filepath))) {
-            return bufferedReader.lines()
-                    .map(PlayerStatsMPObject::new)
-                    .toList();
-        } catch (FileNotFoundException e) {
-            return new ArrayList<>();
-        }
-    }
-
     protected boolean checkServerInput(String input) {
         CommunicationPrefixes communicationPrefixes;
 
@@ -126,7 +65,7 @@ public abstract class MultiplayerClient {
         return validServerMessages.contains(communicationPrefixes);
     }
 
-    protected void start() throws ExitException {
+    protected boolean start() throws ExitException {
         CompletionService<Boolean> threadPool = new ExecutorCompletionService<>(listeningExecutor);
         threadPool.submit(this::litenToClient);
 
@@ -136,8 +75,8 @@ public abstract class MultiplayerClient {
             threadPool.take().get();
         } catch (InterruptedException e) {
             // TODO
-            listeningExecutor.shutdownNow();
-            return;
+            disconnectClient();
+            throw new ExitException();
         } catch (ExecutionException e) {
             if (e.getCause().getClass() == ExitException.class) {
                 listeningExecutor.shutdownNow();
@@ -146,14 +85,14 @@ public abstract class MultiplayerClient {
             if (e.getCause().getClass() == SocketException.class) {
                 listeningExecutor.shutdownNow();
                 System.out.println("Host hat die Verbindung getrennt");
-                throw new ExitException();
+                return false;
             }
             // TODO
             e.printStackTrace();
-            return;
+            return false;
         }
 
-        listeningExecutor.shutdownNow();
+        return true;
     }
 
     private boolean listenToServer() throws IOException, InterruptedException, ExecutionException {
@@ -229,7 +168,6 @@ public abstract class MultiplayerClient {
         try {
             socket.close();
         } catch (IOException ignored) {
-
         }
     }
 

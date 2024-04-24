@@ -3,17 +3,23 @@ package de.dhbw.ase.play.games.multiplayer.quiz;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsMPObject;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MultiplayerQuizClient extends MultiplayerClient {
 
-    private boolean discardUserinput;
+    protected final StatsRepository statsRepository;
+    protected List<PlayerStatsMPObject> stats = new ArrayList<>();
 
-    public MultiplayerQuizClient(UserIn sc, String username, String filepath) {
-        super(sc, username, filepath);
+    public MultiplayerQuizClient(UserIn sc, String username, StatsRepository statsRepository) {
+        super(sc, username);
+        this.statsRepository = statsRepository;
 
         validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
         validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
@@ -71,7 +77,8 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
             case STATS_TRANSFER:
                 stats.add(
-                        new PlayerStatsMPObject(input.substring(CommunicationPrefixes.STATS_TRANSFER.getLength())));
+                        PlayerStatsMPObject.fromLine(
+                                input.substring(CommunicationPrefixes.STATS_TRANSFER.getLength())));
                 break;
 
             case STATS_TRANSFER_FINISHED:
@@ -90,5 +97,37 @@ public class MultiplayerQuizClient extends MultiplayerClient {
         }
 
         return super.processUserInput(input);
+    }
+
+    protected void writeStats() {
+        List<PlayerStatsMPObject> file;
+        try {
+            file = statsRepository.readStats(PlayerStatsMPObject::fromLine);
+        } catch (CouldNotAccessFileException e) {
+            System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
+            System.out.println("Die Stats wurden nicht gespeichert.");
+            return;
+        }
+
+        for (PlayerStatsMPObject p : stats) {
+            int index = file.indexOf(p);
+            if (index == -1) {
+                file.add(p);
+            } else {
+                PlayerStatsMPObject oldStats = file.get(index);
+                oldStats.add(p);
+            }
+        }
+
+        Collections.sort(file);
+        Collections.reverse(file);
+
+        try {
+            statsRepository.writeStats(file);
+        } catch (CouldNotAccessFileException e) {
+            System.out.println("Beim speichern der Stats ist ein Fehler aufgetreten.");
+            System.out.println("Die Stats wurden möglicherweise nicht vollständig gespeichert.");
+            return;
+        }
     }
 }

@@ -1,9 +1,9 @@
 package de.dhbw.ase.play.games.multiplayer.core;
 
-import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
-import de.dhbw.ase.play.games.reader.Question;
-import de.dhbw.ase.play.games.reader.Reader;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.Question;
+import de.dhbw.ase.play.games.repository.QuestionRepository;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,6 +20,7 @@ public abstract class MultiplayerServer {
     private final Map<String, ClientHandler> clients = new HashMap<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     protected final Set<String> userList = new HashSet<>();
+    private final QuestionRepository questionRepository;
     protected List<Question> questionList;
     protected int questionIndex;
     protected List<Question.Answer> currentAnswerList;
@@ -27,8 +28,9 @@ public abstract class MultiplayerServer {
     private ServerSocket serverSocket;
 
 
-    protected MultiplayerServer(int port) {
+    protected MultiplayerServer(int port, QuestionRepository questionRepository) {
         this.port = port;
+        this.questionRepository = questionRepository;
     }
 
     protected abstract void initializeRound();
@@ -38,8 +40,15 @@ public abstract class MultiplayerServer {
 
     protected void startPlaying() {
         initializeRound();
-        Reader mReader = new Reader(Quizzz.FILE_MP, 8);
-        questionList = mReader.getQuestionList();
+        try {
+            questionList = questionRepository.getQuestionList(8);
+        } catch (CouldNotAccessFileException e) {
+            System.out.println("Das Spiel konnte nicht gestartet werden.");
+            System.out.println("Möglicherweise sind die Gamedaten kompromittiert");
+            shutdown();
+            return;
+            //TODO prüfen ob das so funktionert
+        }
         questionIndex = -1;
         sendMessageToAllClients(CommunicationPrefixes.START_GAME.toString());
         Collections.shuffle(questionList);
@@ -76,7 +85,6 @@ public abstract class MultiplayerServer {
                 startPlaying();
             }
             case PLAY ->
-                // TODO save statistics
                     gameState = GameState.FINISHED;
         }
     }
@@ -160,10 +168,7 @@ public abstract class MultiplayerServer {
 
     protected Boolean checkIfQuestionFinished() {
         synchronized (userList) {
-            if (userList.isEmpty()) {
-                return true;
-            }
-            return false;
+            return userList.isEmpty();
         }
     }
 

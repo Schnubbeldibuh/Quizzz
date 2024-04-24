@@ -1,24 +1,26 @@
 package de.dhbw.ase.stats.show;
 
-import de.dhbw.ase.Startable;
-import de.dhbw.ase.stats.StatsMenu;
-import de.dhbw.ase.stats.persistance.PlayerStatsMPQuickObejct;
+import de.dhbw.ase.play.games.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsWWMObject;
 
-public class ShowStatsWWM extends ShowStats {
+public class ShowStatsWWM extends ShowStats<PlayerStatsWWMObject> {
 
-    public ShowStatsWWM(String filename) {
-        super(filename);
+    public ShowStatsWWM(StatsRepository statsRepository) {
+        super(statsRepository);
     }
 
     @Override
-    protected void displayStats(String string) {
-        PlayerStatsWWMObject playerStatsWWMObject = new PlayerStatsWWMObject(string);
+    protected void displayStats(PlayerStatsWWMObject state) {
         System.out.printf("| %-15s | %13s | %6s |%10s |%n",
-                playerStatsWWMObject.getUsername(),
-                playerStatsWWMObject.getRightAnswers(),
-                playerStatsWWMObject.getPoints(),
-                playerStatsWWMObject.getMoney());
+                state.getUsername(),
+                state.getRightAnswers(),
+                state.getPoints(),
+                state.getMoney());
+    }
+
+    @Override
+    protected PlayerStatsWWMObject mapLine(String line) {
+        return PlayerStatsWWMObject.fromLine(line);
     }
 
     @Override

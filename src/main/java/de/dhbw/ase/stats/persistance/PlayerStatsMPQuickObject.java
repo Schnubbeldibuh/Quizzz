@@ -1,26 +1,26 @@
 package de.dhbw.ase.stats.persistance;
 
-public class PlayerStatsMPObject extends StatsObject implements Comparable<PlayerStatsMPObject> {
+public class PlayerStatsMPQuickObject extends StatsObject implements Comparable<PlayerStatsMPQuickObject>{
 
     private int rightAnswers;
     private int wrongAnswers;
-    private int points;
+    private long fastestAnswer;
 
-    public PlayerStatsMPObject(String username, int rightAnswers, int wrongAnswers, int points) {
+    public PlayerStatsMPQuickObject(String username, int rightAnswers, int wrongAnswers, long fastestAnswer) {
         super(username);
         this.rightAnswers = rightAnswers;
         this.wrongAnswers = wrongAnswers;
-        this.points = points;
+        this.fastestAnswer = fastestAnswer;
     }
 
-    public static PlayerStatsMPObject fromLine(String line) {
+    public static PlayerStatsMPQuickObject fromeLine(String line) {
         String[] splittedLine = line.split(";");
 
-        return new PlayerStatsMPObject(
+        return new PlayerStatsMPQuickObject(
                 splittedLine[0],
                 Integer.parseInt(splittedLine[1]),
                 Integer.parseInt(splittedLine[2]),
-                Integer.parseInt(splittedLine[3]));
+                Long.parseLong(splittedLine[3]));
     }
 
     @Override
@@ -31,21 +31,28 @@ public class PlayerStatsMPObject extends StatsObject implements Comparable<Playe
                 ";" +
                 wrongAnswers +
                 ";" +
-                points;
+                fastestAnswer;
     }
 
-    public void add(PlayerStatsMPObject playerStatsMPObject) {
-        this.wrongAnswers += playerStatsMPObject.wrongAnswers;
-        this.rightAnswers += playerStatsMPObject.rightAnswers;
-        this.points += playerStatsMPObject.points;
+    public void add(PlayerStatsMPQuickObject playerStatsMPQuickObject) {
+        this.wrongAnswers += playerStatsMPQuickObject.wrongAnswers;
+        this.rightAnswers += playerStatsMPQuickObject.rightAnswers;
+        this.fastestAnswer += playerStatsMPQuickObject.fastestAnswer;
     }
 
     @Override
-    public int compareTo(PlayerStatsMPObject o) {
+    public int compareTo(PlayerStatsMPQuickObject o) {
         if (rightAnswers < o.rightAnswers) {
             return -1;
         }
         if (rightAnswers > o.rightAnswers) {
+            return 1;
+        }
+
+        if (fastestAnswer < o.fastestAnswer) {
+            return -1;
+        }
+        if (fastestAnswer > o.fastestAnswer) {
             return 1;
         }
 
@@ -67,7 +74,7 @@ public class PlayerStatsMPObject extends StatsObject implements Comparable<Playe
         return wrongAnswers;
     }
 
-    public int getPoints() {
-        return points;
+    public long getFastestAnswer() {
+        return fastestAnswer;
     }
 }

@@ -3,6 +3,8 @@ package de.dhbw.ase.play.games.singelplayer;
 import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
+import de.dhbw.ase.play.games.repository.QuestionRepositoryFilebased;
+import de.dhbw.ase.play.games.repository.StatsRepositoryFilebased;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
@@ -17,8 +19,19 @@ public class SingleplayerMenu extends Submenu {
     @Override
     protected Map<String, SelectedMenu> createSelectionMap() {
         Map<String, SelectedMenu> map = new HashMap<>();
-        map.put("1", new SelectedMenu(new WerWirdMillionaer(getSc(), Quizzz.FILE_STATS_WWM)));
-        map.put("2", new SelectedMenu(new FindQuestionsQuiz(getSc(), Quizzz.FILE_STATS_FQ)));
+        map.put("1", new SelectedMenu(
+                new WerWirdMillionaer(getSc(),
+                        StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_WWM),
+                        QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_EASY),
+                        QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_MEDIUM),
+                        QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_HARD),
+                        QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_VERY_HARD),
+                        QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_EXPERT))));
+
+        map.put("2", new SelectedMenu(new FindQuestionsQuiz(getSc(),
+                QuestionRepositoryFilebased.getInstance(Quizzz.FILE_FQ2),
+                StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_FQ))));
+
         map.put("3", new SelectedMenu(new SingleplayerCategoryMenu(getSc())));
         map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put("5", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));

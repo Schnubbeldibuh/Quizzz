@@ -1,21 +1,27 @@
 package de.dhbw.ase.stats.show;
 
-import de.dhbw.ase.stats.persistance.PlayerStatsFQObject;
-import de.dhbw.ase.stats.persistance.PlayerStatsMPQuickObejct;
+import de.dhbw.ase.play.games.repository.StatsRepository;
+import de.dhbw.ase.stats.persistance.PlayerStatsMPQuickObject;
 
-public class ShowStatsMPQuick extends ShowStats{
-    public ShowStatsMPQuick(String filename) {
-        super(filename);
+public class ShowStatsMPQuick extends ShowStats<PlayerStatsMPQuickObject> {
+
+    public ShowStatsMPQuick(StatsRepository statsRepository) {
+        super(statsRepository);
+    }
+
+
+    @Override
+    protected PlayerStatsMPQuickObject mapLine(String line) {
+        return PlayerStatsMPQuickObject.fromeLine(line);
     }
 
     @Override
-    protected void displayStats(String string) {
-        PlayerStatsMPQuickObejct playerStatsMPQuickObejct = new PlayerStatsMPQuickObejct(string);
+    protected void displayStats(PlayerStatsMPQuickObject state) {
         System.out.printf("| %-15s | %13s | %14s |%14s |%n",
-                playerStatsMPQuickObejct.getUsername(),
-                playerStatsMPQuickObejct.getRightAnswers(),
-                playerStatsMPQuickObejct.getWrongAnswers(),
-                playerStatsMPQuickObejct.getFastestAnswer());
+                state.getUsername(),
+                state.getRightAnswers(),
+                state.getWrongAnswers(),
+                state.getFastestAnswer());
     }
 
     @Override

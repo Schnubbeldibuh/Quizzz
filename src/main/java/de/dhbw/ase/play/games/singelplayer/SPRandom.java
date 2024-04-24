@@ -1,10 +1,11 @@
 package de.dhbw.ase.play.games.singelplayer;
 
+import de.dhbw.ase.play.games.ExitException;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class SPRandom extends SingleplayerGame {
 
@@ -17,19 +18,14 @@ public class SPRandom extends SingleplayerGame {
     }
 
     @Override
-    protected void startGame() {
+    protected void startGame() throws ExitException, CouldNotAccessFileException {
         Collections.shuffle(spGamesList);
         randomGame = spGamesList.get(0);
         randomGame.startGame();
     }
 
     @Override
-    protected String getStatsFilesPath() {
-        return randomGame.getStatsFilesPath();
-    }
-
-    @Override
-    protected void writeStats() {
+    protected void writeStats() throws CouldNotAccessFileException {
         randomGame.writeStats();
     }
 }

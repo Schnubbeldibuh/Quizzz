@@ -1,32 +1,37 @@
-package de.dhbw.ase.play.games.reader;
+package de.dhbw.ase.play.games.repository;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class Reader {
-    private final Random random;
-    private String filePath;
-    private int amount;
+public class QuestionRepositoryFilebased implements QuestionRepository {
 
-    public Reader(String filePath, int amount) {
-        random = new Random();
+    private static final Map<String, QuestionRepository> INSTANCES = new HashMap<>();
+
+    public static QuestionRepository getInstance(String filePath) {
+        if (INSTANCES.containsKey(filePath)) {
+            return INSTANCES.get(filePath);
+        }
+        QuestionRepositoryFilebased repositoryFilebased = new QuestionRepositoryFilebased(filePath);
+        INSTANCES.put(filePath, repositoryFilebased);
+        return repositoryFilebased;
+    }
+
+    private final Random random = new Random();
+    private final String filePath;
+
+
+    private QuestionRepositoryFilebased(String filePath) {
         this.filePath = filePath;
-        this.amount = amount;
     }
 
-    public Reader() {
-        random  = new Random();
+    @Override
+    public List<Question> getQuestionList(int amount) throws CouldNotAccessFileException {
+        return new ArrayList<>(readQuestionFile(filePath, amount));
     }
 
-    public List<Question> getQuestionList() {
-        List<Question> questionsForOneRound = new ArrayList<>(readFile(filePath, amount));
-        return questionsForOneRound;
-    }
-
-    protected List<Question> readFile(String file, int amount) {
+    private List<Question> readQuestionFile(String file, int amount) throws CouldNotAccessFileException {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
             bufferedReader.mark(1000);
             String l1 = bufferedReader.readLine();
@@ -39,8 +44,7 @@ public class Reader {
                     .map(this::mapLineToQuestion)
                     .toList();
         } catch (IOException e) {
-            // TODO
-            throw new RuntimeException();
+            throw new CouldNotAccessFileException();
         }
     }
 
@@ -69,5 +73,18 @@ public class Reader {
         answerList.add(new Question.Answer(splittedLine[4], false));
         answerList.add(new Question.Answer(splittedLine[5], false));
         return new Question(answerList, splittedLine[1]);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuestionRepositoryFilebased that = (QuestionRepositoryFilebased) o;
+        return Objects.equals(filePath, that.filePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(filePath);
     }
 }

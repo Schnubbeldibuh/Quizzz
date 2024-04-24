@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.reader;
+package de.dhbw.ase.play.games.repository;
 
 import java.util.List;
 
