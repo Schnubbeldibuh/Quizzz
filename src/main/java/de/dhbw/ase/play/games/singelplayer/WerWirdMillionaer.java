@@ -49,7 +49,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
 
         for (int i = 0; i < questionList.size(); i++) {
             WWMLevels currentLevel = WWMLevels.values()[i];
-            showQuestionLevel(i+1);
+            showQuestionLevel(i);
             boolean answerEvaluation = playQuestion(questionList.get(i));
             if (answerEvaluation) {
                 System.out.println("Richtige Antwort!");
@@ -74,7 +74,6 @@ public class WerWirdMillionaer extends SingleplayerGame {
                         currentLevel.getPoints(),
                         currentLevel.getMoneyWon(),
                         currentLevel.getRightAnswers());
-                writeStats();
                 return;
             }
 
@@ -123,25 +122,25 @@ public class WerWirdMillionaer extends SingleplayerGame {
 
     private void showQuestionLevel(int level) {
         System.out.println();
-        System.out.println("Level: " + level + ", Gewinnstufe: " + WWMLevels.values()[level].getLevel());
+        System.out.println("Level: " + level+1 + ", Gewinnstufe: " + WWMLevels.values()[level].getLevel());
     }
 
     private enum WWMLevels {
-        ONE ("50€", 0, 1, 0, 0),
-        TWO ("100€", 1, 2, 0, 50),
-        THREE ("200€", 2, 3, 0, 100),
-        FOUR ("300€", 3, 4, 0, 200),
-        FIVE ("500€", 4, 5, 0, 300),
-        SIX ("1.000€", 5, 10, 500, 500),
-        SEVEN ("2.000€",10, 15, 500, 1000),
-        EIGHT ("4.000€", 15, 20, 500, 2000),
-        NINE ("8.000€", 20, 25, 500, 4000),
-        TEN ("16.000€", 25, 35, 500, 8000),
-        ELEVEN ("32.000€", 35, 45, 500, 16000),
-        TWELVE ("64.000€", 45, 55, 500, 32000),
-        THIRTEEN ("125.000€", 55, 75, 500, 64000),
-        FOURTEEN ("500.000€", 75, 95, 500, 125000),
-        FIFTEEN ("1.000.000€", 95, 200, 500, 500000),
+        ONE ("50€", 0, 1, 0, 50),
+        TWO ("100€", 1, 2, 0, 100),
+        THREE ("200€", 2, 3, 0, 200),
+        FOUR ("300€", 3, 4, 0, 300),
+        FIVE ("500€", 4, 5, 0, 500),
+        SIX ("1.000€", 5, 10, 500, 1000),
+        SEVEN ("2.000€",10, 15, 500, 2000),
+        EIGHT ("4.000€", 15, 20, 500, 4000),
+        NINE ("8.000€", 20, 25, 500, 8000),
+        TEN ("16.000€", 25, 35, 500, 16000),
+        ELEVEN ("32.000€", 35, 45, 500, 32000),
+        TWELVE ("64.000€", 45, 55, 500, 64000),
+        THIRTEEN ("125.000€", 55, 75, 500, 125000),
+        FOURTEEN ("500.000€", 75, 95, 500, 500000),
+        FIFTEEN ("1.000.000€", 95, 200, 500, 1000000),
         WON("WON", 0, 200, 0, 1000000);
 
         private final String level;
