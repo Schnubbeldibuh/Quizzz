@@ -107,6 +107,9 @@ public class MultiplayerGame extends Game {
         if (host && server != null) {
             server.shutdown();
         }
+
+        server = null;
+        client = null;
     }
 
     private void startServerAndResgisterHostclient() throws UnknownHostException, ExitException {
@@ -120,7 +123,7 @@ public class MultiplayerGame extends Game {
             server = startServer();
             client = factory.createClient(getUsername());
             try {
-                client.registerClient("localhost", Quizzz.SERVER_PORT); // TODO rückgabewert verarbeiten
+                client.registerClient("localhost", Quizzz.SERVER_PORT);
             } catch (UsernameAlreadyExistsException ignored) {
             }
         } else {

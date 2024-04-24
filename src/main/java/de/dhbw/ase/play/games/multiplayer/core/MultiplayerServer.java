@@ -156,8 +156,13 @@ public abstract class MultiplayerServer {
     }
 
     private void checkIfShutDown() {
-        if (gameState == GameState.SHUTDOWN)
+        if (isShutdown()) {
             throw new IllegalStateException("Server is already shut down");
+        }
+    }
+
+    public boolean isShutdown() {
+        return gameState == GameState.SHUTDOWN;
     }
 
     protected void removeUser(String username) {
