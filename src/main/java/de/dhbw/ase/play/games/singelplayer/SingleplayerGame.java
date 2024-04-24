@@ -53,6 +53,7 @@ public abstract class SingleplayerGame extends Game {
     protected boolean playQuestion(Question question) throws ExitException {
         List<Question.Answer> answerList = question.getAnswerList();
         Collections.shuffle(answerList);
+        System.out.println();
         System.out.println(question.getQuestion());
         System.out.println("A: " + answerList.get(0).answer());
         System.out.println("B: " + answerList.get(1).answer());
