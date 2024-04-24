@@ -4,7 +4,6 @@ import de.dhbw.ase.Startable;
 import de.dhbw.ase.user.in.UserIn;
 
 public abstract class Game implements Startable {
-    // TODO zu util klasse umbauen und aus der Vererbungskette nehmen
 
     private final UserIn sc;
     private String username;

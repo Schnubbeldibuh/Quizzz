@@ -76,9 +76,9 @@ public abstract class MultiplayerClient {
         try {
             threadPool.take().get();
         } catch (InterruptedException e) {
-            // TODO
-            disconnectClient();
+            System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
             throw new ExitException();
+
         } catch (ExecutionException e) {
             if (e.getCause().getClass() == ExitException.class) {
                 listeningExecutor.shutdownNow();
@@ -90,9 +90,8 @@ public abstract class MultiplayerClient {
                 System.out.println("Host hat die Verbindung getrennt");
                 return false;
             }
-            // TODO
-            e.printStackTrace();
-            return false;
+            System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
+            throw new ExitException();
         }
 
         return true;

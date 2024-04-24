@@ -49,7 +49,6 @@ public abstract class MultiplayerServer {
             System.out.println("Möglicherweise sind die Gamedaten kompromittiert");
             shutdown();
             return;
-            //TODO prüfen ob das so funktionert
         }
         questionIndex = -1;
         sendMessageToAllClients(CommunicationPrefixes.START_GAME.toString());
