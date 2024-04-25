@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.repository;
+package de.dhbw.ase.repository;
 
 import de.dhbw.ase.questionmanagement.QuestionObject;
 

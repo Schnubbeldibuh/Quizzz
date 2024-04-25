@@ -1,7 +1,7 @@
 package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.play.games.ExitException;
-import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.repository.CouldNotAccessFileException;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.Collections;

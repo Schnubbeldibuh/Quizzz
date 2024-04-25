@@ -3,8 +3,8 @@ package de.dhbw.ase.play.games.singelplayer;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.Game;
-import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
-import de.dhbw.ase.play.games.repository.Question;
+import de.dhbw.ase.repository.CouldNotAccessFileException;
+import de.dhbw.ase.repository.Question;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.Collections;

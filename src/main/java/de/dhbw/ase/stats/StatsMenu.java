@@ -3,7 +3,7 @@ package de.dhbw.ase.stats;
 import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
-import de.dhbw.ase.play.games.repository.StatsRepositoryFilebased;
+import de.dhbw.ase.repository.StatsRepositoryFilebased;
 import de.dhbw.ase.stats.show.*;
 import de.dhbw.ase.user.in.UserIn;
 

@@ -1,6 +1,6 @@
 package de.dhbw.ase.stats.show;
 
-import de.dhbw.ase.play.games.repository.StatsRepository;
+import de.dhbw.ase.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsWWMObject;
 
 public class ShowStatsWWM extends ShowStats<PlayerStatsWWMObject> {

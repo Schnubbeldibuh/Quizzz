@@ -2,8 +2,8 @@ package de.dhbw.ase.questionmanagement;
 
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Startable;
-import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
-import de.dhbw.ase.play.games.repository.QuestionRepository;
+import de.dhbw.ase.repository.CouldNotAccessFileException;
+import de.dhbw.ase.repository.QuestionRepository;
 import de.dhbw.ase.user.in.UserIn;
 
 public class QuestionManagerEdit implements Startable {

@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.repository;
+package de.dhbw.ase.repository;
 
 public class CouldNotAccessFileException extends Exception {
 }

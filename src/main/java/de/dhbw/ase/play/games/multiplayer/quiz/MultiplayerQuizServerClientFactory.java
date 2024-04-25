@@ -4,8 +4,8 @@ import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerServer;
 import de.dhbw.ase.play.games.multiplayer.core.ServerClientFactory;
-import de.dhbw.ase.play.games.repository.QuestionRepositoryFilebased;
-import de.dhbw.ase.play.games.repository.StatsRepositoryFilebased;
+import de.dhbw.ase.repository.QuestionRepositoryFilebased;
+import de.dhbw.ase.repository.StatsRepositoryFilebased;
 import de.dhbw.ase.user.in.UserIn;
 
 public class MultiplayerQuizServerClientFactory implements ServerClientFactory {

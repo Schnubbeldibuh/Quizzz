@@ -3,8 +3,8 @@ package de.dhbw.ase.play.games.multiplayer.quickquiz;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerClient;
-import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
-import de.dhbw.ase.play.games.repository.StatsRepository;
+import de.dhbw.ase.repository.CouldNotAccessFileException;
+import de.dhbw.ase.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsMPQuickObject;
 import de.dhbw.ase.user.in.UserIn;
 

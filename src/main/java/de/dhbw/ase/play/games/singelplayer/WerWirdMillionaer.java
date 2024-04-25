@@ -1,10 +1,10 @@
 package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.play.games.ExitException;
-import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
-import de.dhbw.ase.play.games.repository.Question;
-import de.dhbw.ase.play.games.repository.QuestionRepository;
-import de.dhbw.ase.play.games.repository.StatsRepository;
+import de.dhbw.ase.repository.CouldNotAccessFileException;
+import de.dhbw.ase.repository.Question;
+import de.dhbw.ase.repository.QuestionRepository;
+import de.dhbw.ase.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsWWMObject;
 import de.dhbw.ase.user.in.UserIn;
 

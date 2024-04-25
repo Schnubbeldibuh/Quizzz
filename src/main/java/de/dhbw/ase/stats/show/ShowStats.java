@@ -2,8 +2,8 @@ package de.dhbw.ase.stats.show;
 
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Startable;
-import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
-import de.dhbw.ase.play.games.repository.StatsRepository;
+import de.dhbw.ase.repository.CouldNotAccessFileException;
+import de.dhbw.ase.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.StatsObject;
 
 public abstract class ShowStats<T extends StatsObject> implements Startable {

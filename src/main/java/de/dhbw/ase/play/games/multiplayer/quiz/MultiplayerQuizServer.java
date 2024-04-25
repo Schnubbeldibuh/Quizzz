@@ -2,7 +2,7 @@ package de.dhbw.ase.play.games.multiplayer.quiz;
 
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.play.games.multiplayer.core.MultiplayerServer;
-import de.dhbw.ase.play.games.repository.QuestionRepository;
+import de.dhbw.ase.repository.QuestionRepository;
 
 import java.util.HashMap;
 import java.util.Map;

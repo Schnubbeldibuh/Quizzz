@@ -1,9 +1,9 @@
 package de.dhbw.ase.play.games.multiplayer.core;
 
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
-import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
-import de.dhbw.ase.play.games.repository.Question;
-import de.dhbw.ase.play.games.repository.QuestionRepository;
+import de.dhbw.ase.repository.CouldNotAccessFileException;
+import de.dhbw.ase.repository.Question;
+import de.dhbw.ase.repository.QuestionRepository;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

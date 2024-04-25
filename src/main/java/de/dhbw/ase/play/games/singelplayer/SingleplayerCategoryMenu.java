@@ -3,8 +3,8 @@ package de.dhbw.ase.play.games.singelplayer;
 import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
-import de.dhbw.ase.play.games.repository.QuestionRepositoryFilebased;
-import de.dhbw.ase.play.games.repository.StatsRepositoryFilebased;
+import de.dhbw.ase.repository.QuestionRepositoryFilebased;
+import de.dhbw.ase.repository.StatsRepositoryFilebased;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package de.dhbw.ase.play.games.repository;
+package de.dhbw.ase.repository;
 
 import java.util.List;
 import java.util.function.Function;
