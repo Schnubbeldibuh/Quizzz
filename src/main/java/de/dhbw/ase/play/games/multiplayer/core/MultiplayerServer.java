@@ -36,7 +36,6 @@ public abstract class MultiplayerServer {
     }
 
     protected abstract void initializeRound();
-
     protected abstract void processClientMessage(String username, String msg);
     protected abstract void sendStatsToAllClients();
 
@@ -54,11 +53,6 @@ public abstract class MultiplayerServer {
         sendMessageToAllClients(CommunicationPrefixes.START_GAME.toString());
         Collections.shuffle(questionList);
         playQuestion();
-    }
-
-    protected void sendMessageToAllClients(String msg) {
-        clients.values()
-                .forEach(c -> c.sendMessage(msg));
     }
 
     protected void sendMessageToClient(String msg, String username) {
@@ -88,6 +82,32 @@ public abstract class MultiplayerServer {
             case PLAY ->
                     gameState = GameState.FINISHED;
         }
+    }
+
+    private Void joiningPhase() {
+        serverSocket = null;
+        try (ServerSocket ss = new ServerSocket()) {
+            serverSocket = ss;
+            ss.setReuseAddress(true);
+            ss.bind(new InetSocketAddress(port));
+            while (gameState == GameState.JOIN) {
+                Socket socket = serverSocket.accept();
+                executor.submit(new ClientHandler(socket, this, gameMode));
+            }
+        } catch (SocketException e) {
+            if (serverSocket != null && serverSocket.isClosed())
+                return null;
+            e.printStackTrace();
+            System.out.println("Der Server ist abgestürzt :(");
+            System.out.println("Bitte erneut versuchen.");
+            return null;
+
+        } catch (IOException e) {
+            System.out.println("Der Server ist abgestürzt :(");
+            System.out.println("Bitte erneut versuchen.");
+            return null;
+        }
+        return null;
     }
 
     boolean addClient(ClientHandler client, String username) {
@@ -121,63 +141,26 @@ public abstract class MultiplayerServer {
         }
     }
 
-    void shutdown() {
-        if (gameState == GameState.SHUTDOWN)
-            return;
-        gameState = GameState.SHUTDOWN;
-        try {
-            serverSocket.close();
-        } catch (IOException ignored) {
-        }
-        executor.shutdownNow();
-        clients.values()
-                .forEach(ClientHandler::closeConnection);
-    }
-
-    protected Set<String> getUsernames() {
-        return new HashSet<>(clients.keySet());
-    }
-
-    private Void joiningPhase() {
-        serverSocket = null;
-        try (ServerSocket ss = new ServerSocket()) {
-            serverSocket = ss;
-            ss.setReuseAddress(true);
-            ss.bind(new InetSocketAddress(port));
-            while (gameState == GameState.JOIN) {
-                Socket socket = serverSocket.accept();
-                executor.submit(new ClientHandler(socket, this, gameMode));
-            }
-        } catch (SocketException e) {
-            if (serverSocket != null && serverSocket.isClosed())
-                return null;
-            e.printStackTrace();
-            System.out.println("Der Server ist abgestürzt :(");
-            System.out.println("Bitte erneut versuchen.");
-            return null;
-
-        } catch (IOException e) {
-            System.out.println("Der Server ist abgestürzt :(");
-            System.out.println("Bitte erneut versuchen.");
-            return null;
-        }
-        return null;
-    }
-
-    private void checkIfShutDown() {
-        if (isShutdown()) {
-            throw new IllegalStateException("Server is already shut down");
-        }
-    }
-
-    public boolean isShutdown() {
-        return gameState == GameState.SHUTDOWN;
-    }
-
     protected void removeUser(String username) {
         synchronized(userList) {
             userList.remove(username);
         }
+    }
+
+    protected void startPlaying() {
+        initializeRound();
+        try {
+            questionList = questionRepository.getQuestionList(1);
+        } catch (CouldNotAccessFileException e) {
+            System.out.println("Das Spiel konnte nicht gestartet werden.");
+            System.out.println("Möglicherweise sind die Gamedaten kompromittiert");
+            shutdown();
+            return;
+        }
+        questionIndex = -1;
+        sendMessageToAllClients(CommunicationPrefixes.START_GAME.toString());
+        Collections.shuffle(questionList);
+        playQuestion();
     }
 
     protected Boolean checkIfQuestionFinished() {
@@ -203,14 +186,41 @@ public abstract class MultiplayerServer {
         stringBuilder.append(CommunicationPrefixes.NEXT_QUESTION);
         stringBuilder.append(question.question());
         currentAnswerList.forEach(a -> {
-                    stringBuilder.append(";");
-                    stringBuilder.append(a.answer());
+            stringBuilder.append(";");
+            stringBuilder.append(a.answer());
         });
         stringBuilder.append(";");
         stringBuilder.append(questionIndex);
-        
+
         sendMessageToAllClients(stringBuilder.toString());
 
         userList.addAll(getUsernames());
+    }
+
+    private void checkIfShutDown() {
+        if (isShutdown()) {
+            throw new IllegalStateException("Server is already shut down");
+        }
+    }
+
+    void shutdown() {
+        if (gameState == GameState.SHUTDOWN)
+            return;
+        gameState = GameState.SHUTDOWN;
+        try {
+            serverSocket.close();
+        } catch (IOException ignored) {
+        }
+        executor.shutdownNow();
+        clients.values()
+                .forEach(ClientHandler::closeConnection);
+    }
+
+    public boolean isShutdown() {
+        return gameState == GameState.SHUTDOWN;
+    }
+
+    protected Set<String> getUsernames() {
+        return new HashSet<>(clients.keySet());
     }
 }

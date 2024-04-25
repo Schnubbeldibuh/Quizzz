@@ -40,6 +40,18 @@ public abstract class MultiplayerClient {
 
     protected abstract boolean processServerInput(String input);
 
+    protected boolean checkServerInput(String input) {
+        CommunicationPrefixes communicationPrefixes;
+
+        try {
+            communicationPrefixes = CommunicationPrefixes.evaluateCase(input);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        return validServerMessages.contains(communicationPrefixes);
+    }
+
     protected boolean processUserInput(String input) {
         Integer selection = switch (input) {
             case "a" -> 0;
@@ -52,19 +64,6 @@ public abstract class MultiplayerClient {
         };
         sendMessageToServer(CommunicationPrefixes.ANSWER.toString() + selection + ";" + questionIndex);
         return true;
-    }
-
-
-    protected boolean checkServerInput(String input) {
-        CommunicationPrefixes communicationPrefixes;
-
-        try {
-            communicationPrefixes = CommunicationPrefixes.evaluateCase(input);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-
-        return validServerMessages.contains(communicationPrefixes);
     }
 
     protected boolean start() throws ExitException {
@@ -172,10 +171,6 @@ public abstract class MultiplayerClient {
         }
     }
 
-    protected void sendMessageToServer(String msg) {
-        out.println(msg);
-    }
-
     protected void disconnectClient() {
         listeningExecutor.shutdownNow();
         executor.shutdownNow();
@@ -183,6 +178,10 @@ public abstract class MultiplayerClient {
             socket.close();
         } catch (IOException ignored) {
         }
+    }
+
+    protected void sendMessageToServer(String msg) {
+        out.println(msg);
     }
 
     protected void showQuestion(String input) {
