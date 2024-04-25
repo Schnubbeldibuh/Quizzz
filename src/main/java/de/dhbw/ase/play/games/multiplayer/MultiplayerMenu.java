@@ -11,14 +11,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MultiplayerMenu extends Submenu {
+
+    private final UserIn sc;
+
     public MultiplayerMenu(UserIn sc) {
         super(sc);
+        this.sc = sc;
     }
 
     @Override
-    protected Map<String, SelectedMenu> createSelectionMap() {
-        UserIn sc = getSc();
-
+    protected Map<String, SelectedMenu> generateSelectionMap() {
         Map<String, SelectedMenu> map = new HashMap<>();
         map.put("1", new SelectedMenu(new MultiplayerGame(sc, new MultiplayerQuizServerClientFactory(sc))));
         map.put("2", new SelectedMenu(new MultiplayerGame(sc, new MultiplayerQuickServerClientFactory(sc))));

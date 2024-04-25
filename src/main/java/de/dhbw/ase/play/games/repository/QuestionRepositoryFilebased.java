@@ -1,8 +1,8 @@
 package de.dhbw.ase.play.games.repository;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import de.dhbw.ase.questionmanagement.QuestionObject;
+
+import java.io.*;
 import java.util.*;
 
 public class QuestionRepositoryFilebased implements QuestionRepository {
@@ -18,9 +18,11 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
         return repositoryFilebased;
     }
 
-    private final Random random = new Random();
     private final String filePath;
 
+    private final List<String> fileContentAsString = new ArrayList<>();
+    private final List<Question> fileContent = new ArrayList<>();
+    private final List<QuestionObject> fileContentAsQuestionObject = new ArrayList<>();
 
     private QuestionRepositoryFilebased(String filePath) {
         this.filePath = filePath;
@@ -28,44 +30,97 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
 
     @Override
     public List<Question> getQuestionList(int amount) throws CouldNotAccessFileException {
-        return new ArrayList<>(readQuestionFile(filePath, amount));
+        LinkedList<Question> questions = new LinkedList<>(readCompleteFile());
+        List<Question> selectedQuestions = new ArrayList<>();
+
+        List<Question.Answer> fakeAnswers = new ArrayList<>();
+        fakeAnswers.add(new Question.Answer("Richtig", true));
+        fakeAnswers.add(new Question.Answer("Falsch", false));
+        fakeAnswers.add(new Question.Answer("Falsch", false));
+        fakeAnswers.add(new Question.Answer("Falsch", false));
+        Question fakeQuestion = new Question(fakeAnswers,
+                "Es gab nicht genug Fragen zu diesem Speilmodus. " +
+                        "Also wähle die Richtige Antwort:");
+
+        Collections.shuffle(questions);
+
+        while (selectedQuestions.size() < amount) {
+            if (questions.size() == 0) {
+                selectedQuestions.add(fakeQuestion);
+                continue;
+            }
+            selectedQuestions.add(questions.poll());
+        }
+
+        return selectedQuestions;
     }
 
-    private List<Question> readQuestionFile(String file, int amount) throws CouldNotAccessFileException {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
-            bufferedReader.mark(1000);
-            String l1 = bufferedReader.readLine();
-            int lines = Integer.parseInt(l1.substring(0, l1.indexOf(';')));
-            bufferedReader.reset();
+    @Override
+    public List<Question> readCompleteFile() throws CouldNotAccessFileException {
+        if (!fileContent.isEmpty()) {
+            return fileContent;
+        }
 
-            Set<Integer> linenumbers = getRandomLinenumbers(amount, lines);
-            return bufferedReader.lines()
-                    .filter(l -> checkLinePrefix(linenumbers, l))
-                    .map(this::mapLineToQuestion)
-                    .toList();
+        return readCompleteFileAsString()
+                .stream()
+                .map(this::mapLineToQuestion)
+                .toList();
+    }
+
+    @Override
+    public List<QuestionObject> readCompleteFileAsQuestionObject() throws CouldNotAccessFileException {
+        if (fileContentAsQuestionObject.isEmpty()) {
+            readCompleteFileAsString()
+                    .stream()
+                    .map(QuestionObject::new)
+                    .forEach(fileContentAsQuestionObject::add);
+        }
+
+        return Collections.unmodifiableList(fileContentAsQuestionObject);
+    }
+
+    @Override
+    public List<String> readCompleteFileAsString() throws CouldNotAccessFileException {
+        if (!fileContentAsQuestionObject.isEmpty() && !fileContentAsString.isEmpty()) {
+            fileContentAsQuestionObject
+                    .stream()
+                    .map(QuestionObject::toString)
+                    .forEach(fileContentAsString::add);
+
+        } else if (fileContentAsString.isEmpty()) {
+            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+                bufferedReader.lines()
+                        .filter(l -> !l.isEmpty())
+                        .forEach(fileContentAsString::add);
+
+            } catch (IOException e) {
+                throw new CouldNotAccessFileException();
+            }
+        }
+        return Collections.unmodifiableList(fileContentAsString);
+    }
+
+    @Override
+    public void writeBackToFile(List<QuestionObject> lineList) throws CouldNotAccessFileException {
+        ArrayList<QuestionObject> questionObjects = new ArrayList<>(lineList);
+        Collections.sort(questionObjects);
+
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
+            for (QuestionObject questionObject : questionObjects) {
+                bufferedWriter.write(questionObject.getCompleteLine());
+                bufferedWriter.newLine();
+            }
         } catch (IOException e) {
             throw new CouldNotAccessFileException();
         }
+
+        fileContentAsString.clear();
+        fileContent.clear();
+        fileContentAsQuestionObject.clear();
+        fileContentAsQuestionObject.addAll(questionObjects);
     }
 
-    private boolean checkLinePrefix(Set<Integer> searchedNumbers, String line) {
-        for (Integer n : searchedNumbers)
-            if (line.startsWith(n.toString())) {
-                searchedNumbers.remove(n);
-                return true;
-            }
-        return false;
-    }
-
-    private Set<Integer> getRandomLinenumbers(int amount, int lines) {
-        Set<Integer> randomNumberList = new HashSet<>();
-        while (randomNumberList.size() < amount) {
-            randomNumberList.add(random.nextInt(lines+1));
-        }
-        return randomNumberList;
-    }
-
-    protected Question mapLineToQuestion(String line) {
+    private Question mapLineToQuestion(String line) {
         String[] splittedLine = line.split(";");
         List<Question.Answer> answerList = new ArrayList<>();
         answerList.add(new Question.Answer(splittedLine[2], true));

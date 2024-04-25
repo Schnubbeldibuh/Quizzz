@@ -1,27 +1,45 @@
 package de.dhbw.ase.questionmanagement;
 
 import de.dhbw.ase.SelectedMenu;
-import de.dhbw.ase.user.in.UserIn;
+import de.dhbw.ase.Startable;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.QuestionRepository;
 
-public class QuestionManagerDelete extends QuetionEditor {
+public class QuestionManagerDelete implements Startable {
 
-    private final QuestionManagerEditingMenu questionManagerEditingMenu;
+    private final QuestionRepository questionRepository;
+    private final QuestionManagerEditingMenu.SelectedLine selectedLine;
 
-    public QuestionManagerDelete(QuestionManagerEditingMenu questionManagerEditingMenu) {
-        this.questionManagerEditingMenu = questionManagerEditingMenu;
+
+    public QuestionManagerDelete(QuestionRepository questionRepository,
+                                 QuestionManagerEditingMenu.SelectedLine selectedLine) {
+
+        this.questionRepository = questionRepository;
+        this.selectedLine = selectedLine;
     }
 
     @Override
     public SelectedMenu.MenuSelection start() {
-        readFileContent(questionManagerEditingMenu.getFilePath());
-        getQuestionIndex(questionManagerEditingMenu.getSelectedLine());
-        file.remove(this.questionIndex);
-
-        for (int i = 0; i < this.questionIndex; i++) {
-            int currentQuestionIndex = Integer.parseInt(file.get(i).getQuestionIndex());
-            file.get(i).setQuestionIndex(String.valueOf(currentQuestionIndex - 1));
+        try {
+            questionRepository.writeBackToFile(
+                    questionRepository
+                            .readCompleteFileAsQuestionObject()
+                            .stream()
+                            .filter(q -> q.getQuestionIndex() != (selectedLine.getSelectedLine()))
+                            .map(q ->
+                                    q.getQuestionIndex() < selectedLine.getSelectedLine() ? q :
+                                            QuestionObject.Builder.create()
+                                                    .fromQuestionObject(q)
+                                                    .withQuestionIndex(q.getQuestionIndex() - 1)
+                                                    .build())
+                            .toList()
+            );
+        } catch (CouldNotAccessFileException e) {
+            System.out.println("Das Programm konnte nicht auf die Daten zugreifen.");
+            System.out.println("Die Änderungen wurden möglicherweise nicht gespeichert.");
+            return SelectedMenu.MenuSelection.BACK;
         }
-        writeBackToFile(questionManagerEditingMenu.getFilePath());
+
         return SelectedMenu.MenuSelection.BACK;
     }
 }

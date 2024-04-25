@@ -11,14 +11,17 @@ import java.util.Map;
 
 public class PlayMenu extends Submenu {
 
+    private final UserIn sc;
+
     public PlayMenu(UserIn sc) {
         super(sc);
+        this.sc = sc;
     }
     @Override
-    protected Map<String, SelectedMenu> createSelectionMap() {
+    protected Map<String, SelectedMenu> generateSelectionMap() {
         Map<String, SelectedMenu> map = new HashMap<>();
-        map.put("1", new SelectedMenu(new MultiplayerMenu(getSc())));
-        map.put("2", new SelectedMenu(new SingleplayerMenu(getSc())));
+        map.put("1", new SelectedMenu(new MultiplayerMenu(sc)));
+        map.put("2", new SelectedMenu(new SingleplayerMenu(sc)));
         map.put("3", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 

@@ -2,28 +2,28 @@ package de.dhbw.ase.questionmanagement;
 
 import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
+import de.dhbw.ase.play.games.repository.CouldNotAccessFileException;
+import de.dhbw.ase.play.games.repository.QuestionRepository;
 import de.dhbw.ase.user.in.UserIn;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class QuestionManager extends Submenu {
-    private final String filePath;
+    private final QuestionRepository questionRepository;
+    private final UserIn sc;
 
-    public QuestionManager(UserIn sc, String file) {
+    public QuestionManager(UserIn sc, QuestionRepository questionRepository) {
         super(sc);
-        this.filePath = file;
+        this.questionRepository = questionRepository;
+        this.sc = sc;
     }
 
     @Override
-    protected Map<String, SelectedMenu> createSelectionMap() {
+    protected Map<String, SelectedMenu> generateSelectionMap() {
         Map<String, SelectedMenu> map = new HashMap<>();
-        map.put("1", new SelectedMenu(new QuestionManagerAdd(getSc(),this)));
-        map.put("2", new SelectedMenu(new QuestionManagerEditingMenu(getSc(), this)));
+        map.put("1", new SelectedMenu(new QuestionManagerAdd(sc, questionRepository)));
+        map.put("2", new SelectedMenu(new QuestionManagerEditingMenu(sc, questionRepository)));
         map.put("3", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
@@ -31,16 +31,27 @@ public class QuestionManager extends Submenu {
     }
 
     @Override
+    public SelectedMenu.MenuSelection start() {
+        SelectedMenu.MenuSelection menuSelection;
+        do {
+            try {
+                questionRepository.readCompleteFileAsString()
+                        .stream()
+                        .map(this::convertString)
+                        .forEach(System.out::println);
+            } catch (CouldNotAccessFileException e) {
+                System.out.println("Das System kann nicht auf die Fragen zugreifen");
+                return SelectedMenu.MenuSelection.BACK;
+            }
+            menuSelection = startOnlyOnes();
+        } while (menuSelection != SelectedMenu.MenuSelection.EXIT);
+
+        return menuSelection;
+    }
+
+    @Override
     protected void showOptions() {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
-            bufferedReader.lines()
-                    .map(this::convertString)
-                    .forEach(System.out::println);
-        } catch (FileNotFoundException e) {
-            //TODO
-        } catch (IOException e) {
-            //TODO
-        }
+
         System.out.println();
         System.out.println("Möchtest du eine Frage hinzufügen oder eine bestehende Frage bearbeiten?");
         System.out.println("1 - Hinzufügen");
@@ -51,9 +62,5 @@ public class QuestionManager extends Submenu {
 
     private String convertString(String input) {
         return input.replaceAll(";", " - ");
-    }
-
-    public String getFilePath() {
-        return filePath;
     }
 }

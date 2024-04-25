@@ -13,36 +13,39 @@ import java.util.List;
 import java.util.Map;
 
 public class SingleplayerCategoryMenu extends Submenu {
+    private final UserIn sc;
+
     public SingleplayerCategoryMenu(UserIn sc) {
         super(sc);
+        this.sc = sc;
     }
 
     @Override
-    protected Map<String, SelectedMenu> createSelectionMap() {
+    protected Map<String, SelectedMenu> generateSelectionMap() {
 
         Map<String, SelectedMenu> map = new HashMap<>();
 
-        SPQuiz generalQuiz = new SPQuiz(getSc(), Categories.GENERAL,
+        SPQuiz generalQuiz = new SPQuiz(sc, Categories.GENERAL,
                 QuestionRepositoryFilebased.getInstance(Quizzz.FILE_SP_GENERAL),
                 StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_SP_GENERAL));
 
-        SPQuiz geographyQuiz = new SPQuiz(getSc(), Categories.GEOGRAPHY,
+        SPQuiz geographyQuiz = new SPQuiz(sc, Categories.GEOGRAPHY,
                 QuestionRepositoryFilebased.getInstance(Quizzz.FILE_SP_GEOGRAPHY),
                 StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_SP_GEOGRAPHY));
 
-        SPQuiz cinemaTVQuiz = new SPQuiz(getSc(), Categories.CINEMA_TV,
+        SPQuiz cinemaTVQuiz = new SPQuiz(sc, Categories.CINEMA_TV,
                 QuestionRepositoryFilebased.getInstance(Quizzz.FILE_SP_CINEMA_TV),
                 StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_SP_CINEMA_TV));
 
-        SPQuiz technologyInternetQuiz = new SPQuiz(getSc(), Categories.TECHNOLOGY_INTERNET,
+        SPQuiz technologyInternetQuiz = new SPQuiz(sc, Categories.TECHNOLOGY_INTERNET,
                 QuestionRepositoryFilebased.getInstance(Quizzz.FILE_SP_TECHNOLOGY),
                 StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_SP_TECHNOLOGY));
 
-        SPQuiz sportsQuiz = new SPQuiz(getSc(), Categories.SPORTS,
+        SPQuiz sportsQuiz = new SPQuiz(sc, Categories.SPORTS,
                 QuestionRepositoryFilebased.getInstance(Quizzz.FILE_SP_SPORTS),
                 StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_SP_SPORTS));
 
-        SPQuiz foodQuiz = new SPQuiz(getSc(), Categories.FOOD,
+        SPQuiz foodQuiz = new SPQuiz(sc, Categories.FOOD,
                 QuestionRepositoryFilebased.getInstance(Quizzz.FILE_SP_FOOD),
                 StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_SP_FOOD));
 
@@ -54,7 +57,7 @@ public class SingleplayerCategoryMenu extends Submenu {
         spGamesList.add(sportsQuiz);
         spGamesList.add(foodQuiz);
 
-        map.put("1", new SelectedMenu(new SPRandom(getSc(), spGamesList)));
+        map.put("1", new SelectedMenu(new SPRandom(sc, spGamesList)));
         map.put("2", new SelectedMenu(generalQuiz));
         map.put("3", new SelectedMenu(geographyQuiz));
         map.put("4", new SelectedMenu(cinemaTVQuiz));

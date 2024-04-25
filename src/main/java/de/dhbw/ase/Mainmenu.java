@@ -21,16 +21,15 @@ public class Mainmenu extends Submenu {
     public void startGame() {
         System.out.println("Herzlichen Willkommen bei Quizzz!");
         start();
-        //System.exit(0);
         sc.stop(new ConsoleOut());
     }
 
     @Override
-    protected Map<String, SelectedMenu> createSelectionMap() {
+    protected Map<String, SelectedMenu> generateSelectionMap() {
         Map<String, SelectedMenu> map = new HashMap<>();
-        map.put("1", new SelectedMenu(new PlayMenu(getSc())));
-        map.put("2", new SelectedMenu(new QuestionMenu(getSc())));
-        map.put("3", new SelectedMenu(new StatsMenu(getSc())));
+        map.put("1", new SelectedMenu(new PlayMenu(sc)));
+        map.put("2", new SelectedMenu(new QuestionMenu(sc)));
+        map.put("3", new SelectedMenu(new StatsMenu(sc)));
         map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
         return map;

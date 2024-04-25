@@ -17,7 +17,7 @@ public class StatsMenu extends Submenu {
     }
 
     @Override
-    protected Map<String, SelectedMenu> createSelectionMap() {
+    protected Map<String, SelectedMenu> generateSelectionMap() {
         Map<String, SelectedMenu> map = new HashMap<>();
 
         map.put("1", new SelectedMenu(

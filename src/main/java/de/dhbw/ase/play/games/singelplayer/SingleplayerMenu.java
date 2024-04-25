@@ -12,15 +12,18 @@ import java.util.Map;
 
 public class SingleplayerMenu extends Submenu {
 
+    private final UserIn sc;
+
     public SingleplayerMenu(UserIn sc) {
         super(sc);
+        this.sc = sc;
     }
 
     @Override
-    protected Map<String, SelectedMenu> createSelectionMap() {
+    protected Map<String, SelectedMenu> generateSelectionMap() {
         Map<String, SelectedMenu> map = new HashMap<>();
         map.put("1", new SelectedMenu(
-                new WerWirdMillionaer(getSc(),
+                new WerWirdMillionaer(sc,
                         StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_WWM),
                         QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_EASY),
                         QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_MEDIUM),
@@ -28,11 +31,11 @@ public class SingleplayerMenu extends Submenu {
                         QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_VERY_HARD),
                         QuestionRepositoryFilebased.getInstance(Quizzz.FILE_WWM_EXPERT))));
 
-        map.put("2", new SelectedMenu(new FindQuestionsQuiz(getSc(),
+        map.put("2", new SelectedMenu(new FindQuestionsQuiz(sc,
                 QuestionRepositoryFilebased.getInstance(Quizzz.FILE_FQ2),
                 StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_FQ))));
 
-        map.put("3", new SelectedMenu(new SingleplayerCategoryMenu(getSc())));
+        map.put("3", new SelectedMenu(new SingleplayerCategoryMenu(sc)));
         map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put("5", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
