@@ -198,4 +198,12 @@ public abstract class MultiplayerClient {
 
         questionIndex = questionAnswersArray[5];
     }
+
+    public boolean isDiscardUserinput() {
+        return discardUserinput;
+    }
+
+    public void setDiscardUserinput(boolean discardUserinput) {
+        this.discardUserinput = discardUserinput;
+    }
 }

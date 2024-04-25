@@ -24,7 +24,7 @@ public class MultiplayerQuizServer extends MultiplayerServer {
             String[] answerArray = answer.split(";");
             int answerIndex = Integer.parseInt(answerArray[0]);
             int answerId = Integer.parseInt(answerArray[1]);
-            boolean outcome = currentAnswerList.get(answerIndex).isRight();
+            boolean outcome = getCurrentAnswerList().get(answerIndex).isRight();
 
             String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.toString() + outcome;
             sendMessageToClient(outgoingMsg, username);

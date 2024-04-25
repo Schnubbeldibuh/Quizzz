@@ -19,12 +19,12 @@ public abstract class MultiplayerServer {
     private final int port;
     private final Map<String, ClientHandler> clients = new HashMap<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    protected final Set<String> userList = new HashSet<>();
+    private final Set<String> userList = new HashSet<>();
     private final QuestionRepository questionRepository;
     private final String gameMode;
-    protected List<Question> questionList;
-    protected int questionIndex;
-    protected List<Question.Answer> currentAnswerList;
+    private List<Question> questionList;
+    private int questionIndex;
+    private List<Question.Answer> currentAnswerList;
     private GameState gameState = GameState.CREATED;
     private ServerSocket serverSocket;
 
@@ -39,27 +39,16 @@ public abstract class MultiplayerServer {
     protected abstract void processClientMessage(String username, String msg);
     protected abstract void sendStatsToAllClients();
 
-    protected void startPlaying() {
-        initializeRound();
-        try {
-            questionList = questionRepository.getQuestionList(8);
-        } catch (CouldNotAccessFileException e) {
-            System.out.println("Das Spiel konnte nicht gestartet werden.");
-            System.out.println("Möglicherweise sind die Gamedaten kompromittiert");
-            shutdown();
-            return;
-        }
-        questionIndex = -1;
-        sendMessageToAllClients(CommunicationPrefixes.START_GAME.toString());
-        Collections.shuffle(questionList);
-        playQuestion();
+    protected void sendMessageToAllClients(String msg) {
+        clients.values()
+                .forEach(c -> c.sendMessage(msg));
     }
 
     protected void sendMessageToClient(String msg, String username) {
         clients.get(username).sendMessage(msg);
     }
 
-    void startJoiningPhase() {
+    private void startJoiningPhase() {
         checkIfShutDown();
         executor.submit(this::joiningPhase);
     }
@@ -147,7 +136,7 @@ public abstract class MultiplayerServer {
         }
     }
 
-    protected void startPlaying() {
+    private void startPlaying() {
         initializeRound();
         try {
             questionList = questionRepository.getQuestionList(1);
@@ -216,11 +205,23 @@ public abstract class MultiplayerServer {
                 .forEach(ClientHandler::closeConnection);
     }
 
-    public boolean isShutdown() {
+    protected boolean isShutdown() {
         return gameState == GameState.SHUTDOWN;
+    }
+
+    protected void clearUserList() {
+        userList.clear();
     }
 
     protected Set<String> getUsernames() {
         return new HashSet<>(clients.keySet());
+    }
+
+    protected int getQuestionIndex() {
+        return questionIndex;
+    }
+
+    protected List<Question.Answer> getCurrentAnswerList() {
+        return currentAnswerList;
     }
 }

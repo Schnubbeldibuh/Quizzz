@@ -35,7 +35,7 @@ public class MultiplayerQuizClient extends MultiplayerClient {
             throw new ExitException();
         }
 
-        if (discardUserinput) {
+        if (isDiscardUserinput()) {
             return false;
         }
 
@@ -57,7 +57,7 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 break;
 
             case ANSWER_EVALUATION:
-                discardUserinput = true;
+                setDiscardUserinput(true);
 
                 boolean evaluation =
                         Boolean.parseBoolean(input.substring(CommunicationPrefixes.ANSWER_EVALUATION.getLength()));
@@ -71,7 +71,7 @@ public class MultiplayerQuizClient extends MultiplayerClient {
                 break;
 
             case NEXT_QUESTION:
-                discardUserinput = false;
+                setDiscardUserinput(false);
                 showQuestion(input);
                 break;
 
@@ -92,7 +92,7 @@ public class MultiplayerQuizClient extends MultiplayerClient {
 
     @Override
     protected boolean processUserInput(String input) {
-        if (discardUserinput) {
+        if (isDiscardUserinput()) {
             return false;
         }
 

@@ -35,7 +35,7 @@ public class MultiplayerQuickClient extends MultiplayerClient {
         if (input.equalsIgnoreCase("exit")) {
             throw new ExitException();
         }
-        if (discardUserinput) {
+        if (isDiscardUserinput()) {
             return false;
         }
 
@@ -57,7 +57,7 @@ public class MultiplayerQuickClient extends MultiplayerClient {
                 return true;
 
             case ANSWER_EVALUATION:
-                discardUserinput = true;
+                setDiscardUserinput(true);
 
                 boolean evaluation =
                         Boolean.parseBoolean(input.substring(CommunicationPrefixes.ANSWER_EVALUATION.getLength()));
@@ -71,7 +71,7 @@ public class MultiplayerQuickClient extends MultiplayerClient {
                 return true;
 
             case RIGHT_ANSWER:
-                discardUserinput = true;
+                setDiscardUserinput(true);
                 System.out.println(
                         input.substring(CommunicationPrefixes.RIGHT_ANSWER.getLength()) + " hat richtig geantwortet.");
 
@@ -79,7 +79,7 @@ public class MultiplayerQuickClient extends MultiplayerClient {
 
             case NEXT_QUESTION:
                 showQuestion(input);
-                discardUserinput = false;
+                setDiscardUserinput(false);
                 return true;
 
             case STATS_TRANSFER:
@@ -98,7 +98,7 @@ public class MultiplayerQuickClient extends MultiplayerClient {
     }
 
     protected boolean processUserInput(String input) {
-        if (discardUserinput) {
+        if (isDiscardUserinput()) {
             return true;
         }
 

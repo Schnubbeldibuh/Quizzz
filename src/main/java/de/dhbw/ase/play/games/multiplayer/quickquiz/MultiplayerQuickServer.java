@@ -25,11 +25,11 @@ public class MultiplayerQuickServer extends MultiplayerServer {
             int answerIndex = Integer.parseInt(answerArray[0]);
             int answerId = Integer.parseInt(answerArray[1]);
 
-            if (questionIndex > answerId) {
+            if (getQuestionIndex() > answerId) {
                 return;
             }
 
-            boolean outcome = currentAnswerList.get(answerIndex).isRight();
+            boolean outcome = getCurrentAnswerList().get(answerIndex).isRight();
             String outgoingMsg = CommunicationPrefixes.ANSWER_EVALUATION.toString() + outcome;
             sendMessageToClient(outgoingMsg, username);
 
@@ -39,7 +39,7 @@ public class MultiplayerQuickServer extends MultiplayerServer {
                 if (firstAnswer) {
                     pointsMap.get(username).increaseFastesAnswer();
                 }
-                userList.clear();
+                clearUserList();
             } else {
                 firstAnswer = false;
                 pointsMap.get(username).increaseWrongAnswer();
