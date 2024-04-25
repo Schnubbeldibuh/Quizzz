@@ -78,7 +78,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
             }
 
             System.out.println("Diese Antwort war leider Falsch.");
-            Question.Answer rightAnswer = questionList.get(i).getAnswerList()
+            Question.Answer rightAnswer = questionList.get(i).answerList()
                     .stream()
                     .filter(Question.Answer::isRight)
                     .findFirst()

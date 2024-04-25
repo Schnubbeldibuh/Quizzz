@@ -195,13 +195,13 @@ public abstract class MultiplayerServer {
         }
 
         Question question = questionList.get(questionIndex);
-        currentAnswerList = question.getAnswerList();
+        currentAnswerList = question.answerList();
 
         Collections.shuffle(currentAnswerList);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(CommunicationPrefixes.NEXT_QUESTION);
-        stringBuilder.append(question.getQuestion());
+        stringBuilder.append(question.question());
         currentAnswerList.forEach(a -> {
                     stringBuilder.append(";");
                     stringBuilder.append(a.answer());
