@@ -118,6 +118,10 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
             throw new CouldNotAccessFileException();
         }
 
+        setbufferedFileContent(questionObjects);
+    }
+
+    private void setbufferedFileContent(ArrayList<QuestionObject> questionObjects) {
         fileContentAsString.clear();
         fileContent.clear();
         fileContentAsQuestionObject.clear();
@@ -136,8 +140,14 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         QuestionRepositoryFilebased that = (QuestionRepositoryFilebased) o;
         return Objects.equals(filePath, that.filePath);
     }
