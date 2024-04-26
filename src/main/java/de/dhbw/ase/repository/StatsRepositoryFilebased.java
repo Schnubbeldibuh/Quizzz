@@ -7,6 +7,7 @@ import java.util.function.Function;
 public class StatsRepositoryFilebased implements StatsRepository {
 
     private static final Map<String, StatsRepositoryFilebased> INSTANCES = new HashMap<>();
+
     public static StatsRepositoryFilebased getInstance(String filePath) {
         if (INSTANCES.containsKey(filePath)) {
             return INSTANCES.get(filePath);
@@ -27,8 +28,9 @@ public class StatsRepositoryFilebased implements StatsRepository {
     public <T> List<T> readStats(Function<String, T> lineMapper) throws CouldNotAccessFileException {
         try (BufferedReader bufferedReader =
                      new BufferedReader(new FileReader(filePath))) {
-            return bufferedReader.lines()
-                    .filter((l) -> !l.isEmpty())
+            return bufferedReader
+                    .lines()
+                    .filter(this::checkIfLineIsEmpty)
                     .map(lineMapper)
                     .toList();
         } catch (FileNotFoundException e) {
@@ -36,6 +38,10 @@ public class StatsRepositoryFilebased implements StatsRepository {
         } catch (IOException e) {
             throw new CouldNotAccessFileException();
         }
+    }
+
+    private boolean checkIfLineIsEmpty(String l) {
+        return !l.isEmpty();
     }
 
 

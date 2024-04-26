@@ -39,7 +39,7 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
         fakeAnswers.add(new Question.Answer("Falsch", false));
         fakeAnswers.add(new Question.Answer("Falsch", false));
         Question fakeQuestion = new Question(fakeAnswers,
-                "Es gab nicht genug Fragen zu diesem Speilmodus. " +
+                "Es gab nicht genug Fragen zu diesem Spielmodus. " +
                         "Also wähle die Richtige Antwort:");
 
         Collections.shuffle(questions);
@@ -90,7 +90,7 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
         } else if (fileContentAsString.isEmpty()) {
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
                 bufferedReader.lines()
-                        .filter(l -> !l.isEmpty())
+                        .filter(this::checkIfLineIsEmpty)
                         .forEach(fileContentAsString::add);
 
             } catch (IOException e) {
@@ -98,6 +98,10 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
             }
         }
         return Collections.unmodifiableList(fileContentAsString);
+    }
+
+    private boolean checkIfLineIsEmpty(String l) {
+        return !l.isEmpty();
     }
 
     @Override
