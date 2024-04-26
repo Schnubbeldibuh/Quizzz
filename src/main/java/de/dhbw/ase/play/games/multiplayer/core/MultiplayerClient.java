@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -19,7 +18,7 @@ public abstract class MultiplayerClient {
     private final String username;
     private final ExecutorService listeningExecutor = Executors.newFixedThreadPool(2);
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    protected final List<CommunicationPrefixes> validServerMessages = new ArrayList<>();
+    private final List<CommunicationPrefixes> validServerMessages;
     private final String gameMode;
     private final UserIn sc;
     private boolean discardUserinput;
@@ -29,9 +28,10 @@ public abstract class MultiplayerClient {
     protected String questionIndex;
 
 
-    public MultiplayerClient(UserIn sc, String username, String gameMode) {
+    public MultiplayerClient(UserIn sc, String username, List<CommunicationPrefixes> validServerMessages, String gameMode) {
         this.username = username;
         this.sc = sc;
+        this.validServerMessages = validServerMessages;
         this.gameMode = gameMode;
     }
 

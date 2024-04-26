@@ -17,17 +17,15 @@ public class MultiplayerQuickClient extends MultiplayerClient {
     protected final StatsRepository statsRepository;
     protected List<PlayerStatsMPQuickObject> stats = new ArrayList<>();
 
-    public MultiplayerQuickClient(UserIn sc, String username, StatsRepository statsRepository, String gameMode) {
-        super(sc, username, gameMode);
+    public MultiplayerQuickClient(UserIn sc,
+                                  String username,
+                                  StatsRepository statsRepository,
+                                  List<CommunicationPrefixes> validServerMessages,
+                                  String gameMode) {
+        super(sc, username, validServerMessages, gameMode);
         this.statsRepository = statsRepository;
 
-        validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
-        validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
-        validServerMessages.add(CommunicationPrefixes.ROUND_FINISHED);
-        validServerMessages.add(CommunicationPrefixes.START_GAME);
-        validServerMessages.add(CommunicationPrefixes.RIGHT_ANSWER);
-        validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER_FINISHED);
-        validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER);
+
     }
 
     @Override

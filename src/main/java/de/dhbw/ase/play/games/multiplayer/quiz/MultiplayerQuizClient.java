@@ -17,16 +17,13 @@ public class MultiplayerQuizClient extends MultiplayerClient {
     protected final StatsRepository statsRepository;
     protected List<PlayerStatsMPObject> stats = new ArrayList<>();
 
-    public MultiplayerQuizClient(UserIn sc, String username, StatsRepository statsRepository, String gameMode) {
-        super(sc, username, gameMode);
+    public MultiplayerQuizClient(UserIn sc,
+                                 String username,
+                                 StatsRepository statsRepository,
+                                 List<CommunicationPrefixes> validServerMessages,
+                                 String gameMode) {
+        super(sc, username, validServerMessages, gameMode);
         this.statsRepository = statsRepository;
-
-        validServerMessages.add(CommunicationPrefixes.ANSWER_EVALUATION);
-        validServerMessages.add(CommunicationPrefixes.NEXT_QUESTION);
-        validServerMessages.add(CommunicationPrefixes.ROUND_FINISHED);
-        validServerMessages.add(CommunicationPrefixes.START_GAME);
-        validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER_FINISHED);
-        validServerMessages.add(CommunicationPrefixes.STATS_TRANSFER);
     }
 
     @Override
