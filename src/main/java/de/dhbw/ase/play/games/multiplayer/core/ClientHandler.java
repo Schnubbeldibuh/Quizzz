@@ -61,8 +61,10 @@ class ClientHandler implements Runnable {
 
             do {
                 line = in.readLine();
-                if (line == null)
+                if (line == null) {
                     break;
+                }
+
                 server.processClientMessage(getUsername(), line);
             } while (true);
             socket.close();
@@ -95,7 +97,9 @@ class ClientHandler implements Runnable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj.getClass() != getClass()) return false;
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
 
         ClientHandler o = (ClientHandler) obj;
         return o.getUsername().equals(getUsername());

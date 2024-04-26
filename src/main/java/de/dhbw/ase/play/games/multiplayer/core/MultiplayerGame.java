@@ -63,8 +63,9 @@ public class MultiplayerGame extends Game {
                 exit();
                 return SelectedMenu.MenuSelection.BACK;
             }
-            if (host)
+            if (host) {
                 server.advanceGamestate();
+            }
 
         } while (contine && askUserForRetry());
 
@@ -169,8 +170,10 @@ public class MultiplayerGame extends Game {
 
     private ServerInfos parseServerInfos(String input) {
         String[] split = input.split(":");
-        if (split.length != 2)
+        if (split.length != 2) {
             return null;
+        }
+
         int port;
         try {
             port = Integer.parseInt(split[1]);

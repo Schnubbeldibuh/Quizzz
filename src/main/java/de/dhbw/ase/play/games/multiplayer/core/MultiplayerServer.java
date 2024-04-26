@@ -40,8 +40,9 @@ public abstract class MultiplayerServer {
     protected abstract void sendStatsToAllClients();
 
     protected void sendMessageToAllClients(String msg) {
-        clients.values()
-                .forEach(c -> c.sendMessage(msg));
+        for (ClientHandler c : clients.values()) {
+            c.sendMessage(msg);
+        }
     }
 
     protected void sendMessageToClient(String msg, String username) {
@@ -84,8 +85,10 @@ public abstract class MultiplayerServer {
                 executor.submit(new ClientHandler(socket, this, gameMode));
             }
         } catch (SocketException e) {
-            if (serverSocket != null && serverSocket.isClosed())
+            if (serverSocket != null && serverSocket.isClosed()) {
                 return null;
+            }
+
             e.printStackTrace();
             System.out.println("Der Server ist abgestürzt :(");
             System.out.println("Bitte erneut versuchen.");
@@ -101,12 +104,14 @@ public abstract class MultiplayerServer {
 
     boolean addClient(ClientHandler client, String username) {
         checkIfShutDown();
-        if (username == null)
+        if (username == null) {
             return false;
+        }
 
         synchronized (clients) {
-            if (clients.containsKey(username))
+            if (clients.containsKey(username)) {
                 return false;
+            }
             clients.put(username, client);
         }
         return true;
@@ -114,8 +119,9 @@ public abstract class MultiplayerServer {
 
     protected void removeClient(String username) {
         checkIfShutDown();
-        if (username == null)
+        if (username == null) {
             return;
+        }
 
         synchronized (clients) {
             clients.remove(username);
@@ -193,16 +199,20 @@ public abstract class MultiplayerServer {
     }
 
     void shutdown() {
-        if (gameState == GameState.SHUTDOWN)
+        if (gameState == GameState.SHUTDOWN) {
             return;
+        }
+
         gameState = GameState.SHUTDOWN;
         try {
             serverSocket.close();
         } catch (IOException ignored) {
         }
         executor.shutdownNow();
-        clients.values()
-                .forEach(ClientHandler::closeConnection);
+
+        for (ClientHandler c : clients.values()) {
+            c.closeConnection();
+        }
     }
 
     protected boolean isShutdown() {

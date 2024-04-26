@@ -22,7 +22,7 @@ public abstract class MultiplayerClient {
     protected final List<CommunicationPrefixes> validServerMessages = new ArrayList<>();
     private final String gameMode;
     private final UserIn sc;
-    protected boolean discardUserinput;
+    private boolean discardUserinput;
     private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
