@@ -30,13 +30,13 @@ public abstract class Submenu implements Startable {
 
             SelectedMenu selection = scanUntilValidInput();
 
-            if (selection.menuSelection() == SelectedMenu.MenuSelection.SUBMENU)
+            if (selection.menuSelection() == SelectedMenu.MenuSelection.SUBMENU) {
                 // executing Submenu
                 submenuSelection = selection.startable().start();
-            else
+            } else {
                 // if the user does not select a startable he exits the game or goes back to the  upper menu
                 return selection.menuSelection();
-
+            }
         } while (submenuSelection != SelectedMenu.MenuSelection.EXIT);
         return submenuSelection;
     }
@@ -50,13 +50,13 @@ public abstract class Submenu implements Startable {
 
         SelectedMenu selection = scanUntilValidInput();
 
-        if (selection.menuSelection() == SelectedMenu.MenuSelection.SUBMENU)
+        if (selection.menuSelection() == SelectedMenu.MenuSelection.SUBMENU) {
             // executing Submenu
             submenuSelection = selection.startable().start();
-        else
+        } else {
             // if the user does not select a startable he exits the game or goes back to the  upper menu
             return selection.menuSelection();
-
+        }
         return submenuSelection;
     }
 
