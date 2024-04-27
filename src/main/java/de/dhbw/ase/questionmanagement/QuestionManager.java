@@ -49,6 +49,9 @@ public class QuestionManager extends Submenu {
                 return SelectedMenu.MenuSelection.BACK;
             }
             menuSelection = startOnlyOnes();
+            if (menuSelection == SelectedMenu.MenuSelection.BACK) {
+                return SelectedMenu.MenuSelection.BACK;
+            }
         } while (menuSelection != SelectedMenu.MenuSelection.EXIT);
 
         return menuSelection;
