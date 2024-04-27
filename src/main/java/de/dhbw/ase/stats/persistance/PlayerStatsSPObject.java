@@ -24,15 +24,15 @@ public class PlayerStatsSPObject extends StatsObject implements Comparable<Playe
     }
 
     public void add(PlayerStatsSPObject playerStatsSPObject) {
-        this.wrongAnswers += playerStatsSPObject.wrongAnswers;
-        this.rightAnswers += playerStatsSPObject.rightAnswers;
-
         int totalQuestionsBefore = wrongAnswers + rightAnswers;
         int totalQuestionsAfter = playerStatsSPObject.wrongAnswers + playerStatsSPObject.rightAnswers;
         this.averageAnswerTime =
                 ((totalQuestionsBefore * averageAnswerTime)
                         + (totalQuestionsAfter * playerStatsSPObject.averageAnswerTime))
                 / (totalQuestionsBefore + totalQuestionsAfter);
+
+        this.wrongAnswers += playerStatsSPObject.wrongAnswers;
+        this.rightAnswers += playerStatsSPObject.rightAnswers;
     }
 
     @Override

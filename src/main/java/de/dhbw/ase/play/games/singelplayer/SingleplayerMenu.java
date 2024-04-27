@@ -36,8 +36,11 @@ public class SingleplayerMenu extends Submenu {
                 StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_FQ))));
 
         map.put("3", new SelectedMenu(new SingleplayerCategoryMenu(sc)));
-        map.put("4", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
-        map.put("5", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
+        map.put("4", new SelectedMenu(new SurvivalQuiz(sc,
+                QuestionRepositoryFilebased.getInstance(Quizzz.FILE_S),
+                StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_S))));
+        map.put("5", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
+        map.put("6", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
         return map;
     }
@@ -48,7 +51,8 @@ public class SingleplayerMenu extends Submenu {
         System.out.println("1 - Wer wird Millionär?");
         System.out.println("2 - Fragenfinder");
         System.out.println("3 - Kategorien");
-        System.out.println("4 - Zurück");
-        System.out.println("5 - Exit");
+        System.out.println("4 - Survival");
+        System.out.println("5 - Zurück");
+        System.out.println("6 - Exit");
     }
 }

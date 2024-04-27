@@ -60,6 +60,10 @@ public class StatsMenu extends Submenu {
                 new ShowStatsSP(
                         StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_SP_FOOD))
         ));
+        map.put("11", new SelectedMenu(
+                new ShowStatsS(
+                        StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_S))
+        ));
         map.put("11", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
         map.put("12", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
@@ -79,7 +83,8 @@ public class StatsMenu extends Submenu {
         System.out.println("8 - Kategorie Technologie und Internet");
         System.out.println("9 - Kategorie Sport");
         System.out.println("10 - Kategorie Essen und Trinken");
-        System.out.println("11 - Zurück");
-        System.out.println("12 - Exit");
+        System.out.println("11 - Survival");
+        System.out.println("12 - Zurück");
+        System.out.println("13 - Exit");
     }
 }

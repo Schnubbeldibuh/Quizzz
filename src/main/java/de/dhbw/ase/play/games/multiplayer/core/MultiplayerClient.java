@@ -68,7 +68,7 @@ public abstract class MultiplayerClient {
 
     protected boolean start() throws ExitException {
         CompletionService<Boolean> threadPool = new ExecutorCompletionService<>(listeningExecutor);
-        threadPool.submit(this::litenToClient);
+        threadPool.submit(this::listenToClient);
 
         threadPool.submit(this::listenToServer);
 
@@ -115,7 +115,7 @@ public abstract class MultiplayerClient {
         return true;
     }
 
-    private boolean litenToClient() throws ExitException, InterruptedException, ExecutionException {
+    private boolean listenToClient() throws ExitException, InterruptedException, ExecutionException {
         Future<Boolean> submit;
         do {
             String input = sc.waitForNextLine(this);

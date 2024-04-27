@@ -59,7 +59,6 @@ public class QuestionManager extends Submenu {
 
     @Override
     protected void showOptions() {
-
         System.out.println();
         System.out.println("Möchtest du eine Frage hinzufügen oder eine bestehende Frage bearbeiten?");
         System.out.println("1 - Hinzufügen");

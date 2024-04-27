@@ -52,6 +52,12 @@ public abstract class SingleplayerGame extends Game {
     }
 
     protected boolean playQuestion(Question question) throws ExitException {
+        List<Question.Answer> answerList = showQuestion(question);
+        int answer = scanUntilValidInput();
+        return answerList.get(answer).isRight();
+    }
+
+    protected List<Question.Answer> showQuestion(Question question) {
         List<Question.Answer> answerList = new ArrayList<>(question.getAnswerList());
         Collections.shuffle(answerList);
         System.out.println();
@@ -60,8 +66,7 @@ public abstract class SingleplayerGame extends Game {
         System.out.println("B: " + answerList.get(1).answer());
         System.out.println("C: " + answerList.get(2).answer());
         System.out.println("D: " + answerList.get(3).answer());
-        int answer = scanUntilValidInput();
-        return answerList.get(answer).isRight();
+        return answerList;
     }
 
     protected int scanUntilValidInput() throws ExitException {
