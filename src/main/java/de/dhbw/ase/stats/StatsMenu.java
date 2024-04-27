@@ -64,8 +64,8 @@ public class StatsMenu extends Submenu {
                 new ShowStatsS(
                         StatsRepositoryFilebased.getInstance(Quizzz.FILE_STATS_S))
         ));
-        map.put("11", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
-        map.put("12", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
+        map.put("12", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
+        map.put("13", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
         return map;
     }
