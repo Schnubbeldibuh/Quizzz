@@ -4,9 +4,10 @@ import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.play.games.Game;
 import de.dhbw.ase.repository.CouldNotAccessFileException;
-import de.dhbw.ase.repository.Question;
+import de.dhbw.ase.repository.question.Question;
 import de.dhbw.ase.user.in.UserIn;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,10 +52,10 @@ public abstract class SingleplayerGame extends Game {
     }
 
     protected boolean playQuestion(Question question) throws ExitException {
-        List<Question.Answer> answerList = question.answerList();
+        List<Question.Answer> answerList = new ArrayList<>(question.getAnswerList());
         Collections.shuffle(answerList);
         System.out.println();
-        System.out.println(question.question());
+        System.out.println(question.getQuestion());
         System.out.println("A: " + answerList.get(0).answer());
         System.out.println("B: " + answerList.get(1).answer());
         System.out.println("C: " + answerList.get(2).answer());

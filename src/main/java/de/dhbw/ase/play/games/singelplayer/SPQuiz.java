@@ -2,7 +2,7 @@ package de.dhbw.ase.play.games.singelplayer;
 
 import de.dhbw.ase.play.games.ExitException;
 import de.dhbw.ase.repository.CouldNotAccessFileException;
-import de.dhbw.ase.repository.Question;
+import de.dhbw.ase.repository.question.Question;
 import de.dhbw.ase.repository.QuestionRepository;
 import de.dhbw.ase.repository.StatsRepository;
 import de.dhbw.ase.stats.persistance.PlayerStatsSPObject;
@@ -53,7 +53,8 @@ public class SPQuiz extends SingleplayerGame {
             System.out.println("Diese Antwort war leider Falsch.");
             totalAnswerTime += Math.abs(afterQuestion - beforeQuestion);
 
-            Question.Answer rightAnswer = questionList.get(i).answerList()
+            Question.Answer rightAnswer = questionList.get(i)
+                    .getAnswerList()
                     .stream()
                     .filter(Question.Answer::isRight)
                     .findFirst()

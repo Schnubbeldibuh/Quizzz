@@ -2,7 +2,7 @@ package de.dhbw.ase.play.games.multiplayer.core;
 
 import de.dhbw.ase.play.games.multiplayer.CommunicationPrefixes;
 import de.dhbw.ase.repository.CouldNotAccessFileException;
-import de.dhbw.ase.repository.Question;
+import de.dhbw.ase.repository.question.Question;
 import de.dhbw.ase.repository.QuestionRepository;
 
 import java.io.IOException;
@@ -173,13 +173,13 @@ public abstract class MultiplayerServer {
         }
 
         Question question = questionList.get(questionIndex);
-        currentAnswerList = question.answerList();
+        currentAnswerList = new ArrayList<>(question.getAnswerList());
 
         Collections.shuffle(currentAnswerList);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(CommunicationPrefixes.NEXT_QUESTION);
-        stringBuilder.append(question.question());
+        stringBuilder.append(question.getQuestion());
         currentAnswerList.forEach(a -> {
             stringBuilder.append(";");
             stringBuilder.append(a.answer());

@@ -4,9 +4,11 @@ import de.dhbw.ase.SelectedMenu;
 import de.dhbw.ase.Submenu;
 import de.dhbw.ase.repository.CouldNotAccessFileException;
 import de.dhbw.ase.repository.QuestionRepository;
+import de.dhbw.ase.repository.question.Question;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class QuestionManager extends Submenu {
@@ -35,10 +37,13 @@ public class QuestionManager extends Submenu {
         SelectedMenu.MenuSelection menuSelection;
         do {
             try {
-                questionRepository.readCompleteFileAsString()
-                        .stream()
-                        .map(this::convertString)
-                        .forEach(System.out::println);
+                List<Question> questions = questionRepository.readCompleteFile();
+
+                for (int i = 0; i < questions.size(); i++) {
+                    String string = convertToString(i, questions.get(i));
+                    System.out.println(string);
+                }
+
             } catch (CouldNotAccessFileException e) {
                 System.out.println("Das System kann nicht auf die Fragen zugreifen");
                 return SelectedMenu.MenuSelection.BACK;
@@ -60,7 +65,7 @@ public class QuestionManager extends Submenu {
         System.out.println("4 - Exit");
     }
 
-    private String convertString(String input) {
-        return input.replaceAll(";", " - ");
+    private String convertToString(int i, Question question) {
+        return i + " - " + question.toString();
     }
 }

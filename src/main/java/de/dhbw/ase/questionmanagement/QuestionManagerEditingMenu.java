@@ -61,7 +61,7 @@ public class QuestionManagerEditingMenu extends Submenu {
         }
 
         try {
-            if ((questionNumber >= 0) && (questionNumber < questionRepository.readCompleteFileAsString().size())) {
+            if ((questionNumber >= 0) && (questionNumber < questionRepository.readCompleteFile().size())) {
                 return true;
             }
         } catch (CouldNotAccessFileException ignored) {
