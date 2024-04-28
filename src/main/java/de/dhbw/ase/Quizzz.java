@@ -12,6 +12,7 @@ public class Quizzz {
 
     public static String FILE_FQ2 = "src/main/resources/FQ2.csv";
     public static String FILE_S = "src/main/resources/S.csv";
+    public static String FILE_STORY = "src/main/resources/Story.csv";
 
     public static String FILE_MP = "src/main/resources/MP.csv";
 
@@ -25,6 +26,7 @@ public class Quizzz {
     public static String FILE_STATS_WWM = "src/main/resources/stats/wwmStats.csv";
     public static String FILE_STATS_FQ = "src/main/resources/stats/fqStats.csv";
     public static String FILE_STATS_S = "src/main/resources/stats/sStats.csv";
+    public static String FILE_STATS_STORY = "src/main/resources/stats/storyStats.csv";
 
     public static String FILE_STATS_MP = "src/main/resources/stats/mpStats.csv";
     public static String FILE_STATS_MP_QUICK = "src/main/resources/stats/mpQuickStats.csv";

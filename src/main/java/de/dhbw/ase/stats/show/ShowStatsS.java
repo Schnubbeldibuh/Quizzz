@@ -16,7 +16,7 @@ public class ShowStatsS extends ShowStats<PlayerStatsSurvivalObject>{
 
     @Override
     protected void displayStats(PlayerStatsSurvivalObject state) {
-        System.out.printf("| %-14s | %-13s | %-14s | %-19s | %-20s | %-18s |%n",
+        System.out.printf("| %14s | %13s | %14s | %19s | %20s | %18s |%n",
                 state.getUsername(),
                 state.getRightAnswers(),
                 state.getWrongAnswers(),

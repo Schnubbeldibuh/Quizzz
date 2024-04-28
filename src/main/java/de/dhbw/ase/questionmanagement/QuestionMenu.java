@@ -41,8 +41,10 @@ public class QuestionMenu extends Submenu {
                 new QuestionManager(sc, QuestionRepositoryFilebased.getInstance(Quizzz.FILE_FQ2))));
         map.put("11", new SelectedMenu(
                 new QuestionManager(sc, QuestionRepositoryFilebased.getInstance(Quizzz.FILE_S))));
-        map.put("12", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
-        map.put("13", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
+        map.put("12", new SelectedMenu(
+                new QuestionManager(sc, QuestionRepositoryFilebased.getInstance(Quizzz.FILE_STORY))));
+        map.put("13", new SelectedMenu(SelectedMenu.MenuSelection.BACK));
+        map.put("14", new SelectedMenu(SelectedMenu.MenuSelection.EXIT));
 
         return map;
     }
@@ -61,7 +63,8 @@ public class QuestionMenu extends Submenu {
         System.out.println("9 - Kategorie Essen und Trinken");
         System.out.println("10 - Fragenfinder");
         System.out.println("11 - Survival");
-        System.out.println("12 - Zurück");
-        System.out.println("13 - Exit");
+        System.out.println("12 - Story");
+        System.out.println("13 - Zurück");
+        System.out.println("14 - Exit");
     }
 }
