@@ -23,9 +23,9 @@ public class ShowStatsStory extends ShowStats<PlayerStatsStoryObject>{
 
     @Override
     protected void displayFittingHeader() {
-        System.out.printf("----------------------------------------------------------------------------%n");
+        System.out.printf("------------------------------------------------------%n");
         System.out.printf("| %-14s | %-22s | %-18s |%n",
                 "USERNAME", "HIGHEST ACHIEVED LEVEL", "TOTAL PLAYED GAMES");
-        System.out.printf("----------------------------------------------------------------------------%n");
+        System.out.printf("------------------------------------------------------%n");
     }
 }
