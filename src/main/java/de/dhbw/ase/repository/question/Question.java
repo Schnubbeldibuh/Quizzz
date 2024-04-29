@@ -117,10 +117,10 @@ public class Question {
         @Override
         public int compareTo(Answer o) {
             if (isRight && !o.isRight) {
-                return 1;
+                return -1;
             }
             if (!isRight && o.isRight) {
-                return -1;
+                return 1;
             }
 
             return answer.compareTo(o.answer);
