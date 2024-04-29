@@ -1,6 +1,7 @@
-package de.dhbw.ase.play.games.singelplayer;
+package de.dhbw.ase.play.games.singelplayer.wwm;
 
 import de.dhbw.ase.play.games.ExitException;
+import de.dhbw.ase.play.games.singelplayer.SingleplayerGame;
 import de.dhbw.ase.repository.CouldNotAccessFileException;
 import de.dhbw.ase.repository.question.Question;
 import de.dhbw.ase.repository.QuestionRepository;
@@ -21,6 +22,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
     private final QuestionRepository expertRepo;
     private final StatsRepository statsRepository;
     private PlayerStatsWWMObject playerStatsWWMObject;
+    private JokerMenu jokerMenu;
 
     private final UserIn sc;
 
@@ -46,10 +48,13 @@ public class WerWirdMillionaer extends SingleplayerGame {
 
         System.out.println();
         System.out.println("------------- Neue Runde WWM -------------");
+        System.out.println();
+        System.out.println("Um einen Joker zu verwenden, kann in jeder Runde <Joker> eingegeben werden.");
 
         for (int i = 0; i < questionList.size(); i++) {
             WWMLevels currentLevel = WWMLevels.values()[i];
             showQuestionLevel(i);
+            jokerMenu.setAnswerLists(questionList.get(i).getAnswerList());
             boolean answerEvaluation = playQuestion(questionList.get(i));
             if (answerEvaluation) {
                 System.out.println("Richtige Antwort!");
@@ -108,6 +113,32 @@ public class WerWirdMillionaer extends SingleplayerGame {
                 WWMLevels.WON.getPoints(),
                 WWMLevels.WON.getMoneyWon(),
                 WWMLevels.WON.getRightAnswers());
+    }
+
+    @Override
+    protected int scanUntilValidInput() throws ExitException {
+        int selection;
+        do {
+            String input = sc.waitForNextLine(this).toLowerCase();
+            if (input.equalsIgnoreCase("exit")) {
+                throw new ExitException();
+            }
+            if (input.equalsIgnoreCase("joker")) {
+                jokerMenu.start();
+            }
+            if (input.length() == 1) {
+                selection = switch (input.charAt(0)) {
+                    case 'a' -> 0;
+                    case 'b' -> 1;
+                    case 'c' -> 2;
+                    case 'd' -> 3;
+                    default -> -1;
+                };
+                if (selection != -1)
+                    return selection;
+            }
+            System.out.println("Invalide Eingabe. Bitte erneut antworten.");
+        } while (true);
     }
 
     private List<Question> generateQuestionList() throws CouldNotAccessFileException {

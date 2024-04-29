@@ -19,7 +19,9 @@ public class FindQuestionsQuiz extends SingleplayerGame {
 
     private PlayerStatsFQObject playerStatsFQObject;
 
-    public FindQuestionsQuiz(UserIn sc, QuestionRepository questionRepository, StatsRepository statsRepository) {
+    public FindQuestionsQuiz(UserIn sc,
+                             QuestionRepository questionRepository,
+                             StatsRepository statsRepository) {
         super(sc);
         this.questionRepository = questionRepository;
         this.statsRepository = statsRepository;

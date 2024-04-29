@@ -12,7 +12,8 @@ public class SPRandom extends SingleplayerGame {
     private final List<SPQuiz> spGamesList;
     private SPQuiz randomGame;
 
-    public SPRandom(UserIn sc, List<SPQuiz> spGamesList) {
+    public SPRandom(UserIn sc,
+                    List<SPQuiz> spGamesList) {
         super(sc);
         this.spGamesList = spGamesList;
     }
