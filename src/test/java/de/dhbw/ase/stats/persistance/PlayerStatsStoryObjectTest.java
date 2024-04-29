@@ -2,8 +2,14 @@ package de.dhbw.ase.stats.persistance;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class PlayerStatsStoryObjectTest {
 
@@ -47,18 +53,30 @@ class PlayerStatsStoryObjectTest {
     }
 
     @Test
-    void compareTo() {
-    }
-
-    @Test
     void testToString() {
+        PlayerStatsStoryObject playerStatsStoryObject1 = new PlayerStatsStoryObject("test", 1, 2);
+
+        String toString = playerStatsStoryObject1.toString();
+        Assertions.assertEquals("test;1;2", toString);
     }
 
-    @Test
-    void getHighestAchievedLevel() {
+    @ParameterizedTest
+    @MethodSource("compareToValues")
+    void compareTo(int highestAchievedLevel1, int highestAchievedLevel2, int totalPlayedGames1, int totalPlayedGames2, int expected) {
+        PlayerStatsStoryObject playerStatsStoryObject1 = new PlayerStatsStoryObject("test", highestAchievedLevel1, totalPlayedGames1);
+        PlayerStatsStoryObject playerStatsStoryObject2 = new PlayerStatsStoryObject("test", highestAchievedLevel2, totalPlayedGames2);
+
+        int i = playerStatsStoryObject1.compareTo(playerStatsStoryObject2);
+        Assertions.assertEquals(expected, i);
     }
 
-    @Test
-    void getTotalPlayedGames() {
+    private static Stream<Arguments> compareToValues() {
+        return Stream.of(
+                arguments(3, 2, 2, 3, 1),
+                arguments(1, 2, 2, 3, -1),
+                arguments(2, 2, 3, 2, 1),
+                arguments(2, 2, 2, 3, -1),
+                arguments(2, 2, 4, 4, 0)
+        );
     }
 }
