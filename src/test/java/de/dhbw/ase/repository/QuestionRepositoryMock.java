@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class QuestionRepositoryMock implements QuestionRepository {
 
-    public List<Question> stats;
+    public List<Question> stats = new ArrayList<>();
     public List<Question> savedStats;
 
 
