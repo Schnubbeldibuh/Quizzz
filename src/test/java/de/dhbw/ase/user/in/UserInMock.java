@@ -22,7 +22,9 @@ public class UserInMock implements UserIn {
 
     @Override
     public String getLastLine(Object o) {
-        return inputs.poll();
+        String poll = inputs.poll();
+        System.out.println(poll);
+        return poll;
     }
 
     @Override
