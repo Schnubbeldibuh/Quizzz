@@ -41,7 +41,7 @@ public abstract class Submenu implements Startable {
         return submenuSelection;
     }
 
-    protected SelectedMenu.MenuSelection startOnlyOnes() {
+    protected SelectedMenu.MenuSelection startOnlyOnce() {
         fillSelectionMap();
 
         SelectedMenu.MenuSelection submenuSelection;

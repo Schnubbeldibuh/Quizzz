@@ -45,6 +45,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
     @Override
     protected void startGame() throws ExitException, CouldNotAccessFileException {
         List<Question> questionList = generateQuestionList();
+        jokerMenu = new JokerMenu(sc);
 
         System.out.println();
         System.out.println("------------- Neue Runde WWM -------------");
@@ -61,6 +62,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
                 System.out.println();
                 System.out.println("1 - Weiterspielen");
                 System.out.println("2 - Geld nehmen um die Anzeigenhauptmeisterstrafe bezahlen");
+                // an die richtige Stelle schieben, nach Frage
 
                 String input;
                 do {
@@ -125,6 +127,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
             }
             if (input.equalsIgnoreCase("joker")) {
                 jokerMenu.start();
+                continue;
             }
             if (input.length() == 1) {
                 selection = switch (input.charAt(0)) {

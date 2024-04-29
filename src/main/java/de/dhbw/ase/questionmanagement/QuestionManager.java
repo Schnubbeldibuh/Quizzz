@@ -48,7 +48,7 @@ public class QuestionManager extends Submenu {
                 System.out.println("Das System kann nicht auf die Fragen zugreifen");
                 return SelectedMenu.MenuSelection.BACK;
             }
-            menuSelection = startOnlyOnes();
+            menuSelection = startOnlyOnce();
             if (menuSelection == SelectedMenu.MenuSelection.BACK) {
                 return SelectedMenu.MenuSelection.BACK;
             }

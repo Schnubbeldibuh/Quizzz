@@ -48,7 +48,7 @@ public class QuestionManagerEditingMenu extends Submenu {
         } while (!validateInput(s));
         selectedLine.setSelectedLine(s);
 
-        return super.startOnlyOnes();
+        return super.startOnlyOnce();
     }
 
     private boolean validateInput(String input) {

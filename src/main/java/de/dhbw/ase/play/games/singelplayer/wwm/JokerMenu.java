@@ -6,7 +6,6 @@ import de.dhbw.ase.repository.question.Question;
 import de.dhbw.ase.user.in.UserIn;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,5 +52,10 @@ public class JokerMenu extends Submenu {
         }
         System.out.println("4 - Zurück");
         System.out.println("5 - Exit");
+    }
+
+    @Override
+    public SelectedMenu.MenuSelection start() {
+        return startOnlyOnce();
     }
 }

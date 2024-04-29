@@ -37,12 +37,15 @@ public class FiftyFiftyJoker implements Startable {
         System.out.println("Die übrigen Antworten lauten:");
         System.out.println(outputList.get(0));
         System.out.println(outputList.get(1));
+        System.out.println();
+        System.out.println("Bitte deine Antwort (a,b,c,d) oder <Joker> eingeben.");
     }
 
     @Override
     public SelectedMenu.MenuSelection start() {
         if (alreadyUsed) {
-            System.out.println("Joker wurde schon benutzt.");
+            System.out.println("50:50-Joker wurde schon benutzt.");
+            System.out.println("Bitte deine Antwort (a,b,c,d) oder <Joker> eingeben.");
             return SelectedMenu.MenuSelection.BACK;
         }
         useFiftyFifty();
