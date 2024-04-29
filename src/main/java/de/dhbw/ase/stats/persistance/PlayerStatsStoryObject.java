@@ -22,7 +22,7 @@ public class PlayerStatsStoryObject extends StatsObject implements Comparable<Pl
 
     public void add(PlayerStatsStoryObject playerStatsStoryObject) {
         this.totalPlayedGames += playerStatsStoryObject.totalPlayedGames;
-        this.highestAchievedLevel += Math.max(playerStatsStoryObject.highestAchievedLevel, this.highestAchievedLevel);
+        this.highestAchievedLevel = Math.max(playerStatsStoryObject.highestAchievedLevel, this.highestAchievedLevel);
     }
 
     @Override

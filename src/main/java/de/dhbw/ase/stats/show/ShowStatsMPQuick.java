@@ -12,7 +12,7 @@ public class ShowStatsMPQuick extends ShowStats<PlayerStatsMPQuickObject> {
 
     @Override
     protected PlayerStatsMPQuickObject mapLine(String line) {
-        return PlayerStatsMPQuickObject.fromeLine(line);
+        return PlayerStatsMPQuickObject.fromLine(line);
     }
 
     @Override

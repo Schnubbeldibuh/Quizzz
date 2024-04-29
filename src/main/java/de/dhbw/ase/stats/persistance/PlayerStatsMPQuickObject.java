@@ -13,7 +13,7 @@ public class PlayerStatsMPQuickObject extends StatsObject implements Comparable<
         this.fastestAnswer = fastestAnswer;
     }
 
-    public static PlayerStatsMPQuickObject fromeLine(String line) {
+    public static PlayerStatsMPQuickObject fromLine(String line) {
         String[] splittedLine = line.split(";");
 
         return new PlayerStatsMPQuickObject(
