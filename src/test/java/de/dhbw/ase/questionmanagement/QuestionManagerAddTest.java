@@ -27,10 +27,10 @@ class QuestionManagerAddTest {
 
         manager.start();
 
-        int size = repository.savedStats.size();
+        int size = repository.savedQuestions.size();
         Assertions.assertEquals(1, size);
 
-        Question question = repository.savedStats.get(0);
+        Question question = repository.savedQuestions.get(0);
         Assertions.assertEquals(newQuestion, question.getQuestion());
 
         Iterator<String> answerIterator = newAnswers.iterator();
@@ -51,12 +51,12 @@ class QuestionManagerAddTest {
         userInput.add(q.getQuestion());
         q.getAnswerList().stream().map(Question.Answer::answer).forEach(userInput::add);
         UserInMock sc = new UserInMock(userInput);
-        repository.stats.add(q);
+        repository.questions.add(q);
 
         QuestionManagerAdd manager = new QuestionManagerAdd(sc, repository);
 
         manager.start();
 
-        Assertions.assertNull(repository.savedStats);
+        Assertions.assertNull(repository.savedQuestions);
     }
 }

@@ -16,7 +16,7 @@ class QuestionManagerEditTest {
     void start() {
 
         QuestionRepositoryMock repository = new QuestionRepositoryMock();
-        repository.stats = List.of(
+        repository.questions = List.of(
                 Question.Builder.createFakeQuestion()
         );
 
@@ -33,10 +33,10 @@ class QuestionManagerEditTest {
 
         manager.start();
 
-        int size = repository.savedStats.size();
+        int size = repository.savedQuestions.size();
         Assertions.assertEquals(1, size);
 
-        Question question = repository.savedStats.get(0);
+        Question question = repository.savedQuestions.get(0);
         question.getAnswerList().forEach(System.out::println);
 
         Assertions.assertEquals(newQuestion, question.getQuestion());

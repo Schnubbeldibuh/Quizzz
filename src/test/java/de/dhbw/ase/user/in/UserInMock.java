@@ -8,11 +8,15 @@ import java.util.List;
 
 public class UserInMock implements UserIn {
 
-    private final Deque<String> inputs;
+    public final Deque<String> inputs;
 
 
     public UserInMock(List<String> inputs) {
         this.inputs = new LinkedList<>(inputs);
+    }
+
+    public UserInMock() {
+        this.inputs = new LinkedList<>();
     }
 
     @Override

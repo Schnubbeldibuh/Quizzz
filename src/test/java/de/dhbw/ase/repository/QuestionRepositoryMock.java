@@ -8,28 +8,28 @@ import java.util.Set;
 
 public class QuestionRepositoryMock implements QuestionRepository {
 
-    public List<Question> stats = new ArrayList<>();
-    public List<Question> savedStats;
+    public List<Question> questions = new ArrayList<>();
+    public List<Question> savedQuestions;
 
 
 
     @Override
     public List<Question> getQuestionList(int amount) throws CouldNotAccessFileException {
-        return null;
+        return questions.stream().limit(amount).toList();
     }
 
     @Override
     public List<Question> readCompleteFile() throws CouldNotAccessFileException {
-        return stats;
+        return questions;
     }
 
     @Override
     public void writeBackToFile(List<Question> lineList) throws CouldNotAccessFileException {
-        savedStats = lineList;
+        savedQuestions = lineList;
     }
 
     @Override
     public void writeBackToFile(Set<Question> lineList) throws CouldNotAccessFileException {
-        savedStats = new ArrayList<>(lineList);
+        savedQuestions = new ArrayList<>(lineList);
     }
 }

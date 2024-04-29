@@ -13,13 +13,7 @@ class QuestionManagerDeleteTest {
     @Test
     void start() {
         QuestionRepositoryMock repository = new QuestionRepositoryMock();
-        Set<Question.Answer> answers = Set.of(
-                new Question.Answer("1", true),
-                new Question.Answer("2", false),
-                new Question.Answer("3", false),
-                new Question.Answer("4", false)
-        );
-        repository.stats = List.of(
+        repository.questions = List.of(
                 Question.Builder.createFakeQuestion(),
                 Question.Builder.createFakeQuestion()
         );
@@ -31,7 +25,7 @@ class QuestionManagerDeleteTest {
 
         managerDelete.start();
 
-        int size = repository.savedStats.size();
+        int size = repository.savedQuestions.size();
         Assertions.assertEquals(1, size);
     }
 
