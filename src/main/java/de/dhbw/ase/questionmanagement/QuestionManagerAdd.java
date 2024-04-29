@@ -59,7 +59,7 @@ public class QuestionManagerAdd implements Startable {
         }
 
         boolean successfulAdded = fileContent.add(builder.build());
-        if (successfulAdded) {
+        if (!successfulAdded) {
             System.out.println("Diese Frage existiert bereits");
             return SelectedMenu.MenuSelection.BACK;
         }
