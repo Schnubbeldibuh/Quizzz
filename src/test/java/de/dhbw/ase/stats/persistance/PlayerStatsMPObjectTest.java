@@ -3,8 +3,6 @@ package de.dhbw.ase.stats.persistance;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class PlayerStatsMPObjectTest {
 
     @Test
@@ -18,6 +16,9 @@ class PlayerStatsMPObjectTest {
     @Test
     void testToString() {
         PlayerStatsMPObject playerStatsMPObject1 = new PlayerStatsMPObject("test", 1, 2, 3);
+
+        String toString = playerStatsMPObject1.toString();
+        Assertions.assertEquals("test;1;2;3", toString);
     }
 
     @Test
