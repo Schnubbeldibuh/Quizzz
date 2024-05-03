@@ -30,7 +30,7 @@ public class StoryQuiz extends SingleplayerGame{
 
     @Override
     protected void startGame() throws ExitException, CouldNotAccessFileException {
-        List<Question> questionList = questionRepository.getQuestionList(8);
+        List<Question> questionList = questionRepository.readCompleteFile();
         int currentLevel = 0;
 
         System.out.println();

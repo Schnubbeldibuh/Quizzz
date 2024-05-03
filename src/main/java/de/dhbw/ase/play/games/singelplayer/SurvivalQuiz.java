@@ -36,7 +36,7 @@ public class SurvivalQuiz extends SingleplayerGame{
 
     @Override
     protected void startGame() throws ExitException, CouldNotAccessFileException {
-        List<Question> questionList = questionRepository.readCompleteFile();
+        List<Question> questionList = questionRepository.getQuestionList(10);
 
         int rightAnswerCount = 0;
         int wrongAnswerCount = 0;
