@@ -68,6 +68,7 @@ public class SurvivalQuiz extends SingleplayerGame{
                         continue;
                     }
                     result = currentThread.get();
+                    break;
                 } catch (InterruptedException e) {
                     System.out.println("Ein unerwarteter Fehler ist aufgetreten.");
                     listeningExecutor.shutdownNow();
