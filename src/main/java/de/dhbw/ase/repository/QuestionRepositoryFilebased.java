@@ -1,5 +1,6 @@
 package de.dhbw.ase.repository;
 
+import de.dhbw.ase.Quizzz;
 import de.dhbw.ase.repository.question.AnswerProblemException;
 import de.dhbw.ase.repository.question.Question;
 
@@ -19,11 +20,11 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
         return repositoryFilebased;
     }
 
-    private final String filePath;
+    private final String fileName;
     private final List<Question> fileContent = new ArrayList<>();
 
-    private QuestionRepositoryFilebased(String filePath) {
-        this.filePath = filePath;
+    private QuestionRepositoryFilebased(String fileName) {
+        this.fileName = fileName;
     }
 
     @Override
@@ -51,7 +52,7 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
         }
 
         List<Question> questions;
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader bufferedReader = new BufferedReader(createInputStreamReader())) {
             questions = bufferedReader.lines()
                     .filter(this::checkIfLineIsEmpty)
                     .map(this::mapLineToQuestion)
@@ -63,6 +64,15 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
         return questions;
     }
 
+    private InputStreamReader createInputStreamReader() throws FileNotFoundException {
+        File externalFile = new File(Quizzz.QUESTION_DIR + fileName);
+        if (externalFile.exists()) {
+            return new FileReader(externalFile);
+        } else {
+            return new InputStreamReader(Objects.requireNonNull(Quizzz.class.getResourceAsStream(fileName)));
+        }
+    }
+
     private boolean checkIfLineIsEmpty(String l) {
         return !l.isEmpty();
     }
@@ -71,8 +81,16 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
     public void writeBackToFile(List<Question> lineList) throws CouldNotAccessFileException {
         List<Question> questionObjects = new ArrayList<>(lineList);
 
+        createDirIfNeeded();
+        File file = new File(Quizzz.QUESTION_DIR + fileName);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new CouldNotAccessFileException();
+        }
+
         int id = 0;
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Question question : questionObjects) {
                 bufferedWriter.write(id++ + ";" + question.toString());
                 bufferedWriter.newLine();
@@ -82,6 +100,13 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
         }
 
         setBufferedFileContent(questionObjects);
+    }
+
+    private void createDirIfNeeded() {
+        File file = new File(Quizzz.QUESTION_DIR);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
     }
 
     @Override
@@ -112,11 +137,11 @@ public class QuestionRepositoryFilebased implements QuestionRepository {
         }
 
         QuestionRepositoryFilebased that = (QuestionRepositoryFilebased) o;
-        return Objects.equals(filePath, that.filePath);
+        return Objects.equals(fileName, that.fileName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(filePath);
+        return Objects.hash(fileName);
     }
 }

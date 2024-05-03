@@ -4,39 +4,41 @@ import de.dhbw.ase.user.in.ConsoleIn;
 
 public class Quizzz {
 
-    public static String FILE_WWM_EASY = "src/main/resources/WWMEasy.csv";
-    public static String FILE_WWM_EXPERT = "src/main/resources/WWMExpert.csv";
-    public static String FILE_WWM_HARD = "src/main/resources/WWMHard.csv";
-    public static String FILE_WWM_MEDIUM = "src/main/resources/WWMMedium.csv";
-    public static String FILE_WWM_VERY_HARD = "src/main/resources/WWMVeryHard.csv";
+    public static String QUESTION_DIR = "questions/";
+    public static String STATS_DIR = "stats/";
+    public static String FILE_WWM_EASY = "WWMEasy.csv";
+    public static String FILE_WWM_EXPERT = "WWMExpert.csv";
+    public static String FILE_WWM_HARD = "WWMHard.csv";
+    public static String FILE_WWM_MEDIUM = "WWMMedium.csv";
+    public static String FILE_WWM_VERY_HARD = "WWMVeryHard.csv";
 
-    public static String FILE_FQ2 = "src/main/resources/FQ2.csv";
-    public static String FILE_S = "src/main/resources/S.csv";
-    public static String FILE_STORY = "src/main/resources/Story.csv";
+    public static String FILE_FQ2 = "FQ2.csv";
+    public static String FILE_S = "S.csv";
+    public static String FILE_STORY = "Story.csv";
 
-    public static String FILE_MP = "src/main/resources/MP.csv";
+    public static String FILE_MP = "MP.csv";
 
-    public static String FILE_SP_GENERAL = "src/main/resources/SPGeneral.csv";
-    public static String FILE_SP_GEOGRAPHY = "src/main/resources/SPGeography.csv";
-    public static String FILE_SP_CINEMA_TV = "src/main/resources/SPCinemaTV.csv";
-    public static String FILE_SP_TECHNOLOGY = "src/main/resources/SPTechnology.csv";
-    public static String FILE_SP_SPORTS = "src/main/resources/SPSports.csv";
-    public static String FILE_SP_FOOD = "src/main/resources/SPFood.csv";
+    public static String FILE_SP_GENERAL = "SPGeneral.csv";
+    public static String FILE_SP_GEOGRAPHY = "SPGeography.csv";
+    public static String FILE_SP_CINEMA_TV = "/SPCinemaTV.csv";
+    public static String FILE_SP_TECHNOLOGY = "SPTechnology.csv";
+    public static String FILE_SP_SPORTS = "SPSports.csv";
+    public static String FILE_SP_FOOD = "SPFood.csv";
 
-    public static String FILE_STATS_WWM = "src/main/resources/stats/wwmStats.csv";
-    public static String FILE_STATS_FQ = "src/main/resources/stats/fqStats.csv";
-    public static String FILE_STATS_S = "src/main/resources/stats/sStats.csv";
-    public static String FILE_STATS_STORY = "src/main/resources/stats/storyStats.csv";
+    public static String FILE_STATS_WWM = "wwmStats.csv";
+    public static String FILE_STATS_FQ = "fqStats.csv";
+    public static String FILE_STATS_S = "sStats.csv";
+    public static String FILE_STATS_STORY = "storyStats.csv";
 
-    public static String FILE_STATS_MP = "src/main/resources/stats/mpStats.csv";
-    public static String FILE_STATS_MP_QUICK = "src/main/resources/stats/mpQuickStats.csv";
+    public static String FILE_STATS_MP = "mpStats.csv";
+    public static String FILE_STATS_MP_QUICK = "mpQuickStats.csv";
 
-    public static String FILE_STATS_SP_GENERAL = "src/main/resources/stats/SPGeneralStats.csv";
-    public static String FILE_STATS_SP_GEOGRAPHY = "src/main/resources/stats/SPGeographyStats.csv";
-    public static String FILE_STATS_SP_CINEMA_TV = "src/main/resources/stats/SPCinemaTVStats.csv";
-    public static String FILE_STATS_SP_TECHNOLOGY = "src/main/resources/stats/SPTechnologyStats.csv";
-    public static String FILE_STATS_SP_SPORTS = "src/main/resources/stats/SPSportsStats.csv";
-    public static String FILE_STATS_SP_FOOD = "src/main/resources/stats/SPFoodStats.csv";
+    public static String FILE_STATS_SP_GENERAL = "SPGeneralStats.csv";
+    public static String FILE_STATS_SP_GEOGRAPHY = "SPGeographyStats.csv";
+    public static String FILE_STATS_SP_CINEMA_TV = "SPCinemaTVStats.csv";
+    public static String FILE_STATS_SP_TECHNOLOGY = "SPTechnologyStats.csv";
+    public static String FILE_STATS_SP_SPORTS = "SPSportsStats.csv";
+    public static String FILE_STATS_SP_FOOD = "SPFoodStats.csv";
 
     public static int SERVER_PORT = 2400;
 
