@@ -7,7 +7,7 @@ import de.dhbw.ase.repository.QuestionRepository;
 import de.dhbw.ase.repository.question.Question;
 import de.dhbw.ase.user.in.UserIn;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class QuestionManagerAdd implements Startable {
@@ -51,7 +51,7 @@ public class QuestionManagerAdd implements Startable {
 
         Set<Question> fileContent;
         try {
-            fileContent = new HashSet<>(questionRepository.readCompleteFile());
+            fileContent = new LinkedHashSet<>(questionRepository.readCompleteFile());
         } catch (CouldNotAccessFileException e) {
             System.out.println("Das Programm konnte nicht auf die Daten zugreifen.");
             System.out.println("Die Änderungen wurden nicht gespeichert.");
