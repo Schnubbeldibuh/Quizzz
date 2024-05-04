@@ -80,7 +80,7 @@ public class WerWirdMillionaer extends SingleplayerGame {
                         getUsername(),
                         currentLevel.getPoints(),
                         currentLevel.getMoneyWon(),
-                        currentLevel.getRightAnswers());
+                        currentLevel.getRightAnswers()+1);
                 return;
             }
 
